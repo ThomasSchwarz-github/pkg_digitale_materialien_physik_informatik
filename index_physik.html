@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physik-Simulationen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C;
+    --blue-mid: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-border: #B5D4F4;
+    --teal-dark: #0F6E56;
+    --teal-mid: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-border: #9FE1CB;
+    --amber-dark: #854F0B;
+    --amber-mid: #BA7517;
+    --amber-light: #FAEEDA;
+    --amber-border: #FAC775;
+    --violet-dark: #4A1D96;
+    --violet-mid: #7C3AED;
+    --violet-light: #EDE9FE;
+    --violet-border: #C4B5FD;
+    --rose-dark: #881337;
+    --rose-mid: #BE123C;
+    --rose-light: #FFF1F2;
+    --rose-border: #FECDD3;
+    --gray-bg: #F8F7F4;
+    --gray-border: #D3D1C7;
+    --gray-text: #5F5E5A;
+    --text-main: #1a1917;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #f5f3ef;
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  .page {
+    width: min(1200px, 100%);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+
+  /* ── Header ── */
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid var(--text-main);
+    padding-bottom: 1.4rem;
+    margin-bottom: 2.5rem;
+    gap: 1.5rem;
+  }
+  .site-header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .site-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+  .site-header .subtitle {
+    margin-top: 0.6rem;
+    font-size: 14px;
+    color: var(--gray-text);
+    line-height: 1.6;
+    max-width: 580px;
+  }
+  .site-logo {
+    max-height: 160px;
+    width: auto;
+    align-self: flex-start;
+  }
+
+  /* ── Intro box ── */
+  .intro-box {
+    background: var(--blue-light);
+    border-left: 3px solid var(--blue-mid);
+    padding: 1rem 1.25rem;
+    margin-bottom: 2.5rem;
+    border-radius: 0 6px 6px 0;
+  }
+  .intro-box p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--blue-dark);
+  }
+
+  /* ── Jahrgangsstufe section ── */
+  .jg-section {
+    margin-bottom: 3rem;
+  }
+
+  .jg-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1.5px solid var(--gray-border);
+  }
+  .jg-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    font-weight: 500;
+  }
+  .jg-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  /* ── Themen-Block ── */
+  .thema-block {
+    margin-bottom: 1.5rem;
+  }
+  .thema-label {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .thema-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .thema--impuls   .thema-dot { background: var(--blue-mid); }
+  .thema--impuls   .thema-label { color: var(--blue-dark); }
+  .thema--energie  .thema-dot { background: var(--teal-mid); }
+  .thema--energie  .thema-label { color: var(--teal-dark); }
+  .thema--wellen   .thema-dot { background: var(--violet-mid); }
+  .thema--wellen   .thema-label { color: var(--violet-dark); }
+  .thema--elektrik .thema-dot { background: var(--amber-mid); }
+  .thema--elektrik .thema-label { color: var(--amber-dark); }
+  .thema--mechanik .thema-dot { background: var(--rose-mid); }
+  .thema--mechanik .thema-label { color: var(--rose-dark); }
+  .thema--optik    .thema-dot { background: var(--teal-mid); }
+  .thema--optik    .thema-label { color: var(--teal-dark); }
+
+  /* ── Simulations-Karten ── */
+  .sim-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .sim-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-radius: 8px;
+    padding: 0.85rem 1.1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    position: relative;
+  }
+  .sim-card:hover {
+    border-color: var(--blue-mid);
+    box-shadow: 0 2px 12px rgba(24,95,165,0.10);
+    transform: translateY(-1px);
+  }
+
+  .thema--impuls   .sim-card { border-left: 3px solid var(--blue-mid); }
+  .thema--energie  .sim-card { border-left: 3px solid var(--teal-mid); }
+  .thema--wellen   .sim-card { border-left: 3px solid var(--violet-mid); }
+  .thema--elektrik .sim-card { border-left: 3px solid var(--amber-mid); }
+  .thema--mechanik .sim-card { border-left: 3px solid var(--rose-mid); }
+  .thema--optik    .sim-card { border-left: 3px solid var(--teal-mid); }
+
+  .sim-card.coming-soon {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+  }
+  .sim-card.coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--gray-border);
+  }
+
+  .sim-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 17px;
+  }
+  .thema--impuls   .sim-icon { background: var(--blue-light); }
+  .thema--energie  .sim-icon { background: var(--teal-light); }
+  .thema--wellen   .sim-icon { background: var(--violet-light); }
+  .thema--elektrik .sim-icon { background: var(--amber-light); }
+  .thema--mechanik .sim-icon { background: var(--rose-light); }
+  .thema--optik    .sim-icon { background: var(--teal-light); }
+
+  .sim-text { flex: 1; min-width: 0; }
+  .sim-title {
+    font-size: 14.5px;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sim-desc {
+    font-size: 12px;
+    color: var(--gray-text);
+    line-height: 1.5;
+  }
+
+  .sim-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .badge--new {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    border: 1px solid var(--teal-border);
+  }
+  .badge--soon {
+    background: var(--gray-bg);
+    color: var(--gray-text);
+    border: 1px solid var(--gray-border);
+  }
+
+  .arrow {
+    color: var(--gray-border);
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+  .sim-card:hover .arrow { color: var(--blue-mid); }
+
+  /* ── Footer ── */
+  .site-footer {
+    margin-top: 4rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--gray-border);
+    font-size: 12px;
+    color: var(--gray-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 2rem 1.25rem 4rem; }
+    .site-header h1 { font-size: 1.7rem; }
+    .sim-card { padding: 0.7rem 0.9rem; }
+    .sim-desc { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="index.html" class="back-link">‹ Alle Fächer</a>
+
+  <!-- ── Site Header ── -->
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Interaktive Lernmaterialien · Physik</p>
+      <h1>Physik-Simulationen</h1>
+      <p class="subtitle">Interaktive Experimente und Visualisierungen für den Physikunterricht – sortiert nach Jahrgangsstufe und Thema gemäß des schulinternen Lehrplans des Paul-Klee-Gymnasiums Overath.</p>
+    </div>
+    <img src="assets/pkg_hauptlogo_web_kleiner.png" alt="Logo" class="site-logo">
+  </header>
+
+  <div class="intro-box">
+    <p>Alle Simulationen laufen direkt im Browser – keine Installation notwendig. Öffne eine Simulation, variiere Parameter und beobachte, wie sich das System verhält. Begleitende Aufgaben erhältst du im Unterricht.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       JAHRGANGSSTUFE 6
+  ══════════════════════════════════════ -->
+  <section class="jg-section">
+    <div class="jg-header">
+      <span class="jg-label">Jahrgangsstufe</span>
+      <h2 class="jg-title">6</h2>
+    </div>
+
+    <!-- Thema: Schall -->
+    <div class="thema-block thema--wellen">
+      <div class="thema-label">
+        <span class="thema-dot"></span>
+        Schall
+      </div>
+      <div class="sim-list">
+        <a href="tongenerator.html" class="sim-card">
+          <div class="sim-icon">🔊</div>
+          <div class="sim-text">
+            <div class="sim-title">Tongenerator</div>
+            <div class="sim-desc">Erzeuge reine Töne im Browser – Frequenz, Wellenform und Lautstärke interaktiv einstellen</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+        <a href="schwebungen.html" class="sim-card">
+          <div class="sim-icon">〜</div>
+          <div class="sim-text">
+            <div class="sim-title">Schwebungen</div>
+            <div class="sim-desc">Zwei Töne mit ähnlicher Frequenz erzeugen ein periodisches Anschwellen – Überlagerung hörbar machen</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       JAHRGANGSSTUFE 9
+  ══════════════════════════════════════ -->
+  <section class="jg-section">
+    <div class="jg-header">
+      <span class="jg-label">Jahrgangsstufe</span>
+      <h2 class="jg-title">9</h2>
+    </div>
+
+    <!-- Thema: Elektrizität -->
+    <div class="thema-block thema--elektrik">
+      <div class="thema-label">
+        <span class="thema-dot"></span>
+        Elektrizität
+      </div>
+      <div class="sim-list">
+        <a href="stromkreise.html" class="sim-card">
+          <div class="sim-icon">🔌</div>
+          <div class="sim-text">
+            <div class="sim-title">Stromkreise</div>
+            <div class="sim-desc">Untersuche Stromkreise und deren Bauteile in einer interaktiven Darstellung.</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       JAHRGANGSSTUFE EF (Einführungsphase)
+  ══════════════════════════════════════ -->
+  <section class="jg-section">
+    <div class="jg-header">
+      <span class="jg-label">Jahrgangsstufe</span>
+      <h2 class="jg-title">EF – Einführungsphase</h2>
+    </div>
+
+    <!-- Thema: Impuls -->
+    <div class="thema-block thema--impuls">
+      <div class="thema-label">
+        <span class="thema-dot"></span>
+        Impuls &amp; Impulserhaltung
+      </div>
+      <div class="sim-list">
+        <a href="luftkissenbahn_gespannte_feder_zwischen_zwei_gleitern.html" class="sim-card">
+          <div class="sim-icon">⚙️</div>
+          <div class="sim-text">
+            <div class="sim-title">Gleiter mit Feder auf der Luftkissenbahn</div>
+            <div class="sim-desc">Federabstoßung zweier Gleiter – Impulserhaltung bei verschiedenen Massen und Federenergien</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+        <a href="ariane6_simulation.html" class="sim-card">
+          <div class="sim-icon">🚀</div>
+          <div class="sim-text">
+            <div class="sim-title">Ariane 6 – Raketenstart-Simulation</div>
+            <div class="sim-desc">Mehrstufenrakete mit Rückstoßprinzip und Tsiolkowski-Gleichung – Höhe, Geschwindigkeit und Masse im zeitlichen Verlauf</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       JAHRGANGSSTUFE Q1/Q2
+  ══════════════════════════════════════ -->
+  <section class="jg-section">
+    <div class="jg-header">
+      <span class="jg-label">Jahrgangsstufe</span>
+      <h2 class="jg-title">Q1/Q2 – Qualifikationsphase</h2>
+    </div>
+
+    <!-- Thema: Geladene Teilchen in Feldern -->
+    <div class="thema-block thema--elektrik">
+      <div class="thema-label">
+        <span class="thema-dot"></span>
+        Geladene Teilchen in Feldern
+      </div>
+      <div class="sim-list">
+        <a href="elektronenstrahlablenkroehre.html" class="sim-card">
+          <div class="sim-icon">⚡</div>
+          <div class="sim-text">
+            <div class="sim-title">Elektronenstrahlablenkröhre</div>
+            <div class="sim-desc">Simulation: Ablenkung geladener Teilchen im elektrischen Feld</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+        <a href="fadenstrahlrohr.html" class="sim-card">
+          <div class="sim-icon">🔵</div>
+          <div class="sim-text">
+            <div class="sim-title">Fadenstrahlrohr – e/m-Bestimmung</div>
+            <div class="sim-desc">Kreisbahn von Elektronen im Magnetfeld – Bestimmung der spezifischen Ladung e/m</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <span>Physik-Simulationen · Interaktive Lernmaterialien</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+
+</div>
+</body>
+</html>
