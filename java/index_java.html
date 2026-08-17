@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java-Tutorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C;
+    --blue-mid: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-border: #B5D4F4;
+    --green-dark: #14532D;
+    --green-mid: #16A34A;
+    --green-light: #F0FDF4;
+    --green-border: #86EFAC;
+    --gray-bg: #F8F7F4;
+    --gray-border: #D3D1C7;
+    --gray-text: #5F5E5A;
+    --text-main: #1a1917;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #f5f3ef;
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  .page {
+    width: min(1100px, 100%);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+
+  /* ── Header ── */
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid var(--text-main);
+    padding-bottom: 1.4rem;
+    margin-bottom: 2.5rem;
+    gap: 1.5rem;
+  }
+  .site-header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .site-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+  .site-header .subtitle {
+    margin-top: 0.6rem;
+    font-size: 14px;
+    color: var(--gray-text);
+    line-height: 1.6;
+    max-width: 580px;
+  }
+  .site-logo {
+    max-height: 160px;
+    width: auto;
+    align-self: flex-start;
+  }
+
+  /* ── Themen-Sektionen ── */
+  .thema-section { margin-bottom: 2.5rem; }
+
+  .thema-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--gray-border);
+  }
+
+  /* ── Themen-Karten ── */
+  .topic-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .topic-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-left: 3px solid var(--green-mid);
+    border-radius: 8px;
+    padding: 0.85rem 1.1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+  }
+  .topic-card:hover {
+    border-color: var(--green-mid);
+    box-shadow: 0 2px 12px rgba(22,163,74,0.10);
+    transform: translateY(-1px);
+  }
+  .topic-card.coming-soon {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .topic-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green-dark);
+    background: var(--green-light);
+    border: 1px solid var(--green-border);
+    border-radius: 5px;
+    padding: 0.2rem 0.55rem;
+    flex-shrink: 0;
+    min-width: 2.4rem;
+    text-align: center;
+  }
+  .topic-card.coming-soon .topic-num { color: var(--gray-text); background: var(--gray-bg); border-color: var(--gray-border); }
+
+  .topic-text { flex: 1; min-width: 0; }
+  .topic-title { font-size: 14.5px; font-weight: 500; }
+  .topic-desc { font-size: 12px; color: var(--gray-text); margin-top: 0.15rem; line-height: 1.5; }
+
+  .arrow { color: var(--gray-border); font-size: 16px; flex-shrink: 0; transition: color 0.15s; }
+  .topic-card:hover .arrow { color: var(--green-mid); }
+
+  /* ── Footer ── */
+  .site-footer {
+    margin-top: 4rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--gray-border);
+    font-size: 12px;
+    color: var(--gray-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 2rem 1.25rem 4rem; }
+    .site-header h1 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index_informatik.html" class="back-link">‹ Zurück zur Übersicht</a>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Informatik · Kursübergreifend</p>
+      <h1>Java-Tutorial</h1>
+      <p class="subtitle">Grundlagen und Konzepte der objektorientierten Programmierung mit Java – geeignet für EF, Q1 und Q2.</p>
+    </div>
+    <img src="../assets/pkg_hauptlogo_web_kleiner.png" alt="Logo" class="site-logo">
+  </header>
+
+  <!-- ══════════════════════════════════════
+       GRUNDLAGEN
+  ══════════════════════════════════════ -->
+  <section class="thema-section">
+    <div class="thema-header">Grundlagen</div>
+    <div class="topic-list">
+
+      <a href="kontrollstrukturen.html" class="topic-card">
+        <span class="topic-num">01</span>
+        <div class="topic-text">
+          <div class="topic-title">Kontrollstrukturen</div>
+          <div class="topic-desc">Bedingte Anweisungen (if/else), switch-case und Schleifen (for, while, do-while)</div>
+        </div>
+        <span class="arrow">›</span>
+      </a>
+
+      <a href="methoden.html" class="topic-card coming-soon">
+        <span class="topic-num">02</span>
+        <div class="topic-text">
+          <div class="topic-title">Methoden</div>
+          <div class="topic-desc">Definition, Parameter, Rückgabewerte und Methodenaufruf</div>
+        </div>
+        <span class="arrow">›</span>
+      </a>
+
+      <a href="arrays.html" class="topic-card coming-soon">
+        <span class="topic-num">03</span>
+        <div class="topic-text">
+          <div class="topic-title">Arrays</div>
+          <div class="topic-desc">Eindimensionale und mehrdimensionale Arrays, Iteration und Zugriff</div>
+        </div>
+        <span class="arrow">›</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       OBJEKTORIENTIERUNG
+  ══════════════════════════════════════ -->
+  <section class="thema-section">
+    <div class="thema-header">Objektorientierte Programmierung</div>
+    <div class="topic-list">
+
+      <a href="klassen_objekte.html" class="topic-card coming-soon">
+        <span class="topic-num">04</span>
+        <div class="topic-text">
+          <div class="topic-title">Klassen und Objekte</div>
+          <div class="topic-desc">Attribute, Konstruktoren, Methoden und Instanziierung</div>
+        </div>
+        <span class="arrow">›</span>
+      </a>
+
+      <a href="vererbung.html" class="topic-card coming-soon">
+        <span class="topic-num">05</span>
+        <div class="topic-text">
+          <div class="topic-title">Vererbung</div>
+          <div class="topic-desc">Superklassen, Subklassen, Überschreiben von Methoden und Polymorphismus</div>
+        </div>
+        <span class="arrow">›</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <span>Java-Tutorial · Informatik</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+
+</div>
+</body>
+</html>
