@@ -8,17 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --blue-dark: #0C447C;
-    --blue-mid: #185FA5;
-    --blue-light: #E6F1FB;
     --green-dark: #14532D;
     --green-mid: #16A34A;
     --green-light: #F0FDF4;
     --green-border: #86EFAC;
-    --amber-dark: #854F0B;
-    --amber-mid: #BA7517;
-    --amber-light: #FAEEDA;
-    --amber-border: #FAC775;
     --gray-bg: #F8F7F4;
     --gray-border: #D3D1C7;
     --gray-text: #5F5E5A;
@@ -41,7 +34,6 @@
     padding: 2.5rem 1.5rem 4rem;
   }
 
-  /* ── Navigation ── */
   .back-link {
     display: inline-flex;
     align-items: center;
@@ -54,158 +46,84 @@
   .back-link:hover { color: var(--green-mid); }
 
   /* ── Header ── */
-  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 2rem; }
-  .header .kurs { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: 0.4rem; }
-  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
-  .header .meta { margin-top: 0.5rem; font-size: 13px; color: var(--gray-text); }
-
-  /* ── Intro-Box ── */
-  .intro-box {
-    background: var(--green-light);
-    border-left: 3px solid var(--green-mid);
-    padding: 1rem 1.25rem;
-    margin-bottom: 2rem;
-    border-radius: 0 6px 6px 0;
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid var(--text-main);
+    padding-bottom: 1.4rem;
+    margin-bottom: 2.5rem;
+    gap: 1.5rem;
   }
-  .intro-box p { font-size: 14.5px; line-height: 1.75; color: var(--green-dark); }
-
-  /* ── Inhalts-Karten ── */
-  .section-card {
-    background: white;
-    border: 1px solid var(--gray-border);
-    border-radius: 10px;
-    padding: 1.75rem 2rem;
-    margin-bottom: 1.5rem;
-  }
-  .section-card h2 {
-    font-family: 'Source Serif 4', serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--gray-border);
-  }
-  .section-card p {
-    font-size: 14.5px;
-    line-height: 1.75;
-    margin-bottom: 0.9rem;
-  }
-  .section-card p:last-child { margin-bottom: 0; }
-
-  /* ── Inline code ── */
-  code {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    background: var(--gray-bg);
-    border: 1px solid var(--gray-border);
-    border-radius: 3px;
-    padding: 0.1rem 0.35rem;
-  }
-
-  /* ── Abstrakte Syntax-Box ── */
-  .syntax-box {
-    background: var(--gray-bg);
-    border: 1px solid var(--gray-border);
-    border-left: 3px solid var(--blue-mid);
-    border-radius: 0 6px 6px 0;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13.5px;
-    padding: 0.9rem 1.25rem;
-    margin: 1rem 0 1.25rem;
-    white-space: pre;
-    line-height: 1.75;
-    color: var(--text-main);
-  }
-  .syn-kw  { color: var(--blue-dark); font-weight: 600; }
-  .syn-ph  { color: var(--gray-text); font-style: italic; }
-
-  /* ── BlueJ-Code-Block ── */
-  .code-wrap {
-    border-radius: 8px;
-    overflow: hidden;
-    margin: 1.25rem 0 1rem;
-  }
-  .code-block {
-    background: #2B2B2B;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 13.5px;
-    line-height: 1.65;
-    display: table;
-    width: 100%;
-  }
-  .line { display: table-row; }
-  .ln {
-    display: table-cell;
-    color: #606366;
-    padding: 0 0.85rem;
-    text-align: right;
-    user-select: none;
-    border-right: 1px solid #3C3F41;
-    width: 2.8rem;
-    vertical-align: top;
-  }
-  .lc {
-    display: table-cell;
-    color: #A9B7C6;
-    white-space: pre;
-    padding: 0 1.5rem;
-    vertical-align: top;
-  }
-  .code-block .line:first-child .ln,
-  .code-block .line:first-child .lc { padding-top: 0.8rem; }
-  .code-block .line:last-child  .ln,
-  .code-block .line:last-child  .lc { padding-bottom: 0.8rem; }
-
-  /* Syntax-Token-Farben (BlueJ-Dunkelthema) */
-  .kw  { color: #CC7832; font-weight: bold; }   /* Schlüsselwörter      */
-  .str { color: #6A8759; }                        /* String-Literale      */
-  .cmt { color: #808080; font-style: italic; }   /* Kommentare           */
-  .num { color: #6897BB; }                        /* Zahlen               */
-
-  /* ── Vergleichsoperatoren-Tabelle ── */
-  .op-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13.5px;
-    margin-top: 0.5rem;
-  }
-  .op-table th {
-    text-align: left;
+  .site-header .eyebrow {
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--gray-text);
-    padding: 0.4rem 0.85rem;
-    border-bottom: 1.5px solid var(--gray-border);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
   }
-  .op-table td {
-    padding: 0.5rem 0.85rem;
-    border-bottom: 1px solid #EEECEA;
-    vertical-align: middle;
-  }
-  .op-table tr:last-child td { border-bottom: none; }
-  .op-table td:first-child {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
+  .site-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.2rem;
     font-weight: 600;
-    width: 6rem;
+    line-height: 1.15;
   }
-  .op-table td:nth-child(3) {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
+  .site-header .subtitle {
+    margin-top: 0.6rem;
+    font-size: 14px;
     color: var(--gray-text);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+  .site-logo {
+    max-height: 160px;
+    width: auto;
+    align-self: flex-start;
   }
 
-  /* ── Hinweis-Box ── */
-  .hint-box {
-    background: var(--amber-light);
-    border-left: 3px solid var(--amber-mid);
-    padding: 0.85rem 1.1rem;
-    margin-top: 1.25rem;
-    border-radius: 0 6px 6px 0;
+  /* ── Themen-Karten ── */
+  .topic-list { display: flex; flex-direction: column; gap: 0.65rem; }
+
+  .topic-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-left: 3px solid var(--green-mid);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
   }
-  .hint-box p { font-size: 13.5px; line-height: 1.65; color: var(--amber-dark); margin: 0; }
+  .topic-card:hover {
+    border-color: var(--green-mid);
+    box-shadow: 0 2px 12px rgba(22,163,74,0.10);
+    transform: translateY(-1px);
+  }
+
+  .topic-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green-dark);
+    background: var(--green-light);
+    border: 1px solid var(--green-border);
+    border-radius: 5px;
+    padding: 0.2rem 0.55rem;
+    flex-shrink: 0;
+    min-width: 2.4rem;
+    text-align: center;
+  }
+
+  .topic-text { flex: 1; min-width: 0; }
+  .topic-title { font-size: 14.5px; font-weight: 500; }
+  .topic-desc { font-size: 12px; color: var(--gray-text); margin-top: 0.15rem; line-height: 1.5; }
+
+  .arrow { color: var(--gray-border); font-size: 16px; flex-shrink: 0; transition: color 0.15s; }
+  .topic-card:hover .arrow { color: var(--green-mid); }
 
   /* ── Footer ── */
   .site-footer {
@@ -221,11 +139,10 @@
     gap: 0.5rem;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 600px) {
     .page { padding: 2rem 1.25rem 4rem; }
-    .header h1 { font-size: 1.7rem; }
-    .section-card { padding: 1.25rem 1.25rem; }
-    .op-table td:nth-child(3) { display: none; }
+    .site-header h1 { font-size: 1.7rem; }
+    .site-logo { max-height: 100px; }
   }
 </style>
 </head>
@@ -234,147 +151,54 @@
 
   <a href="index_java.html" class="back-link">‹ Zurück zum Java-Tutorial</a>
 
-  <div class="header">
-    <div class="kurs">Informatik · Java-Tutorial</div>
-    <h1>Kontrollstrukturen</h1>
-    <div class="meta">Bedingte Anweisungen: if, if-else und else if</div>
-  </div>
-
-  <div class="intro-box">
-    <p>Möchte ein Programm auf verschiedene Situationen unterschiedlich reagieren, brauchen wir <strong>bedingte Anweisungen</strong>. Sie ermöglichen es dem Programm, eine Entscheidung zu treffen: Ein Codeblock wird nur dann ausgeführt, <em>wenn</em> eine bestimmte Bedingung erfüllt ist.</p>
-  </div>
-
-
-  <!-- ══════════════════════════════════════
-       VERGLEICHSOPERATOREN
-  ══════════════════════════════════════ -->
-  <div class="section-card">
-    <h2>Vergleichsoperatoren</h2>
-    <p>In einer Bedingung werden Werte mithilfe von <strong>Vergleichsoperatoren</strong> verglichen. Das Ergebnis eines Vergleichs ist immer entweder <code>true</code> (wahr) oder <code>false</code> (falsch).</p>
-    <table class="op-table">
-      <thead>
-        <tr>
-          <th>Operator</th>
-          <th>Bedeutung</th>
-          <th>Beispiel</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>==</td><td>gleich</td><td>alter == 18</td></tr>
-        <tr><td>!=</td><td>ungleich</td><td>note != 6</td></tr>
-        <tr><td>&gt;</td><td>größer als</td><td>punkte &gt; 90</td></tr>
-        <tr><td>&lt;</td><td>kleiner als</td><td>temperatur &lt; 0</td></tr>
-        <tr><td>&gt;=</td><td>größer oder gleich</td><td>alter &gt;= 18</td></tr>
-        <tr><td>&lt;=</td><td>kleiner oder gleich</td><td>punkte &lt;= 49</td></tr>
-      </tbody>
-    </table>
-    <div class="hint-box">
-      <p><strong>Achtung:</strong> Für Vergleiche wird <code>==</code> (zwei Gleichheitszeichen) verwendet – nicht <code>=</code> (ein Gleichheitszeichen), das ist die Zuweisung.</p>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Informatik · Java-Tutorial</p>
+      <h1>Kontrollstrukturen</h1>
+      <p class="subtitle">Bedingte Anweisungen und Schleifen – grundlegende Werkzeuge zur Steuerung des Programmablaufs.</p>
     </div>
-  </div>
+    <img src="../assets/pkg_hauptlogo_web_kleiner.png" alt="Logo" class="site-logo">
+  </header>
 
+  <div class="topic-list">
 
-  <!-- ══════════════════════════════════════
-       DIE if-ANWEISUNG
-  ══════════════════════════════════════ -->
-  <div class="section-card">
-    <h2>Die if-Anweisung</h2>
-    <p>Mit <code>if</code> wird eine Bedingung geprüft. Ist sie wahr (<code>true</code>), wird der Anweisungsblock in den geschweiften Klammern ausgeführt. Ist sie falsch (<code>false</code>), wird er übersprungen.</p>
-
-    <div class="syntax-box"><span class="syn-kw">if</span> (<span class="syn-ph">Bedingung</span>) {
-    <span class="syn-ph">// Anweisung(en)</span>
-}</div>
-
-    <p>Beispiel: Das Programm soll eine Meldung ausgeben, wenn es heiß ist.</p>
-
-    <div class="code-wrap">
-      <div class="code-block">
-        <div class="line"><span class="ln">1</span><span class="lc"><span class="kw">int</span> temperatur = <span class="num">30</span>;</span></div>
-        <div class="line"><span class="ln">2</span><span class="lc"></span></div>
-        <div class="line"><span class="ln">3</span><span class="lc"><span class="kw">if</span> (temperatur &gt; <span class="num">25</span>) {</span></div>
-        <div class="line"><span class="ln">4</span><span class="lc">    System.out.println(<span class="str">"Es ist heiß."</span>);</span></div>
-        <div class="line"><span class="ln">5</span><span class="lc">}</span></div>
-        <div class="line"><span class="ln">6</span><span class="lc"></span></div>
-        <div class="line"><span class="ln">7</span><span class="lc"><span class="cmt">// Ausgabe: Es ist heiß.</span></span></div>
+    <a href="bedingungen.html" class="topic-card">
+      <span class="topic-num">01</span>
+      <div class="topic-text">
+        <div class="topic-title">Vergleiche und Bedingungen</div>
+        <div class="topic-desc">Wahrheitswerte, Vergleichsoperatoren und das Formulieren von Bedingungen</div>
       </div>
-    </div>
+      <span class="arrow">›</span>
+    </a>
 
-    <p>Da <code>temperatur</code> den Wert <code>30</code> hat und <code>30 &gt; 25</code> wahr ist, wird Zeile 4 ausgeführt. Hätte <code>temperatur</code> z. B. den Wert <code>20</code>, wäre die Bedingung falsch – das Programm gäbe nichts aus.</p>
-  </div>
-
-
-  <!-- ══════════════════════════════════════
-       DIE if-else-ANWEISUNG
-  ══════════════════════════════════════ -->
-  <div class="section-card">
-    <h2>Die if-else-Anweisung</h2>
-    <p>Mit einem <code>else</code>-Block lässt sich eine Alternative angeben: Ist die Bedingung falsch, wird stattdessen der <code>else</code>-Block ausgeführt. Es gibt dann immer genau einen der beiden Blöcke aus – nie beide, nie keinen.</p>
-
-    <div class="syntax-box"><span class="syn-kw">if</span> (<span class="syn-ph">Bedingung</span>) {
-    <span class="syn-ph">// wird ausgeführt, wenn Bedingung wahr ist</span>
-} <span class="syn-kw">else</span> {
-    <span class="syn-ph">// wird ausgeführt, wenn Bedingung falsch ist</span>
-}</div>
-
-    <p>Beispiel: Zugang zu einem System soll nur Erwachsenen gewährt werden.</p>
-
-    <div class="code-wrap">
-      <div class="code-block">
-        <div class="line"><span class="ln">1</span><span class="lc"><span class="kw">int</span> alter = <span class="num">16</span>;</span></div>
-        <div class="line"><span class="ln">2</span><span class="lc"></span></div>
-        <div class="line"><span class="ln">3</span><span class="lc"><span class="kw">if</span> (alter &gt;= <span class="num">18</span>) {</span></div>
-        <div class="line"><span class="ln">4</span><span class="lc">    System.out.println(<span class="str">"Zugang erlaubt."</span>);</span></div>
-        <div class="line"><span class="ln">5</span><span class="lc">} <span class="kw">else</span> {</span></div>
-        <div class="line"><span class="ln">6</span><span class="lc">    System.out.println(<span class="str">"Zugang verweigert."</span>);</span></div>
-        <div class="line"><span class="ln">7</span><span class="lc">}</span></div>
-        <div class="line"><span class="ln">8</span><span class="lc"></span></div>
-        <div class="line"><span class="ln">9</span><span class="lc"><span class="cmt">// Ausgabe: Zugang verweigert.</span></span></div>
+    <a href="verzweigungen.html" class="topic-card">
+      <span class="topic-num">02</span>
+      <div class="topic-text">
+        <div class="topic-title">Verzweigungen</div>
+        <div class="topic-desc">Bedingte Anweisungen mit if, else und else if</div>
       </div>
-    </div>
+      <span class="arrow">›</span>
+    </a>
 
-    <p>Da <code>alter</code> den Wert <code>16</code> hat, ist <code>16 &gt;= 18</code> falsch. Das Programm führt daher den <code>else</code>-Block aus und gibt „Zugang verweigert." aus.</p>
-  </div>
-
-
-  <!-- ══════════════════════════════════════
-       ELSE IF
-  ══════════════════════════════════════ -->
-  <div class="section-card">
-    <h2>Mehrfache Fallunterscheidung mit else if</h2>
-    <p>Sollen mehr als zwei Fälle unterschieden werden, können <code>else if</code>-Blöcke aneinandergereiht werden. Java prüft die Bedingungen <strong>der Reihe nach von oben nach unten</strong>. Sobald eine Bedingung zutrifft, wird der zugehörige Block ausgeführt – alle weiteren Bedingungen werden dann nicht mehr geprüft.</p>
-
-    <p>Beispiel: Notenvergabe anhand einer Punktzahl.</p>
-
-    <div class="code-wrap">
-      <div class="code-block">
-        <div class="line"><span class="ln"> 1</span><span class="lc"><span class="kw">int</span> punkte = <span class="num">82</span>;</span></div>
-        <div class="line"><span class="ln"> 2</span><span class="lc"><span class="kw">String</span> note;</span></div>
-        <div class="line"><span class="ln"> 3</span><span class="lc"></span></div>
-        <div class="line"><span class="ln"> 4</span><span class="lc"><span class="kw">if</span> (punkte &gt;= <span class="num">90</span>) {</span></div>
-        <div class="line"><span class="ln"> 5</span><span class="lc">    note = <span class="str">"sehr gut"</span>;</span></div>
-        <div class="line"><span class="ln"> 6</span><span class="lc">} <span class="kw">else if</span> (punkte &gt;= <span class="num">75</span>) {</span></div>
-        <div class="line"><span class="ln"> 7</span><span class="lc">    note = <span class="str">"gut"</span>;</span></div>
-        <div class="line"><span class="ln"> 8</span><span class="lc">} <span class="kw">else if</span> (punkte &gt;= <span class="num">60</span>) {</span></div>
-        <div class="line"><span class="ln"> 9</span><span class="lc">    note = <span class="str">"befriedigend"</span>;</span></div>
-        <div class="line"><span class="ln">10</span><span class="lc">} <span class="kw">else if</span> (punkte &gt;= <span class="num">45</span>) {</span></div>
-        <div class="line"><span class="ln">11</span><span class="lc">    note = <span class="str">"ausreichend"</span>;</span></div>
-        <div class="line"><span class="ln">12</span><span class="lc">} <span class="kw">else</span> {</span></div>
-        <div class="line"><span class="ln">13</span><span class="lc">    note = <span class="str">"mangelhaft"</span>;</span></div>
-        <div class="line"><span class="ln">14</span><span class="lc">}</span></div>
-        <div class="line"><span class="ln">15</span><span class="lc"></span></div>
-        <div class="line"><span class="ln">16</span><span class="lc">System.out.println(<span class="str">"Deine Note: "</span> + note);</span></div>
-        <div class="line"><span class="ln">17</span><span class="lc"></span></div>
-        <div class="line"><span class="ln">18</span><span class="lc"><span class="cmt">// Ausgabe: Deine Note: gut</span></span></div>
+    <a href="fallunterscheidung.html" class="topic-card">
+      <span class="topic-num">03</span>
+      <div class="topic-text">
+        <div class="topic-title">Fallunterscheidung</div>
+        <div class="topic-desc">Mehrfache Verzweigung mit switch und case</div>
       </div>
-    </div>
+      <span class="arrow">›</span>
+    </a>
 
-    <p>Mit <code>punkte = 82</code> ist die erste Bedingung (<code>82 &gt;= 90</code>) falsch. Die zweite Bedingung (<code>82 &gt;= 75</code>) ist wahr – also wird <code>note = "gut"</code> gesetzt und alle weiteren Blöcke werden übersprungen.</p>
+    <a href="schleifen.html" class="topic-card">
+      <span class="topic-num">04</span>
+      <div class="topic-text">
+        <div class="topic-title">Schleifen</div>
+        <div class="topic-desc">Wiederholungen mit for, while und do-while</div>
+      </div>
+      <span class="arrow">›</span>
+    </a>
 
-    <div class="hint-box">
-      <p>Der abschließende <code>else</code>-Block ist optional, fängt aber alle Fälle auf, die durch keine der vorherigen Bedingungen abgedeckt wurden – hier also alle Punktzahlen unter 45. Ohne ihn würde <code>note</code> in diesem Fall uninitialisiert bleiben, was zu einem Fehler führen kann.</p>
-    </div>
   </div>
-
 
   <footer class="site-footer">
     <span>Java-Tutorial · Informatik</span>
