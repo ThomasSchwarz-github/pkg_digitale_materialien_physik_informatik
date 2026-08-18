@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informatik EF – Java-Grundlagen</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1e2a3a;
+    --accent:  #4f46e5;
+    --accent-light: #e8eaf6;
+    --green:   #166534;
+    --green-bg:#dcfce7;
+    --red:     #991b1b;
+    --red-bg:  #fee2e2;
+    --border:  #d1d5db;
+    --muted:   #6b7280;
+    --radius:  10px;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    line-height: 1.6;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* ── Page shell ── */
+  .page { max-width: 720px; margin: 0 auto; }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  header h1 { font-size: 18px; font-weight: 600; margin-bottom: 2px; }
+  header .sub { font-size: 13px; opacity: 0.7; }
+  header .meta { text-align: right; font-size: 13px; opacity: 0.8; }
+
+  /* ── Auth card ── */
+  .auth-card {
+    background: #fff;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .auth-card h2 { font-size: 15px; font-weight: 600; margin-bottom: 0.75rem; }
+  .auth-card p  { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
+  .input-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  input[type=email], input[type=text] {
+    flex: 1; min-width: 200px;
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type=email]:focus, input[type=text]:focus { border-color: var(--accent); }
+  .btn {
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-secondary { background: transparent; border: 0.5px solid var(--border); color: #374151; }
+  .btn-secondary:hover { background: #f9fafb; opacity: 1; }
+  .btn-danger { background: transparent; border: 0.5px solid #fca5a5; color: var(--red); font-size: 13px; }
+
+  #auth-status {
+    font-size: 13px;
+    margin-top: 0.6rem;
+    color: var(--muted);
+    min-height: 1.2em;
+  }
+  #user-bar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  #user-bar .email-tag {
+    background: var(--accent-light);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ── Quiz area ── */
+  #quiz { display: none; }
+
+  /* ── Task card ── */
+  .task {
+    background: #fff;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .task-header {
+    background: var(--accent-light);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .task-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .task-question { font-size: 14px; font-weight: 500; color: #1f2937; }
+  .task-body { padding: 1rem 1.25rem; }
+
+  /* ── Code block ── */
+  .code-block {
+    background: #1e2a3a;
+    color: #e2e8f0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .kw  { color: #93c5fd; } /* keyword  */
+  .tp  { color: #6ee7b7; } /* type     */
+  .cm  { color: #9ca3af; font-style: italic; } /* comment */
+  .st  { color: #fcd34d; } /* string   */
+  .nm  { color: #f9a8d4; } /* number   */
+
+  /* ── Single choice ── */
+  .choices { display: flex; flex-direction: column; gap: 0.4rem; }
+  .choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+    font-size: 14px;
+  }
+  .choice:hover { background: #f9fafb; border-color: #9ca3af; }
+  .choice input[type=radio] { accent-color: var(--accent); margin-top: 2px; flex-shrink: 0; }
+  .choice code {
+    font-family: 'Courier New', Courier, monospace;
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  /* ── Short text input ── */
+  .short-answer {
+    width: 100%;
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+    min-height: 40px;
+  }
+  .short-answer:focus { border-color: var(--accent); }
+  .input-label { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+
+  /* ── Drag & Drop match ── */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .match-col-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .drop-zone {
+    min-height: 44px;
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .drop-zone.drag-over { background: var(--accent-light); border-color: var(--accent); }
+  .drop-zone.has-chip { color: #111827; }
+  .chip {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 13px;
+    font-family: 'Courier New', Courier, monospace;
+    cursor: grab;
+    user-select: none;
+    border: 0.5px solid #c7d2fe;
+    transition: opacity 0.12s;
+  }
+  .chip:active { cursor: grabbing; opacity: 0.7; }
+  .chip-pool { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.75rem; }
+  .match-labels { display: flex; flex-direction: column; gap: 0.5rem; }
+  .match-row { display: grid; grid-template-columns: 180px 1fr; align-items: center; gap: 0.75rem; }
+  .match-term { font-size: 14px; font-family: 'Courier New', Courier, monospace; }
+
+  /* ── Order task ── */
+  .order-list { display: flex; flex-direction: column; gap: 6px; }
+  .order-item {
+    display: flex; align-items: center; gap: 10px;
+    background: #f9fafb; border: 0.5px solid var(--border);
+    border-radius: 8px; padding: 8px 12px;
+    cursor: grab; font-size: 14px; font-family: 'Courier New', Courier, monospace;
+  }
+  .order-item:active { cursor: grabbing; opacity: 0.7; }
+  .drag-handle { color: #9ca3af; font-size: 16px; line-height: 1; }
+  .order-item.drag-over-item { border-color: var(--accent); background: var(--accent-light); }
+
+  /* ── Feedback ── */
+  .feedback {
+    font-size: 13px;
+    margin-top: 0.6rem;
+    padding: 7px 11px;
+    border-radius: 8px;
+    display: none;
+  }
+  .fb-correct { background: var(--green-bg); color: var(--green); }
+  .fb-wrong   { background: var(--red-bg);   color: var(--red);   }
+
+  /* ── Action row ── */
+  .action-row {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 0.5px solid var(--border);
+  }
+  .save-status {
+    font-size: 13px; color: var(--muted);
+    display: flex; align-items: center; gap: 7px;
+    flex: 1; min-width: 200px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; transition: background 0.3s; }
+  .dot.saved { background: #16a34a; }
+
+  /* ── Config hint ── */
+  .config-hint {
+    background: #fef9c3; border: 0.5px solid #fde047;
+    border-radius: var(--radius); padding: 0.75rem 1rem;
+    font-size: 13px; color: #713f12; margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  .config-hint code { background: #fef08a; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ KONFIGURATION – hier anpassen ══ -->
+  <div class="config-hint">
+    ⚙️ <strong>Konfiguration nötig:</strong> Trage unten im <code>&lt;script&gt;</code>-Block
+    deine <code>SUPABASE_URL</code> und deinen <code>SUPABASE_ANON_KEY</code> ein,
+    bevor du die Seite einsetzt.
+  </div>
+
+  <!-- ══ Header ══ -->
+  <header>
+    <div>
+      <h1>Java-Grundlagen – Klasse MusikPlayer</h1>
+      <div class="sub">Informatik · EF · Digitales Arbeitsblatt</div>
+    </div>
+    <div class="meta">
+      Bearbeitungszeit: 20 Min.<br>
+      Deine Antworten werden gespeichert.
+    </div>
+  </header>
+
+  <!-- ══ Auth ══ -->
+  <div class="auth-card" id="auth-card">
+    <h2>Anmelden</h2>
+    <p>Gib deine Schul-E-Mail-Adresse ein. Du bekommst einen Link zum Einloggen – kein Passwort nötig.</p>
+    <div class="input-row">
+      <input type="email" id="email-input" placeholder="vorname.nachname@schule.de">
+      <button class="btn btn-primary" onclick="sendMagicLink()">Link senden</button>
+    </div>
+    <div id="auth-status"></div>
+  </div>
+
+  <div id="user-bar">
+    <span>Angemeldet als</span>
+    <span class="email-tag" id="user-email-display"></span>
+    <button class="btn btn-danger" onclick="logout()">Abmelden</button>
+  </div>
+
+  <!-- ══ Quiz ══ -->
+  <div id="quiz">
+
+    <!-- ── Aufgabe 1: Single Choice – Attribute ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 1</span>
+        <span class="task-question">Welche der folgenden Variablen ist ein Attribut der Klasse <code style="font-family:monospace;font-size:13px;">MusikPlayer</code>?</span>
+      </div>
+      <div class="task-body">
+        <div class="code-block"><span class="kw">public class</span> <span class="tp">MusikPlayer</span> {
+  <span class="kw">private int</span> aktuelleLautstaerke;
+  <span class="kw">private int</span> maxLautstaerke;
+  <span class="kw">private boolean</span> spielt;
+  <span class="kw">public void</span> starten() { ... }
+}</div>
+        <div class="choices" id="q1">
+          <label class="choice"><input type="radio" name="q1" value="a"> <span><code>starten()</code></span></label>
+          <label class="choice"><input type="radio" name="q1" value="b"> <span><code>aktuelleLautstaerke</code></span></label>
+          <label class="choice"><input type="radio" name="q1" value="c"> <span><code>MusikPlayer</code></span></label>
+          <label class="choice"><input type="radio" name="q1" value="d"> <span><code>void</code></span></label>
+        </div>
+        <div class="feedback" id="fb1"></div>
+      </div>
+    </div>
+
+    <!-- ── Aufgabe 2: Single Choice – Konstruktor ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 2</span>
+        <span class="task-question">Was macht ein Konstruktor in Java?</span>
+      </div>
+      <div class="task-body">
+        <div class="choices" id="q2">
+          <label class="choice"><input type="radio" name="q2" value="a"> <span>Er gibt den Wert eines Attributs zurück.</span></label>
+          <label class="choice"><input type="radio" name="q2" value="b"> <span>Er initialisiert ein neues Objekt und belegt seine Attribute mit Startwerten.</span></label>
+          <label class="choice"><input type="radio" name="q2" value="c"> <span>Er löscht ein Objekt aus dem Speicher.</span></label>
+          <label class="choice"><input type="radio" name="q2" value="d"> <span>Er definiert die Klasse und ihre Vererbungshierarchie.</span></label>
+        </div>
+        <div class="feedback" id="fb2"></div>
+      </div>
+    </div>
+
+    <!-- ── Aufgabe 3: Single Choice – Getter ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 3</span>
+        <span class="task-question">Welche der folgenden Methoden ist eine Getter-Methode?</span>
+      </div>
+      <div class="task-body">
+        <div class="code-block"><span class="kw">public int</span>     gibAktuellenTitel()       { <span class="kw">return this</span>.aktuellerTitel; }
+<span class="kw">public void</span>    starten()                 { <span class="kw">this</span>.spielt = <span class="kw">true</span>; }
+<span class="kw">public void</span>    stoppen()                 { <span class="kw">this</span>.spielt = <span class="kw">false</span>; }
+<span class="kw">public void</span>    lauter()                  { ... }</div>
+        <div class="choices" id="q3">
+          <label class="choice"><input type="radio" name="q3" value="a"> <span><code>starten()</code></span></label>
+          <label class="choice"><input type="radio" name="q3" value="b"> <span><code>stoppen()</code></span></label>
+          <label class="choice"><input type="radio" name="q3" value="c"> <span><code>gibAktuellenTitel()</code></span></label>
+          <label class="choice"><input type="radio" name="q3" value="d"> <span><code>lauter()</code></span></label>
+        </div>
+        <div class="feedback" id="fb3"></div>
+      </div>
+    </div>
+
+    <!-- ── Aufgabe 4: Single Choice – Sichtbarkeit ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 4</span>
+        <span class="task-question">Warum sind Attribute wie <code style="font-family:monospace;font-size:13px;">aktuelleLautstaerke</code> in der Regel <code style="font-family:monospace;font-size:13px;">private</code>?</span>
+      </div>
+      <div class="task-body">
+        <div class="choices" id="q4">
+          <label class="choice"><input type="radio" name="q4" value="a"> <span>Damit sie schneller ausgeführt werden.</span></label>
+          <label class="choice"><input type="radio" name="q4" value="b"> <span>Damit sie von überall im Programm direkt geändert werden können.</span></label>
+          <label class="choice"><input type="radio" name="q4" value="c"> <span>Um den direkten Zugriff von außen zu verhindern und die Datenintegrität zu schützen (Kapselung).</span></label>
+          <label class="choice"><input type="radio" name="q4" value="d"> <span>Damit der Konstruktor nicht aufgerufen werden kann.</span></label>
+        </div>
+        <div class="feedback" id="fb4"></div>
+      </div>
+    </div>
+
+    <!-- ── Aufgabe 5: Single Choice – Rückgabetyp ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 5</span>
+        <span class="task-question">Was gibt die Methode <code style="font-family:monospace;font-size:13px;">spieltGerade()</code> zurück, wenn der Player gerade nicht spielt?</span>
+      </div>
+      <div class="task-body">
+        <div class="code-block"><span class="kw">public boolean</span> spieltGerade() {
+  <span class="kw">return this</span>.spielt;
+}</div>
+        <div class="choices" id="q5">
+          <label class="choice"><input type="radio" name="q5" value="a"> <span><code>0</code></span></label>
+          <label class="choice"><input type="radio" name="q5" value="b"> <span><code>null</code></span></label>
+          <label class="choice"><input type="radio" name="q5" value="c"> <span><code>false</code></span></label>
+          <label class="choice"><input type="radio" name="q5" value="d"> <span><code>"false"</code></span></label>
+        </div>
+        <div class="feedback" id="fb5"></div>
+      </div>
+    </div>
+
+    <!-- ── Aufgabe 6: Single Choice – Schleifenausgabe ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 6</span>
+        <span class="task-question">Ein <code style="font-family:monospace;font-size:13px;">MusikPlayer</code>-Objekt wird mit dem Standardkonstruktor erzeugt. Dann wird <code style="font-family:monospace;font-size:13px;">spieleBisTitel(3)</code> aufgerufen. Wie lautet die vollständige Konsolenausgabe?</span>
+      </div>
+      <div class="task-body">
+        <div class="code-block"><span class="cm">// Standardkonstruktor setzt aktuellerTitel = 1</span>
+<span class="kw">public void</span> spieleBisTitel(<span class="kw">int</span> pTitel) {
+  <span class="kw">for</span>(<span class="kw">int</span> i = <span class="kw">this</span>.aktuellerTitel; i &lt; pTitel; i++) {
+    <span class="kw">this</span>.naechsterTitel();
+  }
+}
+<span class="cm">// naechsterTitel() gibt aus: "Titel: " + aktuellerTitel</span></div>
+        <div class="choices" id="q6">
+          <label class="choice"><input type="radio" name="q6" value="a">
+            <span>Titel: 1<br>Titel: 2<br>Titel: 3</span></label>
+          <label class="choice"><input type="radio" name="q6" value="b">
+            <span>Titel: 2<br>Titel: 3</span></label>
+          <label class="choice"><input type="radio" name="q6" value="c">
+            <span>Titel: 3</span></label>
+          <label class="choice"><input type="radio" name="q6" value="d">
+            <span>(keine Ausgabe)</span></label>
+        </div>
+        <div class="feedback" id="fb6"></div>
+      </div>
+    </div>
+
+    <!-- ── Aufgabe 7: Zuordnung Begriff → Beschreibung ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 7</span>
+        <span class="task-question">Ordne die Java-Begriffe den richtigen Beschreibungen zu. Ziehe die Kästchen in das passende Feld.</span>
+      </div>
+      <div class="task-body">
+        <div class="chip-pool" id="chip-pool">
+          <span class="chip" draggable="true" data-term="Attribut">Attribut</span>
+          <span class="chip" draggable="true" data-term="Methode">Methode</span>
+          <span class="chip" draggable="true" data-term="Konstruktor">Konstruktor</span>
+          <span class="chip" draggable="true" data-term="Objekt">Objekt</span>
+        </div>
+        <div class="match-labels">
+          <div class="match-row">
+            <span class="match-term">Konkretes Exemplar einer Klasse</span>
+            <div class="drop-zone" data-answer="Objekt" id="dz1">Hierher ziehen …</div>
+          </div>
+          <div class="match-row">
+            <span class="match-term">Speichert den Zustand eines Objekts</span>
+            <div class="drop-zone" data-answer="Attribut" id="dz2">Hierher ziehen …</div>
+          </div>
+          <div class="match-row">
+            <span class="match-term">Beschreibt das Verhalten eines Objekts</span>
+            <div class="drop-zone" data-answer="Methode" id="dz3">Hierher ziehen …</div>
+          </div>
+          <div class="match-row">
+            <span class="match-term">Initialisiert ein neues Objekt</span>
+            <div class="drop-zone" data-answer="Konstruktor" id="dz4">Hierher ziehen …</div>
+          </div>
+        </div>
+        <div class="feedback" id="fb7"></div>
+      </div>
+    </div>
+
+    <!-- ── Aufgabe 8: Kurzantwort ── -->
+    <div class="task">
+      <div class="task-header">
+        <span class="task-num">Aufgabe 8</span>
+        <span class="task-question">Erkläre in eigenen Worten, was die Methode <code style="font-family:monospace;font-size:13px;">starten()</code> bewirkt.</span>
+      </div>
+      <div class="task-body">
+        <div class="code-block"><span class="kw">public void</span> starten() {
+  <span class="kw">this</span>.spielt = <span class="kw">true</span>;
+  System.out.println(<span class="st">"Musik läuft."</span>);
+}</div>
+        <p class="input-label">Deine Antwort (1–2 Sätze):</p>
+        <textarea class="short-answer" id="q8" rows="3" placeholder="Die Methode starten() …"></textarea>
+      </div>
+    </div>
+
+    <!-- ── Action row ── -->
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="checkAndSave()">✓ Auswerten &amp; Speichern</button>
+      <button class="btn btn-secondary" onclick="loadAnswers()">↺ Gespeicherte laden</button>
+      <div class="save-status">
+        <span class="dot" id="dot"></span>
+        <span id="save-text">Noch nicht gespeichert.</span>
+      </div>
+    </div>
+
+  </div><!-- /#quiz -->
+</div><!-- /.page -->
+
+<!-- ══ Supabase ══ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ════════════════════════════════════════════
+//  KONFIGURATION – hier anpassen!
+// ════════════════════════════════════════════
+const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
+const ARBEITSBLATT_ID   = 'java_musikplayer_v1';  // eindeutiger Bezeichner dieses Arbeitsblatts
+// ════════════════════════════════════════════
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── Correct answers ──────────────────────────
+const CORRECT = { q1:'b', q2:'b', q3:'c', q4:'c', q5:'c', q6:'b' };
+const FEEDBACK = {
+  q1: { ok:'Richtig! Attribute sind die Variablen, die den Zustand eines Objekts speichern.', err:'Nicht ganz. <code>starten()</code> ist eine Methode, <code>void</code> ein Rückgabetyp und <code>MusikPlayer</code> der Klassenname. Attribute sind die <em>Variablen</em> der Klasse.' },
+  q2: { ok:'Richtig! Ein Konstruktor initialisiert ein neues Objekt und setzt Startwerte.', err:'Nicht ganz. Getter geben Werte zurück, Java hat eine automatische Speicherverwaltung (Garbage Collector) – ein Konstruktor <em>initialisiert</em> Objekte.' },
+  q3: { ok:'Richtig! <code>gibAktuellenTitel()</code> hat einen Rückgabetyp (<code>int</code>) und gibt ein Attribut zurück – das ist das Merkmal einer Getter-Methode.', err:'Nicht ganz. Getter-Methoden erkennt man am Rückgabetyp (nicht <code>void</code>) und daran, dass sie ein Attribut zurückgeben.' },
+  q4: { ok:'Richtig! <code>private</code>-Attribute schützen den Zustand eines Objekts vor unkontrolliertem Zugriff von außen – das nennt man Kapselung.', err:'Nicht ganz. <code>private</code> hat nichts mit Geschwindigkeit zu tun, sondern mit Datenschutz im Sinne der Kapselung (Encapsulation).' },
+  q5: { ok:'Richtig! <code>spielt</code> wurde im Konstruktor auf <code>false</code> gesetzt. Die Methode gibt diesen Wert zurück.', err:'Nicht ganz. Der Rückgabetyp ist <code>boolean</code>. <code>null</code> ist für Objekte, <code>0</code> für <code>int</code>. Ein nicht gestarteter Player gibt <code>false</code> zurück.' },
+  q6: { ok:'Richtig! Die Schleife läuft für i = 1 und i = 2 (nicht für i = 3, da i < pTitel). Es werden also zwei Mal <code>naechsterTitel()</code> aufgerufen → Titel 2, dann Titel 3.', err:'Nicht ganz. Die Schleife startet bei <code>aktuellerTitel = 1</code> und läuft solange <code>i < 3</code>, also für i = 1 und i = 2. Das ergibt zwei Aufrufe: Titel 2 und Titel 3.' },
+};
+
+// ── Auth ─────────────────────────────────────
+async function sendMagicLink() {
+  const email = document.getElementById('email-input').value.trim();
+  if (!email) { setAuthStatus('Bitte E-Mail-Adresse eingeben.'); return; }
+  setAuthStatus('Sende Link …');
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+  if (error) { setAuthStatus('Fehler: ' + error.message); return; }
+  setAuthStatus('✉️ Link gesendet! Prüfe deine E-Mails und klicke den Link.');
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('auth-card').style.display = 'block';
+  document.getElementById('user-bar').style.display = 'none';
+  setStatus('Abgemeldet.', false);
+}
+
+function setAuthStatus(msg) {
+  document.getElementById('auth-status').textContent = msg;
+}
+
+// Check session on load & on auth state change
+sb.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    document.getElementById('auth-card').style.display = 'none';
+    document.getElementById('user-bar').style.display = 'flex';
+    document.getElementById('user-email-display').textContent = session.user.email;
+    document.getElementById('quiz').style.display = 'block';
+    loadAnswers();
+  }
+});
+
+// ── Save / Load ───────────────────────────────
+function collectAnswers() {
+  const data = {};
+  ['q1','q2','q3','q4','q5','q6'].forEach(q => {
+    const sel = document.querySelector(`input[name="${q}"]:checked`);
+    data[q] = sel ? sel.value : null;
+  });
+  // Drag & drop
+  document.querySelectorAll('.drop-zone').forEach(dz => {
+    const chip = dz.querySelector('.chip');
+    data['dz_' + dz.id] = chip ? chip.dataset.term : null;
+  });
+  data['q8'] = document.getElementById('q8').value;
+  return data;
+}
+
+async function checkAndSave() {
+  const data = collectAnswers();
+
+  // Single choice feedback
+  ['q1','q2','q3','q4','q5','q6'].forEach(q => {
+    const fb = document.getElementById('fb' + q.slice(1));
+    if (!data[q]) { fb.style.display = 'none'; return; }
+    const ok = data[q] === CORRECT[q];
+    fb.innerHTML = ok ? '✓ ' + FEEDBACK[q].ok : '✗ ' + FEEDBACK[q].err;
+    fb.className = 'feedback ' + (ok ? 'fb-correct' : 'fb-wrong');
+    fb.style.display = 'block';
+  });
+
+  // Drag & drop feedback
+  let dzCorrect = 0;
+  document.querySelectorAll('.drop-zone').forEach(dz => {
+    const chip = dz.querySelector('.chip');
+    if (chip && chip.dataset.term === dz.dataset.answer) dzCorrect++;
+  });
+  const fb7 = document.getElementById('fb7');
+  fb7.innerHTML = dzCorrect === 4
+    ? '✓ Alle Zuordnungen richtig!'
+    : `✗ ${dzCorrect} von 4 Zuordnungen richtig. Überprüfe deine Antworten.`;
+  fb7.className = 'feedback ' + (dzCorrect === 4 ? 'fb-correct' : 'fb-wrong');
+  fb7.style.display = 'block';
+
+  // Save to Supabase
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { setStatus('Nicht eingeloggt – Speichern nicht möglich.', false); return; }
+
+  const { error } = await sb.from('arbeitsblatt_antworten').upsert({
+    user_id:       user.id,
+    arbeitsblatt:  ARBEITSBLATT_ID,
+    antworten:     data,
+    gespeichert_am: new Date().toISOString()
+  }, { onConflict: 'user_id,arbeitsblatt' });
+
+  if (error) {
+    setStatus('Speichern fehlgeschlagen: ' + error.message, false);
+  } else {
+    setStatus('Gespeichert um ' + new Date().toLocaleTimeString('de-DE'), true);
+  }
+}
+
+async function loadAnswers() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await sb.from('arbeitsblatt_antworten')
+    .select('antworten, gespeichert_am')
+    .eq('user_id', user.id)
+    .eq('arbeitsblatt', ARBEITSBLATT_ID)
+    .single();
+
+  if (error || !data) { setStatus('Noch keine gespeicherten Antworten.', false); return; }
+
+  const a = data.antworten;
+
+  // Restore single choice
+  ['q1','q2','q3','q4','q5','q6'].forEach(q => {
+    if (a[q]) {
+      const r = document.querySelector(`input[name="${q}"][value="${a[q]}"]`);
+      if (r) r.checked = true;
+    }
+  });
+
+  // Restore drag & drop
+  document.querySelectorAll('.drop-zone').forEach(dz => {
+    const saved = a['dz_' + dz.id];
+    if (!saved) return;
+    const chip = document.querySelector(`.chip[data-term="${saved}"]`);
+    if (chip) { dz.appendChild(chip); dz.classList.add('has-chip'); }
+  });
+
+  // Restore textarea
+  if (a['q8'] !== undefined) document.getElementById('q8').value = a['q8'];
+
+  const ts = new Date(data.gespeichert_am).toLocaleString('de-DE');
+  setStatus('Geladen · gespeichert am ' + ts, true);
+}
+
+function setStatus(msg, saved) {
+  document.getElementById('save-text').textContent = msg;
+  document.getElementById('dot').className = 'dot' + (saved ? ' saved' : '');
+}
+
+// ── Drag & Drop ───────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  let dragged = null;
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('dragstart', e => {
+      dragged = chip;
+      setTimeout(() => chip.style.opacity = '0.5', 0);
+    });
+    chip.addEventListener('dragend', () => { chip.style.opacity = '1'; });
+  });
+
+  document.querySelectorAll('.drop-zone').forEach(dz => {
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault();
+      dz.classList.remove('drag-over');
+      // If zone already has a chip, return it to pool
+      const existing = dz.querySelector('.chip');
+      if (existing) document.getElementById('chip-pool').appendChild(existing);
+      dz.appendChild(dragged);
+      dz.classList.add('has-chip');
+    });
+  });
+
+  // Allow dropping back to pool
+  const pool = document.getElementById('chip-pool');
+  pool.addEventListener('dragover', e => e.preventDefault());
+  pool.addEventListener('drop', e => {
+    e.preventDefault();
+    pool.appendChild(dragged);
+  });
+});
+</script>
+</body>
+</html>

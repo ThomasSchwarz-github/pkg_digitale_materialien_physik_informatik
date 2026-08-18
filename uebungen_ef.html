@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Informatik EF – Einführungsphase</title>
+<title>Übungen & Projekte – Informatik EF</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --blue-dark: #0C447C;
     --blue-mid: #185FA5;
-    --blue-light: #E6F1FB;
     --green-mid: #16A34A;
     --green-light: #F0FDF4;
     --gray-bg: #F8F7F4;
@@ -36,7 +34,7 @@
   }
 
   .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
-  .back-link:hover { color: var(--blue-mid); }
+  .back-link:hover { color: var(--green-mid); }
 
   .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 2rem; }
   .header .kurs { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: 0.4rem; }
@@ -54,6 +52,7 @@
   .sim-icon { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; background: var(--green-light); }
   .sim-text { flex: 1; min-width: 0; }
   .sim-title { font-size: 14.5px; font-weight: 500; }
+  .sim-desc { font-size: 12px; color: var(--gray-text); margin-top: 0.15rem; line-height: 1.5; }
   .arrow { color: var(--gray-border); font-size: 16px; flex-shrink: 0; transition: color 0.15s; }
   .sim-card:hover .arrow { color: var(--green-mid); }
 
@@ -79,21 +78,23 @@
 <body>
 <div class="page">
 
-  <a href="index_informatik.html" class="back-link">‹ Zurück zur Übersicht</a>
+  <a href="informatik_ef.html" class="back-link">‹ Einführungsphase</a>
 
   <div class="header">
     <div class="kurs">Informatik · Jahrgangsstufe EF</div>
-    <h1>Einführungsphase</h1>
+    <h1>Übungen &amp; Projekte</h1>
   </div>
 
   <div class="sim-list">
-    <a href="uebungen_ef.html" class="sim-card">
-      <div class="sim-icon">📝</div>
+
+    <a href="info_ef_uebungen/java_musikplayer.html" class="sim-card">
+      <div class="sim-icon">🎵</div>
       <div class="sim-text">
-        <div class="sim-title">Übungen &amp; Projekte</div>
+        <div class="sim-title">Java-Projekt: Musikplayer</div>
       </div>
       <span class="arrow">›</span>
     </a>
+
   </div>
 
   <footer class="site-footer">
