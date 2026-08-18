@@ -60,7 +60,7 @@
   .auth-card h2 { font-size: 15px; font-weight: 600; margin-bottom: 0.75rem; }
   .auth-card p  { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
   .input-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  input[type=email], input[type=text] {
+  input[type=email], input[type=text], input[type=password] {
     flex: 1; min-width: 200px;
     border: 0.5px solid var(--border);
     border-radius: 8px;
@@ -70,7 +70,7 @@
     outline: none;
     transition: border-color 0.15s;
   }
-  input[type=email]:focus, input[type=text]:focus { border-color: var(--accent); }
+  input[type=email]:focus, input[type=text]:focus, input[type=password]:focus { border-color: var(--accent); }
   .btn {
     padding: 9px 18px;
     border-radius: 8px;
@@ -299,10 +299,12 @@
   <!-- ══ Auth ══ -->
   <div class="auth-card" id="auth-card">
     <h2>Anmelden</h2>
-    <p>Gib deine Schul-E-Mail-Adresse ein. Du bekommst einen Link zum Einloggen – kein Passwort nötig.</p>
+    <p>Gib deine Schul-E-Mail-Adresse und dein Passwort ein.</p>
     <div class="input-row">
       <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de">
-      <button class="btn btn-primary" onclick="sendMagicLink()">Link senden</button>
+      <input type="password" id="password-input" placeholder="Passwort"
+             onkeydown="if(event.key==='Enter') login()">
+      <button class="btn btn-primary" onclick="login()">Anmelden</button>
     </div>
     <div id="auth-status"></div>
   </div>
@@ -532,13 +534,14 @@ const FEEDBACK = {
 };
 
 // ── Auth ─────────────────────────────────────
-async function sendMagicLink() {
-  const email = document.getElementById('email-input').value.trim();
-  if (!email) { setAuthStatus('Bitte E-Mail-Adresse eingeben.'); return; }
-  setAuthStatus('Sende Link …');
-  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+async function login() {
+  const email    = document.getElementById('email-input').value.trim();
+  const password = document.getElementById('password-input').value;
+  if (!email || !password) { setAuthStatus('Bitte E-Mail und Passwort eingeben.'); return; }
+  setAuthStatus('Anmeldung …');
+  const { error } = await sb.auth.signInWithPassword({ email, password });
   if (error) { setAuthStatus('Fehler: ' + error.message); return; }
-  setAuthStatus('✉️ Link gesendet! Prüfe deine E-Mails und klicke den Link.');
+  // Auth-State-Handler übernimmt ab hier
 }
 
 async function logout() {
