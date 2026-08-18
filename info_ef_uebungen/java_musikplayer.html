@@ -285,13 +285,6 @@
 <body>
 <div class="page">
 
-  <!-- ══ KONFIGURATION – hier anpassen ══ -->
-  <div class="config-hint">
-    ⚙️ <strong>Konfiguration nötig:</strong> Trage unten im <code>&lt;script&gt;</code>-Block
-    deine <code>SUPABASE_URL</code> und deinen <code>SUPABASE_ANON_KEY</code> ein,
-    bevor du die Seite einsetzt.
-  </div>
-
   <!-- ══ Header ══ -->
   <header>
     <div>
@@ -299,7 +292,6 @@
       <div class="sub">Informatik · EF · Digitales Arbeitsblatt</div>
     </div>
     <div class="meta">
-      Bearbeitungszeit: 20 Min.<br>
       Deine Antworten werden gespeichert.
     </div>
   </header>
@@ -309,7 +301,7 @@
     <h2>Anmelden</h2>
     <p>Gib deine Schul-E-Mail-Adresse ein. Du bekommst einen Link zum Einloggen – kein Passwort nötig.</p>
     <div class="input-row">
-      <input type="email" id="email-input" placeholder="vorname.nachname@schule.de">
+      <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de">
       <button class="btn btn-primary" onclick="sendMagicLink()">Link senden</button>
     </div>
     <div id="auth-status"></div>
