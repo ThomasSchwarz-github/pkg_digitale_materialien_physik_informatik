@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wie funktioniert ein Laserdrucker? – Physik Q1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C;
+    --blue-mid: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-border: #B5D4F4;
+    --gray-bg: #F8F7F4;
+    --gray-border: #D3D1C7;
+    --gray-text: #5F5E5A;
+    --text-main: #1a1917;
+    --ok: #16A34A;
+    --ok-bg: #F0FDF4;
+    --ok-border: #86EFAC;
+    --err: #DC2626;
+    --err-bg: #FEF2F2;
+    --err-border: #FECACA;
+    --warn-bg: #FFFBEB;
+    --warn-border: #FDE68A;
+    --warn-fg: #78350F;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #f5f3ef;
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  .page {
+    width: min(820px, 100%);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 13px; color: var(--gray-text); text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+  .back-link:hover { color: var(--blue-mid); }
+
+  .header {
+    border-bottom: 2px solid var(--text-main);
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.75rem;
+  }
+  .header .kurs {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gray-text); font-weight: 500; margin-bottom: 0.4rem;
+  }
+  .header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.9rem; font-weight: 600; line-height: 1.2;
+  }
+  .header .meta { margin-top: 0.5rem; font-size: 13px; color: var(--gray-text); }
+
+  .intro-box {
+    background: var(--blue-light);
+    border-left: 3px solid var(--blue-mid);
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px; line-height: 1.8;
+    color: var(--blue-dark);
+  }
+
+  /* Process diagram */
+  .diagram-wrap {
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.25rem 1rem 1rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+  }
+  .diagram-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--gray-text);
+    margin-bottom: 1rem; text-align: center;
+  }
+
+  /* Task cards */
+  .task-card {
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .task-header {
+    display: flex; align-items: center; gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+  .task-num {
+    background: var(--blue-mid); color: white;
+    font-size: 11px; font-weight: 600;
+    padding: 0.2rem 0.55rem; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .task-type {
+    font-size: 11px; color: var(--gray-text); font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  .task-q {
+    font-size: 15px; line-height: 1.65; font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .task-hint {
+    font-size: 12.5px; color: var(--gray-text);
+    margin-bottom: 0.85rem; font-style: italic;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+
+  .option {
+    display: flex; align-items: flex-start; gap: 0.65rem;
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid var(--gray-border); border-radius: 7px;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    user-select: none; font-size: 14px; line-height: 1.55;
+  }
+  .option:hover { border-color: var(--blue-mid); background: var(--blue-light); }
+  .option input { margin-top: 2px; flex-shrink: 0; accent-color: var(--blue-mid); cursor: pointer; }
+
+  .option.opt-correct { border-color: var(--ok-border); background: var(--ok-bg); }
+  .option.opt-wrong   { border-color: var(--err-border); background: var(--err-bg); }
+  .option.opt-missed  { border-color: var(--ok-border); background: var(--ok-bg); opacity: 0.65; }
+
+  .btn-check {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--blue-mid); color: white;
+    border: none; border-radius: 6px;
+    padding: 0.55rem 1.15rem;
+    font-size: 13.5px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-check:hover { background: var(--blue-dark); }
+  .btn-check:disabled { opacity: 0.45; cursor: default; }
+
+  .task-feedback {
+    margin-top: 0.85rem; padding: 0.65rem 0.9rem;
+    border-radius: 7px; font-size: 13.5px; line-height: 1.65;
+    display: none;
+  }
+  .task-feedback.show { display: block; }
+  .fb-correct { background: var(--ok-bg);   border: 1px solid var(--ok-border);  color: #14532D; }
+  .fb-partial  { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-fg); }
+  .fb-wrong    { background: var(--err-bg);  border: 1px solid var(--err-border); color: #7F1D1D; }
+
+  /* Sorting task */
+  .sort-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+
+  .sort-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--gray-bg); border: 1.5px solid var(--gray-border);
+    border-radius: 7px; cursor: grab; font-size: 14px;
+    transition: border-color 0.15s, box-shadow 0.12s;
+    user-select: none;
+  }
+  .sort-item:active { cursor: grabbing; }
+  .sort-item.dragging { opacity: 0.45; box-shadow: 0 4px 18px rgba(24,95,165,0.18); }
+  .sort-item.drag-over { border-color: var(--blue-mid); background: var(--blue-light); }
+  .sort-item.sort-correct { border-color: var(--ok-border); background: var(--ok-bg); cursor: default; }
+  .sort-item.sort-wrong   { border-color: var(--err-border); background: var(--err-bg); cursor: default; }
+
+  .sort-handle { color: var(--gray-border); font-size: 16px; flex-shrink: 0; }
+  .sort-icon {
+    width: 32px; height: 32px; border-radius: 6px;
+    background: var(--blue-light); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .sort-text { flex: 1; }
+  .sort-label { font-weight: 500; }
+  .sort-desc  { font-size: 12px; color: var(--gray-text); margin-top: 0.1rem; }
+
+  /* Footer */
+  .site-footer {
+    margin-top: 4rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--gray-border);
+    font-size: 12px; color: var(--gray-text);
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 2rem 1.25rem 4rem; }
+    .header h1 { font-size: 1.6rem; }
+    .task-card { padding: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="index_physik.html" class="back-link">‹ Physik-Übersicht</a>
+
+  <div class="header">
+    <div class="kurs">Physik · Qualifikationsphase Q1 – Geladene Teilchen in Feldern</div>
+    <h1>Wie funktioniert ein Laserdrucker?</h1>
+    <div class="meta">Einstieg: Elektrostatik in der Alltagstechnik</div>
+  </div>
+
+  <div class="intro-box">
+    Ein Laserdrucker ist ein faszinierendes Beispiel für Elektrostatik im Alltag. Er verbindet <strong>Ladung und Entladung, Anziehung und Abstoßung</strong> sowie <strong>Licht, Wärme und mechanische Bewegung</strong> zu einem präzisen Druckprozess. Nutze dein Vorwissen aus der Elektrizitätslehre (Jahrgangsstufen 5–9) und aus der Mechanik (EF), um die Fragen zu bearbeiten.
+  </div>
+
+  <!-- ── Process Overview SVG ── -->
+  <div class="diagram-wrap">
+    <p class="diagram-title">Der Druckprozess im Überblick</p>
+    <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:480px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+          <path d="M0,0.5 L0,6.5 L7,3.5 z" fill="#185FA5"/>
+        </marker>
+      </defs>
+
+      <!-- 6 boxes: w=100, h=80, gap=27 (incl. arrow). Positions: 5,132,259,386,513,640 -->
+
+      <!-- 1 Aufladen -->
+      <rect x="5"   y="18" width="100" height="78" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+      <circle cx="55" cy="40" r="13" fill="#185FA5"/>
+      <text x="55" y="45" text-anchor="middle" font-size="13" font-weight="600" fill="white" font-family="IBM Plex Sans,sans-serif">1</text>
+      <text x="55" y="65" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0C447C" font-family="IBM Plex Sans,sans-serif">Aufladen</text>
+      <text x="55" y="79" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">Trommel wird</text>
+      <text x="55" y="90" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">geladen</text>
+      <path d="M105 57 L130 57" stroke="#185FA5" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+      <!-- 2 Belichten -->
+      <rect x="132" y="18" width="100" height="78" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+      <circle cx="182" cy="40" r="13" fill="#185FA5"/>
+      <text x="182" y="45" text-anchor="middle" font-size="13" font-weight="600" fill="white" font-family="IBM Plex Sans,sans-serif">2</text>
+      <text x="182" y="65" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0C447C" font-family="IBM Plex Sans,sans-serif">Belichten</text>
+      <text x="182" y="79" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">Laser schreibt</text>
+      <text x="182" y="90" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">das Bild</text>
+      <path d="M232 57 L257 57" stroke="#185FA5" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+      <!-- 3 Entwickeln -->
+      <rect x="259" y="18" width="100" height="78" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+      <circle cx="309" cy="40" r="13" fill="#185FA5"/>
+      <text x="309" y="45" text-anchor="middle" font-size="13" font-weight="600" fill="white" font-family="IBM Plex Sans,sans-serif">3</text>
+      <text x="309" y="65" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0C447C" font-family="IBM Plex Sans,sans-serif">Entwickeln</text>
+      <text x="309" y="79" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">Toner haftet</text>
+      <text x="309" y="90" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">an Trommel</text>
+      <path d="M359 57 L384 57" stroke="#185FA5" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+      <!-- 4 Übertragen -->
+      <rect x="386" y="18" width="100" height="78" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+      <circle cx="436" cy="40" r="13" fill="#185FA5"/>
+      <text x="436" y="45" text-anchor="middle" font-size="13" font-weight="600" fill="white" font-family="IBM Plex Sans,sans-serif">4</text>
+      <text x="436" y="65" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0C447C" font-family="IBM Plex Sans,sans-serif">Übertragen</text>
+      <text x="436" y="79" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">Toner geht</text>
+      <text x="436" y="90" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">auf Papier</text>
+      <path d="M486 57 L511 57" stroke="#185FA5" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+      <!-- 5 Fixieren -->
+      <rect x="513" y="18" width="100" height="78" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+      <circle cx="563" cy="40" r="13" fill="#185FA5"/>
+      <text x="563" y="45" text-anchor="middle" font-size="13" font-weight="600" fill="white" font-family="IBM Plex Sans,sans-serif">5</text>
+      <text x="563" y="65" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0C447C" font-family="IBM Plex Sans,sans-serif">Fixieren</text>
+      <text x="563" y="79" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">Toner wird</text>
+      <text x="563" y="90" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">eingeschmolzen</text>
+      <path d="M613 57 L638 57" stroke="#185FA5" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+      <!-- 6 Reinigen -->
+      <rect x="640" y="18" width="100" height="78" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+      <circle cx="690" cy="40" r="13" fill="#185FA5"/>
+      <text x="690" y="45" text-anchor="middle" font-size="13" font-weight="600" fill="white" font-family="IBM Plex Sans,sans-serif">6</text>
+      <text x="690" y="65" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0C447C" font-family="IBM Plex Sans,sans-serif">Reinigen</text>
+      <text x="690" y="79" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">Trommel wird</text>
+      <text x="690" y="90" text-anchor="middle" font-size="9.5" fill="#5F5E5A" font-family="IBM Plex Sans,sans-serif">gereinigt</text>
+    </svg>
+  </div>
+
+  <!-- ── Aufgabe 1: MC Grundlagen ── -->
+  <div class="task-card" id="task1">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 1</span>
+      <span class="task-type">Multiple Choice</span>
+    </div>
+    <p class="task-q">Welche der folgenden Aussagen über elektrische Ladungen sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
+    <div class="options" id="opts1">
+      <label class="option"><input type="checkbox" value="a"> Gleichnamige Ladungen stoßen sich gegenseitig ab.</label>
+      <label class="option"><input type="checkbox" value="b"> Ungleichnamige Ladungen stoßen sich gegenseitig ab.</label>
+      <label class="option"><input type="checkbox" value="c"> Beim Reiben zweier Körper werden Elektronen von einem auf den anderen übertragen.</label>
+      <label class="option"><input type="checkbox" value="d"> Ein elektrisch neutraler Körper trägt ausschließlich negative Ladungen.</label>
+      <label class="option"><input type="checkbox" value="e"> Durch Influenz kann ein geladener Körper auch einen neutralen Körper anziehen.</label>
+    </div>
+    <button class="btn-check" onclick="checkMC(1, ['a','c','e'])">Antwort prüfen</button>
+    <div class="task-feedback" id="fb1"></div>
+  </div>
+
+  <!-- ── Aufgabe 2: SC Fotoleiter ── -->
+  <div class="task-card" id="task2">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 2</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Die Trommel eines Laserdruckers besteht aus einem <strong>Fotoleiter</strong>. Welche besondere Eigenschaft hat dieses Material?</p>
+    <div class="options" id="opts2">
+      <label class="option"><input type="radio" name="q2" value="a"> Es leitet elektrischen Strom immer und erzeugt dabei Licht.</label>
+      <label class="option"><input type="radio" name="q2" value="b"> Im Dunkeln isoliert es; bei Lichteinfall wird es elektrisch leitfähig.</label>
+      <label class="option"><input type="radio" name="q2" value="c"> Es leitet Strom besser als metallische Leiter wie Kupfer oder Silber.</label>
+      <label class="option"><input type="radio" name="q2" value="d"> Es leitet Strom nur bei sehr hohen Temperaturen.</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(2,'b')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb2"></div>
+  </div>
+
+  <!-- ── Aufgabe 3: SC Belichten ── -->
+  <div class="task-card" id="task3">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 3</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Die aufgeladene Trommel wird von einem Laserstrahl abgetastet. Was geschieht an den vom Laser getroffenen Stellen?</p>
+    <div class="options" id="opts3">
+      <label class="option"><input type="radio" name="q3" value="a"> Die Ladung an diesen Stellen wird verstärkt.</label>
+      <label class="option"><input type="radio" name="q3" value="b"> Der Fotoleiter wird leitfähig – die Ladung fließt ab. Die Stelle wird entladen.</label>
+      <label class="option"><input type="radio" name="q3" value="c"> Die Ladung wechselt ihr Vorzeichen (+ wird –).</label>
+      <label class="option"><input type="radio" name="q3" value="d"> Der Laser heizt die Trommel auf, was die Ladung verstärkt.</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(3,'b')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb3"></div>
+  </div>
+
+  <!-- ── Aufgabe 4: SC Toner ── -->
+  <div class="task-card" id="task4">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 4</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Toner besteht aus winzigen Kunststoffpartikeln, die elektrisch geladen sind. Welches physikalische Grundprinzip aus der Elektrostatik sorgt dafür, dass der Toner an den richtigen Stellen der Trommel haftet?</p>
+    <div class="options" id="opts4">
+      <label class="option"><input type="radio" name="q4" value="a"> Gleichnamige Ladungen stoßen sich ab – der Toner wird von der Trommel abgestoßen und bleibt dabei hängen.</label>
+      <label class="option"><input type="radio" name="q4" value="b"> Ungleichnamige Ladungen ziehen sich an – Toner und geladene Trommelbereiche tragen entgegengesetzte Ladungen.</label>
+      <label class="option"><input type="radio" name="q4" value="c"> Reibung sorgt dafür, dass der Toner gleichmäßig auf die Trommel aufgetragen wird.</label>
+      <label class="option"><input type="radio" name="q4" value="d"> Der Toner haftet durch Luftdruck an der Trommeloberfläche.</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(4,'b')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb4"></div>
+  </div>
+
+  <!-- ── Aufgabe 5: SC Übertragen ── -->
+  <div class="task-card" id="task5">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 5</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Damit der Toner von der Trommel auf das Papier wechselt, wird das Papier elektrisch aufgeladen. Welche Ladung muss das Papier tragen, damit der Toner dorthin angezogen wird?</p>
+    <div class="options" id="opts5">
+      <label class="option"><input type="radio" name="q5" value="a"> Dieselbe Ladung wie die Tonerpartikel.</label>
+      <label class="option"><input type="radio" name="q5" value="b"> Die entgegengesetzte Ladung wie die Tonerpartikel.</label>
+      <label class="option"><input type="radio" name="q5" value="c"> Gar keine Ladung – der Toner haftet durch die Schwerkraft auf dem horizontalen Papier.</label>
+      <label class="option"><input type="radio" name="q5" value="d"> Abwechselnd positive und negative Ladung im Millisekundentakt.</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(5,'b')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb5"></div>
+  </div>
+
+  <!-- ── Aufgabe 6: SC Energieumwandlung Fixieren ── -->
+  <div class="task-card" id="task6">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 6</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Im Fixierer wird der Toner von zwei beheizten Walzen dauerhaft mit dem Papier verschmolzen. Welche Energieumwandlung findet in den elektrischen Heizwalzen statt?</p>
+    <div class="options" id="opts6">
+      <label class="option"><input type="radio" name="q6" value="a"> Lichtenergie → Wärmeenergie</label>
+      <label class="option"><input type="radio" name="q6" value="b"> Chemische Energie → mechanische Energie</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Elektrische Energie → Wärmeenergie</label>
+      <label class="option"><input type="radio" name="q6" value="d"> Kernenergie → Wärmeenergie</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(6,'c')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb6"></div>
+  </div>
+
+  <!-- ── Aufgabe 7: Sortieraufgabe ── -->
+  <div class="task-card" id="task7">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 7</span>
+      <span class="task-type">Sortieraufgabe</span>
+    </div>
+    <p class="task-q">Bringe die sechs Schritte des Laserdruckprozesses in die richtige Reihenfolge.</p>
+    <p class="task-hint">Ziehe die Karten per Drag &amp; Drop an die richtige Position.</p>
+    <div class="sort-list" id="sortList"></div>
+    <button class="btn-check" onclick="checkSort()">Reihenfolge prüfen</button>
+    <div class="task-feedback" id="fb7"></div>
+  </div>
+
+  <footer class="site-footer">
+    <span>Physik · Interaktive Lernmaterialien</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+
+</div><!-- .page -->
+
+<script>
+// ── Single Choice ──
+const scFeedback = {
+  2: {
+    ok:  'Richtig! Ein Fotoleiter (Halbleiter) isoliert im Dunkeln – deshalb bleibt die aufgebrachte Ladung auf der Trommel erhalten. Sobald Licht auf ihn trifft, werden Elektronen frei, der Stoff wird leitfähig, und die Ladung kann abfließen.',
+    err: 'Nicht ganz. Ein Fotoleiter verhält sich im Dunkeln wie ein Isolator. Erst durch Lichteinfall wird er leitfähig – daher der Name „Fotoleiter".'
+  },
+  3: {
+    ok:  'Richtig! Der Laser macht den Fotoleiter an den getroffenen Stellen leitfähig. Die Ladung fließt dort ab – es entsteht ein unsichtbares Ladungsbild auf der Trommel (das sogenannte latente Bild).',
+    err: 'Nicht ganz. Durch den Lichteinfall wird der Fotoleiter kurzzeitig leitfähig, die Ladung fließt ab. An den dunklen (nicht belichteten) Stellen bleibt die Ladung erhalten.'
+  },
+  4: {
+    ok:  'Richtig! Ungleichnamige Ladungen ziehen sich an. Die Tonerpartikel tragen die entgegengesetzte Ladung zu den geladenen Trommelbereichen und werden deshalb elektrostatisch angezogen – sie haften dort.',
+    err: 'Nicht ganz. Das entscheidende Prinzip ist die elektrostatische Anziehung: Tonerpartikel und geladene Trommelbereiche tragen entgegengesetzte Ladungen, sodass sich der Toner genau dort ablagert.'
+  },
+  5: {
+    ok:  'Richtig! Das Papier erhält die entgegengesetzte Ladung der Tonerpartikel. Da ungleichnamige Ladungen sich anziehen, wechseln die Tonerpartikel von der Trommel auf das Papier – die Anziehung zum Papier ist stärker als die Haftung an der Trommel.',
+    err: 'Nicht ganz. Damit der Toner zum Papier hin angezogen wird, muss das Papier die entgegengesetzte Ladung der Tonerpartikel tragen. So zieht das Papier den Toner von der Trommel ab.'
+  },
+  6: {
+    ok:  'Richtig! Die Heizwalzen funktionieren wie ein Heizdraht (ähnlich einem Toaster): Elektrische Energie wird durch den ohmschen Widerstand in Wärmeenergie umgewandelt. Diese Wärme schmilzt den Kunststoff des Toners und verbindet ihn dauerhaft mit dem Papier.',
+    err: 'Nicht ganz. Die Heizwalzen sind elektrisch beheizt. Im Heizwiderstand wird elektrische Energie in Wärmeenergie umgewandelt – dasselbe Prinzip wie bei einem Heizdraht oder einer Herdplatte.'
+  }
+};
+
+function checkSC(n, correct) {
+  const opts = document.querySelectorAll('#opts' + n + ' .option');
+  const fb   = document.getElementById('fb' + n);
+  const btn  = document.querySelector('#task' + n + ' .btn-check');
+  let selected = null;
+  opts.forEach(o => {
+    const inp = o.querySelector('input');
+    if (inp.checked) selected = inp.value;
+    inp.disabled = true;
+  });
+  btn.disabled = true;
+  opts.forEach(o => {
+    const v = o.querySelector('input').value;
+    if (v === correct) o.classList.add('opt-correct');
+    else if (v === selected) o.classList.add('opt-wrong');
+  });
+  fb.classList.add('show');
+  if (!selected) {
+    fb.classList.add('fb-wrong');
+    fb.textContent = 'Bitte wähle eine Antwort aus.';
+    return;
+  }
+  if (selected === correct) {
+    fb.classList.add('fb-correct');
+    fb.textContent = '✓ ' + (scFeedback[n] ? scFeedback[n].ok : 'Richtig!');
+  } else {
+    fb.classList.add('fb-wrong');
+    fb.textContent = '✗ ' + (scFeedback[n] ? scFeedback[n].err : 'Leider falsch.');
+  }
+}
+
+// ── Multiple Choice ──
+function checkMC(n, correct) {
+  const opts = document.querySelectorAll('#opts' + n + ' .option');
+  const fb   = document.getElementById('fb' + n);
+  const btn  = document.querySelector('#task' + n + ' .btn-check');
+  let selected = [];
+  opts.forEach(o => {
+    const inp = o.querySelector('input');
+    if (inp.checked) selected.push(inp.value);
+    inp.disabled = true;
+  });
+  btn.disabled = true;
+  opts.forEach(o => {
+    const v = o.querySelector('input').value;
+    const isRight = correct.includes(v);
+    const isSel   = selected.includes(v);
+    if (isRight && isSel)  o.classList.add('opt-correct');
+    else if (!isRight && isSel) o.classList.add('opt-wrong');
+    else if (isRight && !isSel) o.classList.add('opt-missed');
+  });
+  const allPicked  = correct.every(k => selected.includes(k));
+  const noneWrong  = selected.every(k => correct.includes(k));
+  fb.classList.add('show');
+  if (allPicked && noneWrong) {
+    fb.classList.add('fb-correct');
+    fb.textContent = '✓ Richtig! Gleichnamige Ladungen stoßen sich ab, ungleichnamige ziehen sich an. Beim Reiben wandern Elektronen. Durch Influenz verschieben sich Ladungen in einem neutralen Körper, sodass er von einem geladenen Körper angezogen wird.';
+  } else if (allPicked || noneWrong) {
+    fb.classList.add('fb-partial');
+    fb.textContent = 'Teilweise richtig. Achte darauf, alle drei richtigen Aussagen zu wählen und keine falschen dabei zu haben. Grün = richtig, rot = falsch gewählt, grün/transparent = richtig, aber vergessen.';
+  } else {
+    fb.classList.add('fb-wrong');
+    fb.textContent = '✗ Noch nicht ganz. Die grün hinterlegten Aussagen sind korrekt. Merke: Ungleichnamig = anziehend; Reibung überträgt Elektronen; Influenz ermöglicht Anziehung ohne direkte Ladung.';
+  }
+}
+
+// ── Sorting Task ──
+const STEPS = [
+  { id: 'aufladen',    icon: '⚡', label: 'Aufladen',    desc: 'Die Fotoleitertrommel wird gleichmäßig elektrisch aufgeladen.' },
+  { id: 'belichten',   icon: '💡', label: 'Belichten',   desc: 'Ein Laser schreibt das Druckbild auf die Trommel und entlädt bestimmte Stellen.' },
+  { id: 'entwickeln',  icon: '🖤', label: 'Entwickeln',  desc: 'Geladene Tonerpartikel haften durch elektrostatische Anziehung an der Trommel.' },
+  { id: 'uebertragen', icon: '📄', label: 'Übertragen',  desc: 'Der Toner wechselt durch elektrostatische Kräfte vom Trommel auf das Papier.' },
+  { id: 'fixieren',    icon: '🔥', label: 'Fixieren',    desc: 'Beheizte Walzen schmelzen den Toner dauerhaft ins Papier.' },
+  { id: 'reinigen',    icon: '🧹', label: 'Reinigen',    desc: 'Restlicher Toner wird von der Trommel entfernt; sie ist bereit für den nächsten Zyklus.' }
+];
+const CORRECT_ORDER = ['aufladen','belichten','entwickeln','uebertragen','fixieren','reinigen'];
+
+let order = shuffle([...STEPS]);
+let dragSrc = null;
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function renderSort() {
+  const list = document.getElementById('sortList');
+  list.innerHTML = '';
+  order.forEach(step => {
+    const div = document.createElement('div');
+    div.className = 'sort-item';
+    div.draggable = true;
+    div.dataset.id = step.id;
+    div.innerHTML =
+      '<span class="sort-handle">⠿</span>' +
+      '<div class="sort-icon">' + step.icon + '</div>' +
+      '<div class="sort-text">' +
+        '<div class="sort-label">' + step.label + '</div>' +
+        '<div class="sort-desc">' + step.desc + '</div>' +
+      '</div>';
+
+    div.addEventListener('dragstart', e => {
+      dragSrc = div;
+      div.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    div.addEventListener('dragend', () => {
+      div.classList.remove('dragging');
+      list.querySelectorAll('.sort-item').forEach(el => el.classList.remove('drag-over'));
+    });
+    div.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (div !== dragSrc) div.classList.add('drag-over');
+    });
+    div.addEventListener('dragleave', () => div.classList.remove('drag-over'));
+    div.addEventListener('drop', e => {
+      e.preventDefault();
+      div.classList.remove('drag-over');
+      if (!dragSrc || dragSrc === div) return;
+      const fromId = dragSrc.dataset.id;
+      const toId   = div.dataset.id;
+      const fi = order.findIndex(s => s.id === fromId);
+      const ti = order.findIndex(s => s.id === toId);
+      const [moved] = order.splice(fi, 1);
+      order.splice(ti, 0, moved);
+      renderSort();
+    });
+
+    list.appendChild(div);
+  });
+}
+
+renderSort();
+
+function checkSort() {
+  const items = document.querySelectorAll('#sortList .sort-item');
+  const fb    = document.getElementById('fb7');
+  const btn   = document.querySelector('#task7 .btn-check');
+  let correct = 0;
+  items.forEach((item, i) => {
+    item.draggable = false;
+    if (item.dataset.id === CORRECT_ORDER[i]) {
+      item.classList.add('sort-correct');
+      correct++;
+    } else {
+      item.classList.add('sort-wrong');
+    }
+  });
+  btn.disabled = true;
+  fb.classList.add('show');
+  if (correct === 6) {
+    fb.classList.add('fb-correct');
+    fb.textContent = '✓ Perfekt! Die Reihenfolge stimmt vollständig. Du kennst jetzt den gesamten Laserdruck-Zyklus.';
+  } else {
+    fb.classList.add('fb-wrong');
+    fb.innerHTML = '✗ ' + correct + ' von 6 Schritten richtig positioniert. Grün markierte Positionen stimmen, rote nicht.<br>Die korrekte Reihenfolge: <strong>Aufladen → Belichten → Entwickeln → Übertragen → Fixieren → Reinigen</strong>.';
+  }
+}
+</script>
+</body>
+</html>
