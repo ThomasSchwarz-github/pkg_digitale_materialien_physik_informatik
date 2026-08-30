@@ -92,6 +92,90 @@
     color: var(--gray-text);
   }
 
+  /* Mode selection */
+  .mode-select { margin-bottom: 2rem; }
+  .mode-card {
+    background: white;
+    border: 1.5px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .mode-card:hover { border-color: var(--blue-mid); box-shadow: 0 2px 12px rgba(24,95,165,0.1); }
+  .mode-card h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--blue-dark); margin-bottom: 0.35rem;
+  }
+  .mode-card p { font-size: 13.5px; line-height: 1.6; color: var(--gray-text); }
+
+  /* Auth */
+  .auth-card {
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .auth-card h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem; font-weight: 600;
+    color: var(--blue-dark); margin-bottom: 0.4rem;
+  }
+  .auth-card p { font-size: 13.5px; color: var(--gray-text); margin-bottom: 1rem; }
+  .input-row { display: flex; gap: 0.55rem; flex-wrap: wrap; }
+  .input-row input[type=email], .input-row input[type=password] {
+    flex: 1; min-width: 200px;
+    border: 1.5px solid var(--gray-border); border-radius: 7px;
+    padding: 0.55rem 0.8rem; font-size: 14px; font-family: inherit;
+    outline: none; transition: border-color 0.15s;
+  }
+  .input-row input:focus { border-color: var(--blue-mid); }
+  .btn-save {
+    background: var(--blue-mid); color: white; border: none;
+    border-radius: 6px; padding: 0.55rem 1.15rem;
+    font-size: 13.5px; font-weight: 500; cursor: pointer;
+    font-family: inherit; transition: background 0.15s;
+  }
+  .btn-save:hover { background: var(--blue-dark); }
+  .btn-outline {
+    background: transparent; border: 1.5px solid var(--gray-border);
+    color: var(--text-main); border-radius: 6px;
+    padding: 0.5rem 1rem; font-size: 13px; cursor: pointer;
+    font-family: inherit; transition: border-color 0.15s;
+  }
+  .btn-outline:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+  #auth-status { font-size: 13px; color: var(--gray-text); margin: 0.6rem 0; min-height: 1.2em; }
+
+  #user-bar {
+    display: none; align-items: center; gap: 10px;
+    font-size: 13px; margin-bottom: 1.5rem; flex-wrap: wrap;
+    color: var(--gray-text);
+  }
+  #user-bar .email-tag {
+    background: var(--blue-light); color: var(--blue-dark);
+    padding: 3px 10px; border-radius: 20px; font-weight: 500;
+  }
+
+  #anon-hint {
+    background: var(--warn-bg); border-left: 3px solid var(--warn-border);
+    color: var(--warn-fg); font-size: 13.5px; line-height: 1.6;
+    padding: 0.85rem 1.1rem; margin-bottom: 2rem;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Save action row */
+  .save-action-row {
+    display: none; gap: 1rem; flex-wrap: wrap; align-items: center;
+    margin-top: 2rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--gray-border);
+  }
+  .save-status { font-size: 13px; color: var(--gray-text); display: flex; align-items: center; gap: 7px; }
+  .save-status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-border); flex-shrink: 0; transition: background 0.3s; }
+  .save-status .dot.saved { background: var(--ok); }
+
   /* Process diagram */
   .diagram-wrap {
     background: white;
@@ -243,6 +327,48 @@
     <img src="pics/Aufbau_Laserdrucker.webp" alt="Schematischer Aufbau eines Laserdruckers" style="width:100%;display:block;border-radius:6px;">
     <p style="margin-top:0.6rem;font-size:11px;color:var(--gray-text);">Quelle: <a href="https://de.wikipedia.org/wiki/Laserdrucker#/media/Datei:Aufbau_Laserdrucker.svg" target="_blank" rel="noopener" style="color:var(--gray-text);">Wikipedia – Laserdrucker</a></p>
   </div>
+
+  <!-- ── Mode selection ── -->
+  <div class="mode-select" id="mode-select">
+    <div class="section-header" style="margin-top:0;">
+      <h2>Wie möchtest du die Aufgaben bearbeiten?</h2>
+      <p>Wähle, ob deine Ergebnisse in der Datenbank gespeichert werden sollen.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('saved')">
+      <h3>🔐 Mit Anmeldung – Ergebnisse speichern</h3>
+      <p>Melde dich mit deiner Schul-E-Mail-Adresse an. Am Ende kannst du deine Antworten speichern und beim nächsten Besuch wieder laden.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('anon')">
+      <h3>👤 Ohne Anmeldung – nicht gespeichert</h3>
+      <p>Bearbeite die Aufgaben direkt, ohne dich anzumelden. Du erhältst wie gewohnt sofort Feedback zu jeder Aufgabe – deine Ergebnisse gehen aber beim Schließen der Seite verloren.</p>
+    </div>
+  </div>
+
+  <!-- ── Auth ── -->
+  <div class="auth-card" id="auth-card" style="display:none;">
+    <h2>Anmelden</h2>
+    <p>Gib deine Schul-E-Mail-Adresse und dein Passwort ein.</p>
+    <div class="input-row">
+      <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de">
+      <input type="password" id="password-input" placeholder="Passwort"
+             onkeydown="if(event.key==='Enter') login()">
+      <button class="btn-save" onclick="login()">Anmelden</button>
+    </div>
+    <div id="auth-status"></div>
+    <button class="btn-outline" onclick="backToModeSelect()">‹ Zurück zur Auswahl</button>
+  </div>
+
+  <div id="user-bar">
+    <span>Angemeldet als</span>
+    <span class="email-tag" id="user-email-display"></span>
+    <button class="btn-outline" onclick="logout()">Abmelden</button>
+  </div>
+
+  <div id="anon-hint" style="display:none;">
+    ℹ️ Du bearbeitest die Aufgaben ohne Anmeldung. Deine Antworten werden <strong>nicht gespeichert</strong> und gehen beim Schließen der Seite verloren.
+  </div>
+
+  <div id="quiz-content" style="display:none;">
 
   <div class="section-header">
     <h2>Teil 1 – Grundlagen der Elektrizitätslehre</h2>
@@ -472,6 +598,17 @@
     <div class="task-feedback" id="fb11"></div>
   </div>
 
+  <!-- ── Speichern (nur im Modus "Mit Anmeldung") ── -->
+  <div class="save-action-row" id="save-action-row">
+    <button class="btn-save" onclick="saveResults()">💾 Ergebnisse speichern</button>
+    <div class="save-status">
+      <span class="dot" id="save-dot"></span>
+      <span id="save-text">Noch nicht gespeichert.</span>
+    </div>
+  </div>
+
+  </div><!-- /#quiz-content -->
+
   <footer class="site-footer">
     <span>Physik · Interaktive Lernmaterialien</span>
     <span>Gehostet auf GitHub Pages</span>
@@ -694,6 +831,155 @@ function checkSort() {
     fb.classList.add('fb-wrong');
     fb.innerHTML = '✗ ' + correct + ' von 6 Schritten richtig positioniert. Grün markierte Positionen stimmen, rote nicht.<br>Die korrekte Reihenfolge: <strong>Aufladen → Belichten → Entwickeln → Übertragen → Fixieren → Reinigen</strong>.';
   }
+}
+</script>
+
+<!-- ══ Supabase (Speichern der Ergebnisse) ══ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ════════════════════════════════════════════
+//  KONFIGURATION
+// ════════════════════════════════════════════
+const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
+const ARBEITSBLATT_ID   = 'laserdrucker_einstieg_v1';
+// ════════════════════════════════════════════
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── Moduswahl ─────────────────────────────────
+function selectMode(mode) {
+  document.getElementById('mode-select').style.display = 'none';
+  if (mode === 'saved') {
+    checkExistingSession();
+  } else {
+    document.getElementById('quiz-content').style.display = 'block';
+    document.getElementById('anon-hint').style.display = 'block';
+  }
+}
+
+function backToModeSelect() {
+  location.reload();
+}
+
+// ── Auth ─────────────────────────────────────
+async function checkExistingSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    onLoggedIn(session);
+  } else {
+    document.getElementById('auth-card').style.display = 'block';
+  }
+}
+
+async function login() {
+  const email    = document.getElementById('email-input').value.trim();
+  const password = document.getElementById('password-input').value;
+  if (!email || !password) { setAuthStatus('Bitte E-Mail und Passwort eingeben.'); return; }
+  setAuthStatus('Anmeldung …');
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { setAuthStatus('Fehler: ' + error.message); return; }
+  onLoggedIn(data.session);
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+function onLoggedIn(session) {
+  document.getElementById('auth-card').style.display = 'none';
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-email-display').textContent = session.user.email;
+  document.getElementById('quiz-content').style.display = 'block';
+  document.getElementById('save-action-row').style.display = 'flex';
+  loadAnswers();
+}
+
+function setAuthStatus(msg) {
+  document.getElementById('auth-status').textContent = msg;
+}
+
+// ── Speichern / Laden ─────────────────────────
+function collectAnswers() {
+  const data = {};
+  [1,2,3,4,5].forEach(n => {
+    data['q' + n] = Array.from(document.querySelectorAll('#opts' + n + ' input:checked')).map(i => i.value);
+  });
+  [6,7,8,9,10].forEach(n => {
+    const sel = document.querySelector(`input[name="q${n}"]:checked`);
+    data['q' + n] = sel ? sel.value : null;
+  });
+  data['q11_order'] = Array.from(document.querySelectorAll('#sortList .sort-item')).map(el => el.dataset.id);
+  return data;
+}
+
+async function saveResults() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { setSaveStatus('Nicht eingeloggt – Speichern nicht möglich.', false); return; }
+
+  const answers = collectAnswers();
+  const { error } = await sb.from('arbeitsblatt_antworten').upsert({
+    user_id:        user.id,
+    arbeitsblatt:   ARBEITSBLATT_ID,
+    antworten:      answers,
+    gespeichert_am: new Date().toISOString()
+  }, { onConflict: 'user_id,arbeitsblatt' });
+
+  if (error) {
+    setSaveStatus('Speichern fehlgeschlagen: ' + error.message, false);
+  } else {
+    setSaveStatus('Gespeichert um ' + new Date().toLocaleTimeString('de-DE'), true);
+  }
+}
+
+async function loadAnswers() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await sb.from('arbeitsblatt_antworten')
+    .select('antworten, gespeichert_am')
+    .eq('user_id', user.id)
+    .eq('arbeitsblatt', ARBEITSBLATT_ID)
+    .single();
+
+  if (error || !data) { setSaveStatus('Noch keine gespeicherten Antworten.', false); return; }
+
+  const a = data.antworten;
+
+  [1,2,3,4,5].forEach(n => {
+    if (Array.isArray(a['q' + n])) {
+      a['q' + n].forEach(v => {
+        const inp = document.querySelector(`#opts${n} input[value="${v}"]`);
+        if (inp) inp.checked = true;
+      });
+    }
+  });
+
+  [6,7,8,9,10].forEach(n => {
+    if (a['q' + n]) {
+      const inp = document.querySelector(`input[name="q${n}"][value="${a['q' + n]}"]`);
+      if (inp) inp.checked = true;
+    }
+  });
+
+  if (Array.isArray(a['q11_order']) && a['q11_order'].length === STEPS.length) {
+    const byId = Object.fromEntries(STEPS.map(s => [s.id, s]));
+    const restored = a['q11_order'].map(id => byId[id]).filter(Boolean);
+    if (restored.length === STEPS.length) {
+      order = restored;
+      renderSort();
+    }
+  }
+
+  const ts = new Date(data.gespeichert_am).toLocaleString('de-DE');
+  setSaveStatus('Geladen · gespeichert am ' + ts, true);
+}
+
+function setSaveStatus(msg, saved) {
+  document.getElementById('save-text').textContent = msg;
+  document.getElementById('save-dot').className = 'dot' + (saved ? ' saved' : '');
 }
 </script>
 </body>
