@@ -74,6 +74,24 @@
     color: var(--blue-dark);
   }
 
+  /* Section headers (Teil 1 / Teil 2) */
+  .section-header {
+    margin: 2.75rem 0 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--gray-border);
+  }
+  .section-header:first-of-type { margin-top: 0; }
+  .section-header h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.35rem; font-weight: 600;
+    color: var(--blue-dark);
+    margin-bottom: 0.45rem;
+  }
+  .section-header p {
+    font-size: 14px; line-height: 1.65;
+    color: var(--gray-text);
+  }
+
   /* Process diagram */
   .diagram-wrap {
     background: white;
@@ -226,121 +244,232 @@
     <p style="margin-top:0.6rem;font-size:11px;color:var(--gray-text);">Quelle: <a href="https://de.wikipedia.org/wiki/Laserdrucker#/media/Datei:Aufbau_Laserdrucker.svg" target="_blank" rel="noopener" style="color:var(--gray-text);">Wikipedia – Laserdrucker</a></p>
   </div>
 
-  <!-- ── Aufgabe 1: MC Grundlagen ── -->
+  <div class="section-header">
+    <h2>Teil 1 – Grundlagen der Elektrizitätslehre</h2>
+    <p>Prüfe dein Wissen zur Elektrizitätslehre aus der Sekundarstufe I. Alles kinderleicht? Dann wende dieses Wissen an und versuche dich in Teil 2 an den Aufgaben zum Laserdrucker.</p>
+  </div>
+
+  <!-- ── Aufgabe 1: MC Ladung ── -->
   <div class="task-card" id="task1">
     <div class="task-header">
       <span class="task-num">Aufgabe 1</span>
       <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Welche der folgenden Aussagen über elektrische Ladungen sind korrekt?</p>
+    <p class="task-q">Ihr habt in der Sekundarstufe I bereits einiges über elektrische Ladung gelernt. Welche der folgenden Aussagen sind korrekt?</p>
     <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts1">
-      <label class="option"><input type="checkbox" value="a"> Gleichnamige Ladungen stoßen sich gegenseitig ab.</label>
-      <label class="option"><input type="checkbox" value="b"> Ungleichnamige Ladungen stoßen sich gegenseitig ab.</label>
-      <label class="option"><input type="checkbox" value="c"> Beim Reiben zweier Körper werden Elektronen von einem auf den anderen übertragen.</label>
-      <label class="option"><input type="checkbox" value="d"> Ein elektrisch neutraler Körper trägt ausschließlich negative Ladungen.</label>
-      <label class="option"><input type="checkbox" value="e"> Durch Influenz kann ein geladener Körper auch einen neutralen Körper anziehen.</label>
+      <label class="option"><input type="checkbox" value="a"> Es gibt genau zwei Arten elektrischer Ladung, die üblicherweise als positiv und negativ bezeichnet werden.</label>
+      <label class="option"><input type="checkbox" value="b"> Träger der negativen Elementarladung sind Elektronen.</label>
+      <label class="option"><input type="checkbox" value="c"> Träger der positiven Elementarladung sind ausschließlich freie Positronen.</label>
+      <label class="option"><input type="checkbox" value="d"> Protonen tragen eine positive Ladung, die betragsmäßig genauso groß ist wie die negative Ladung eines Elektrons.</label>
+      <label class="option"><input type="checkbox" value="e"> Gleichnamige Ladungen ziehen sich an, ungleichnamige Ladungen stoßen sich ab.</label>
+      <label class="option"><input type="checkbox" value="f"> Ungleichnamige Ladungen ziehen sich an, gleichnamige Ladungen stoßen sich ab.</label>
+      <label class="option"><input type="checkbox" value="g"> Die elektrostatische Anziehung zwischen einem Proton und einem Elektron trägt dazu bei, dass ein Wasserstoffatom als stabiles Gebilde existieren kann.</label>
+      <label class="option"><input type="checkbox" value="h"> Im Wasserstoffatom verschmelzen Proton und Elektron aufgrund ihrer Anziehung zu einem einzigen, vollständig ladungsfreien Teilchen.</label>
+      <label class="option"><input type="checkbox" value="i"> Ein Körper ist genau dann elektrisch neutral, wenn er überhaupt keine geladenen Teilchen enthält.</label>
+      <label class="option"><input type="checkbox" value="j"> In einem abgeschlossenen System kann die elektrische Gesamtladung durch physikalische Vorgänge verändert werden, solange dabei die Gesamtenergie erhalten bleibt.</label>
     </div>
-    <button class="btn-check" onclick="checkMC(1, ['a','c','e'])">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(1, ['a','b','d','f','g'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb1"></div>
   </div>
 
-  <!-- ── Aufgabe 2: SC Fotoleiter ── -->
+  <!-- ── Aufgabe 2: MC Strom ── -->
   <div class="task-card" id="task2">
     <div class="task-header">
       <span class="task-num">Aufgabe 2</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Die Trommel eines Laserdruckers besteht aus einem <strong>Fotoleiter</strong>. Welche besondere Eigenschaft hat dieses Material?</p>
+    <p class="task-q">Welche der folgenden Aussagen zum elektrischen Strom sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts2">
-      <label class="option"><input type="radio" name="q2" value="a"> Es leitet elektrischen Strom immer und erzeugt dabei Licht.</label>
-      <label class="option"><input type="radio" name="q2" value="b"> Im Dunkeln isoliert es; bei Lichteinfall wird es elektrisch leitfähig.</label>
-      <label class="option"><input type="radio" name="q2" value="c"> Es leitet Strom besser als metallische Leiter wie Kupfer oder Silber.</label>
-      <label class="option"><input type="radio" name="q2" value="d"> Es leitet Strom nur bei sehr hohen Temperaturen.</label>
+      <label class="option"><input type="checkbox" value="a"> Ein elektrischer Strom entsteht durch die gerichtete Bewegung elektrisch geladener Teilchen.</label>
+      <label class="option"><input type="checkbox" value="b"> In Metallen wird der elektrische Strom durch die Bewegung freier Elektronen getragen.</label>
+      <label class="option"><input type="checkbox" value="c"> Elektrischer Strom kann ausschließlich durch die Bewegung von Elektronen entstehen.</label>
+      <label class="option"><input type="checkbox" value="d"> Auch die Bewegung von Ionen, etwa in einer Salzlösung oder in geschmolzenen Salzen, kann einen elektrischen Strom darstellen.</label>
+      <label class="option"><input type="checkbox" value="e"> Die Stromstärke gibt an, welche Ladungsmenge pro Zeiteinheit durch einen Leiterquerschnitt fließt.</label>
+      <label class="option"><input type="checkbox" value="f"> Die Stromstärke gibt an, wie viel Energie pro Zeiteinheit durch einen Leiter transportiert wird.</label>
+      <label class="option"><input type="checkbox" value="g"> Die Einheit der Stromstärke ist das Ampere.</label>
+      <label class="option"><input type="checkbox" value="h"> Die Einheit der Stromstärke ist das Volt.</label>
+      <label class="option"><input type="checkbox" value="i"> Die technische Stromrichtung ist definiert als Richtung vom Plus- zum Minuspol der Quelle, unabhängig davon, welche Ladungsträger sich tatsächlich bewegen.</label>
+      <label class="option"><input type="checkbox" value="j"> In einem Metalldraht bewegen sich die Elektronen tatsächlich in dieselbe Richtung, in der auch die technische Stromrichtung definiert ist.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(2,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(2, ['a','b','d','e','g','i'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb2"></div>
   </div>
 
-  <!-- ── Aufgabe 3: SC Belichten ── -->
+  <!-- ── Aufgabe 3: MC Reibungselektrizität ── -->
   <div class="task-card" id="task3">
     <div class="task-header">
       <span class="task-num">Aufgabe 3</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Die aufgeladene Trommel wird von einem Laserstrahl abgetastet. Was geschieht an den vom Laser getroffenen Stellen?</p>
+    <p class="task-q">Welche der folgenden Aussagen zur Reibungselektrizität und zur Wirkung geladener Körper auf ungeladene Körper sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts3">
-      <label class="option"><input type="radio" name="q3" value="a"> Die Ladung an diesen Stellen wird verstärkt.</label>
-      <label class="option"><input type="radio" name="q3" value="b"> Der Fotoleiter wird leitfähig – die Ladung fließt ab. Die Stelle wird entladen.</label>
-      <label class="option"><input type="radio" name="q3" value="c"> Die Ladung wechselt ihr Vorzeichen (+ wird –).</label>
-      <label class="option"><input type="radio" name="q3" value="d"> Der Laser heizt die Trommel auf, was die Ladung verstärkt.</label>
+      <label class="option"><input type="checkbox" value="a"> Beim Reiben zweier unterschiedlicher Materialien aneinander können Elektronen von einem Material auf das andere übertragen werden.</label>
+      <label class="option"><input type="checkbox" value="b"> Nach dem Reibungsvorgang tragen beide Materialien Ladungen gleichen Betrags, aber entgegengesetzten Vorzeichens.</label>
+      <label class="option"><input type="checkbox" value="c"> Welches der beiden geriebenen Materialien sich positiv und welches sich negativ auflädt, hängt davon ab, welche Materialien konkret beteiligt sind.</label>
+      <label class="option"><input type="checkbox" value="d"> Beim Reiben zweier Materialien entsteht grundsätzlich neue Ladung, die vorher in keinem der beiden Körper vorhanden war.</label>
+      <label class="option"><input type="checkbox" value="e"> Ein geriebener, geladener Kunststoffstab kann kleine, ungeladene Papierschnipsel anziehen. Ursache hiervon ist die Polarisation (Verschiebung der Ladungsschwerpunkte der Atome bzw. Moleküle in einem Isolator).</label>
+      <label class="option"><input type="checkbox" value="f"> Papier ist ein elektrischer Leiter, weshalb sich beim Anziehen durch den Stab freie Elektronen ungehindert bis zur Oberfläche bewegen können.</label>
+      <label class="option"><input type="checkbox" value="g"> Bringt man einen geladenen Körper in die Nähe eines ungeladenen Metallkörpers, so verschieben sich darin frei bewegliche Elektronen, sodass eine Seite des Metallkörpers negativ und die gegenüberliegende Seite positiv geladen erscheint.</label>
+      <label class="option"><input type="checkbox" value="h"> Der ungeladene Metallkörper aus der letzten Antwortmöglichkeit trägt nach dieser Ladungsverschiebung insgesamt eine positive Nettoladung.</label>
+      <label class="option"><input type="checkbox" value="i"> Sowohl bei einem Isolator als auch bei einem Leiter kann die Nähe eines geladenen Körpers zu einer anziehenden Kraft auf den ansonsten neutralen Körper führen.</label>
+      <label class="option"><input type="checkbox" value="j"> Damit ein zunächst neutraler Körper von einem geladenen Körper angezogen werden kann, muss der neutrale Körper vorher zwingend selbst elektrisch aufgeladen werden.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(3,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(3, ['a','b','c','e','g','i'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb3"></div>
   </div>
 
-  <!-- ── Aufgabe 4: SC Toner ── -->
+  <!-- ── Aufgabe 4: MC Elektrisches Feld ── -->
   <div class="task-card" id="task4">
     <div class="task-header">
       <span class="task-num">Aufgabe 4</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Toner besteht aus winzigen Kunststoffpartikeln, die elektrisch geladen sind. Welches physikalische Grundprinzip aus der Elektrostatik sorgt dafür, dass der Toner an den richtigen Stellen der Trommel haftet?</p>
+    <p class="task-q">Welche der folgenden Aussagen zum elektrischen Feld sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts4">
-      <label class="option"><input type="radio" name="q4" value="a"> Gleichnamige Ladungen stoßen sich ab – der Toner wird von der Trommel abgestoßen und bleibt dabei hängen.</label>
-      <label class="option"><input type="radio" name="q4" value="b"> Ungleichnamige Ladungen ziehen sich an – Toner und geladene Trommelbereiche tragen entgegengesetzte Ladungen.</label>
-      <label class="option"><input type="radio" name="q4" value="c"> Reibung sorgt dafür, dass der Toner gleichmäßig auf die Trommel aufgetragen wird.</label>
-      <label class="option"><input type="radio" name="q4" value="d"> Der Toner haftet durch Luftdruck an der Trommeloberfläche.</label>
+      <label class="option"><input type="checkbox" value="a"> Jeder geladene Körper ist von einem elektrischen Feld umgeben, das auch auf andere geladene Körper in seiner Umgebung wirkt.</label>
+      <label class="option"><input type="checkbox" value="b"> Ein elektrisches Feld existiert nur dann, wenn sich tatsächlich ein zweiter geladener Körper in der Nähe befindet, auf den es wirken kann.</label>
+      <label class="option"><input type="checkbox" value="c"> Elektrische Felder können durch Feldlinien anschaulich dargestellt werden.</label>
+      <label class="option"><input type="checkbox" value="d"> Feldlinien beginnen an positiven Ladungen und enden an negativen Ladungen.</label>
+      <label class="option"><input type="checkbox" value="e"> Feldlinien beginnen an negativen Ladungen und enden an positiven Ladungen.</label>
+      <label class="option"><input type="checkbox" value="f"> Auf ein positiv geladenes Teilchen, das sich in einem elektrischen Feld befindet, wirkt eine Kraft in Richtung der Feldlinien.</label>
+      <label class="option"><input type="checkbox" value="g"> Auf ein negativ geladenes Teilchen, das sich in einem elektrischen Feld befindet, wirkt eine Kraft entgegen der Richtung der Feldlinien.</label>
+      <label class="option"><input type="checkbox" value="h"> Die Richtung der Kraft auf ein geladenes Teilchen in einem elektrischen Feld hängt nicht vom Vorzeichen der Ladung dieses Teilchens ab.</label>
+      <label class="option"><input type="checkbox" value="i"> Je dichter die Feldlinien in einem Bereich beieinander liegen, desto stärker ist das elektrische Feld an dieser Stelle.</label>
+      <label class="option"><input type="checkbox" value="j"> Für die Kraft F auf ein geladenes Teilchen mit der Ladung q in einem elektrischen Feld der Stärke E gilt der Zusammenhang F = q · E.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(4,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(4, ['a','c','d','f','g','i','j'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb4"></div>
   </div>
 
-  <!-- ── Aufgabe 5: SC Übertragen ── -->
+  <!-- ── Aufgabe 5: MC Spannung ── -->
   <div class="task-card" id="task5">
     <div class="task-header">
       <span class="task-num">Aufgabe 5</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Damit der Toner von der Trommel auf das Papier wechselt, wird das Papier elektrisch aufgeladen. Welche Ladung muss das Papier tragen, damit der Toner dorthin angezogen wird?</p>
+    <p class="task-q">Welche der folgenden Aussagen zur elektrischen Spannung sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts5">
-      <label class="option"><input type="radio" name="q5" value="a"> Dieselbe Ladung wie die Tonerpartikel.</label>
-      <label class="option"><input type="radio" name="q5" value="b"> Die entgegengesetzte Ladung wie die Tonerpartikel.</label>
-      <label class="option"><input type="radio" name="q5" value="c"> Gar keine Ladung – der Toner haftet durch die Schwerkraft auf dem horizontalen Papier.</label>
-      <label class="option"><input type="radio" name="q5" value="d"> Abwechselnd positive und negative Ladung im Millisekundentakt.</label>
+      <label class="option"><input type="checkbox" value="a"> Elektrische Spannung ist die Ursache für den Fluss eines elektrischen Stroms in einem Stromkreis.</label>
+      <label class="option"><input type="checkbox" value="b"> Die Einheit der elektrischen Spannung ist das Volt.</label>
+      <label class="option"><input type="checkbox" value="c"> Die Einheit der elektrischen Spannung ist das Ampere.</label>
+      <label class="option"><input type="checkbox" value="d"> Zwischen den beiden Polen einer Batterie liegt im Allgemeinen eine elektrische Spannung vor.</label>
+      <label class="option"><input type="checkbox" value="e"> Überträgt man Ladung von einem Metallkörper auf einen zweiten, zunächst neutralen Metallkörper, so liegt zwischen beiden Körpern anschließend eine elektrische Spannung vor.</label>
+      <label class="option"><input type="checkbox" value="f"> Elektrische Spannung ist eine Eigenschaft, die man einem einzelnen Punkt in einem Stromkreis zuordnen kann, unabhängig von einem Vergleichspunkt.</label>
+      <label class="option"><input type="checkbox" value="g"> Elektrische Spannung ist stets zwischen zwei Punkten definiert und gibt an, wie stark Ladungsträger angetrieben werden, sich von einem Punkt zum anderen zu bewegen.</label>
+      <label class="option"><input type="checkbox" value="h"> Um eine Spannung zu messen, muss das Messgerät an zwei Punkten eines Stromkreises angeschlossen werden.</label>
+      <label class="option"><input type="checkbox" value="i"> Eine elektrische Spannung liegt nur dann vor, wenn tatsächlich bereits ein Strom fließt.</label>
+      <label class="option"><input type="checkbox" value="j"> Bei sonst gleichbleibenden Bedingungen führt eine größere anliegende Spannung tendenziell zu einem größeren Stromfluss durch einen Leiter.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(5,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(5, ['a','b','d','e','g','h','j'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb5"></div>
   </div>
 
-  <!-- ── Aufgabe 6: SC Energieumwandlung Fixieren ── -->
+  <div class="section-header">
+    <h2>Teil 2 – Funktionsweise des Laserdruckers</h2>
+    <p>Wende dein Wissen jetzt auf den Laserdrucker an und verfolge Schritt für Schritt, wie mithilfe von Ladung, Licht und Wärme ein Blatt Papier bedruckt wird.</p>
+  </div>
+
+  <!-- ── Aufgabe 6: SC Fotoleiter ── -->
   <div class="task-card" id="task6">
     <div class="task-header">
       <span class="task-num">Aufgabe 6</span>
       <span class="task-type">Single Choice</span>
     </div>
-    <p class="task-q">Im Fixierer wird der Toner von zwei beheizten Walzen dauerhaft mit dem Papier verschmolzen. Welche Energieumwandlung findet in den elektrischen Heizwalzen statt?</p>
+    <p class="task-q">Die Trommel eines Laserdruckers besteht aus einem <strong>Fotoleiter</strong>. Welche besondere Eigenschaft hat dieses Material?</p>
     <div class="options" id="opts6">
-      <label class="option"><input type="radio" name="q6" value="a"> Lichtenergie → Wärmeenergie</label>
-      <label class="option"><input type="radio" name="q6" value="b"> Chemische Energie → mechanische Energie</label>
-      <label class="option"><input type="radio" name="q6" value="c"> Elektrische Energie → Wärmeenergie</label>
-      <label class="option"><input type="radio" name="q6" value="d"> Kernenergie → Wärmeenergie</label>
+      <label class="option"><input type="radio" name="q6" value="a"> Es leitet elektrischen Strom immer und erzeugt dabei Licht.</label>
+      <label class="option"><input type="radio" name="q6" value="b"> Im Dunkeln isoliert es; bei Lichteinfall wird es elektrisch leitfähig.</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Es leitet Strom besser als metallische Leiter wie Kupfer oder Silber.</label>
+      <label class="option"><input type="radio" name="q6" value="d"> Es leitet Strom nur bei sehr hohen Temperaturen.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(6,'c')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkSC(6,'b')">Antwort prüfen</button>
     <div class="task-feedback" id="fb6"></div>
   </div>
 
-  <!-- ── Aufgabe 7: Sortieraufgabe ── -->
+  <!-- ── Aufgabe 7: SC Belichten ── -->
   <div class="task-card" id="task7">
     <div class="task-header">
       <span class="task-num">Aufgabe 7</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Die aufgeladene Trommel wird von einem Laserstrahl abgetastet. Was geschieht an den vom Laser getroffenen Stellen?</p>
+    <div class="options" id="opts7">
+      <label class="option"><input type="radio" name="q7" value="a"> Die Ladung an diesen Stellen wird verstärkt.</label>
+      <label class="option"><input type="radio" name="q7" value="b"> Der Fotoleiter wird leitfähig – die Ladung fließt ab. Die Stelle wird entladen.</label>
+      <label class="option"><input type="radio" name="q7" value="c"> Die Ladung wechselt ihr Vorzeichen (+ wird –).</label>
+      <label class="option"><input type="radio" name="q7" value="d"> Der Laser heizt die Trommel auf, was die Ladung verstärkt.</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(7,'b')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb7"></div>
+  </div>
+
+  <!-- ── Aufgabe 8: SC Toner ── -->
+  <div class="task-card" id="task8">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 8</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Toner besteht aus winzigen Kunststoffpartikeln, die elektrisch geladen sind. Welches physikalische Grundprinzip aus der Elektrostatik sorgt dafür, dass der Toner an den richtigen Stellen der Trommel haftet?</p>
+    <div class="options" id="opts8">
+      <label class="option"><input type="radio" name="q8" value="a"> Gleichnamige Ladungen stoßen sich ab – der Toner wird von der Trommel abgestoßen und bleibt dabei hängen.</label>
+      <label class="option"><input type="radio" name="q8" value="b"> Ungleichnamige Ladungen ziehen sich an – Toner und geladene Trommelbereiche tragen entgegengesetzte Ladungen.</label>
+      <label class="option"><input type="radio" name="q8" value="c"> Reibung sorgt dafür, dass der Toner gleichmäßig auf die Trommel aufgetragen wird.</label>
+      <label class="option"><input type="radio" name="q8" value="d"> Der Toner haftet durch Luftdruck an der Trommeloberfläche.</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(8,'b')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb8"></div>
+  </div>
+
+  <!-- ── Aufgabe 9: SC Übertragen ── -->
+  <div class="task-card" id="task9">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 9</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Damit der Toner von der Trommel auf das Papier wechselt, wird das Papier elektrisch aufgeladen. Welche Ladung muss das Papier tragen, damit der Toner dorthin angezogen wird?</p>
+    <div class="options" id="opts9">
+      <label class="option"><input type="radio" name="q9" value="a"> Dieselbe Ladung wie die Tonerpartikel.</label>
+      <label class="option"><input type="radio" name="q9" value="b"> Die entgegengesetzte Ladung wie die Tonerpartikel.</label>
+      <label class="option"><input type="radio" name="q9" value="c"> Gar keine Ladung – der Toner haftet durch die Schwerkraft auf dem horizontalen Papier.</label>
+      <label class="option"><input type="radio" name="q9" value="d"> Abwechselnd positive und negative Ladung im Millisekundentakt.</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(9,'b')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb9"></div>
+  </div>
+
+  <!-- ── Aufgabe 10: SC Energieumwandlung Fixieren ── -->
+  <div class="task-card" id="task10">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 10</span>
+      <span class="task-type">Single Choice</span>
+    </div>
+    <p class="task-q">Im Fixierer wird der Toner von zwei beheizten Walzen dauerhaft mit dem Papier verschmolzen. Welche Energieumwandlung findet in den elektrischen Heizwalzen statt?</p>
+    <div class="options" id="opts10">
+      <label class="option"><input type="radio" name="q10" value="a"> Lichtenergie → Wärmeenergie</label>
+      <label class="option"><input type="radio" name="q10" value="b"> Chemische Energie → mechanische Energie</label>
+      <label class="option"><input type="radio" name="q10" value="c"> Elektrische Energie → Wärmeenergie</label>
+      <label class="option"><input type="radio" name="q10" value="d"> Kernenergie → Wärmeenergie</label>
+    </div>
+    <button class="btn-check" onclick="checkSC(10,'c')">Antwort prüfen</button>
+    <div class="task-feedback" id="fb10"></div>
+  </div>
+
+  <!-- ── Aufgabe 11: Sortieraufgabe ── -->
+  <div class="task-card" id="task11">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 11</span>
       <span class="task-type">Sortieraufgabe</span>
     </div>
     <p class="task-q">Bringe die sechs Schritte des Laserdruckprozesses in die richtige Reihenfolge.</p>
     <p class="task-hint">Ziehe die Karten per Drag &amp; Drop an die richtige Position.</p>
     <div class="sort-list" id="sortList"></div>
     <button class="btn-check" onclick="checkSort()">Reihenfolge prüfen</button>
-    <div class="task-feedback" id="fb7"></div>
+    <div class="task-feedback" id="fb11"></div>
   </div>
 
   <footer class="site-footer">
@@ -353,23 +482,23 @@
 <script>
 // ── Single Choice ──
 const scFeedback = {
-  2: {
+  6: {
     ok:  'Richtig! Ein Fotoleiter (Halbleiter) isoliert im Dunkeln – deshalb bleibt die aufgebrachte Ladung auf der Trommel erhalten. Sobald Licht auf ihn trifft, werden Elektronen frei, der Stoff wird leitfähig, und die Ladung kann abfließen.',
     err: 'Nicht ganz. Ein Fotoleiter verhält sich im Dunkeln wie ein Isolator. Erst durch Lichteinfall wird er leitfähig – daher der Name „Fotoleiter".'
   },
-  3: {
+  7: {
     ok:  'Richtig! Der Laser macht den Fotoleiter an den getroffenen Stellen leitfähig. Die Ladung fließt dort ab – es entsteht ein unsichtbares Ladungsbild auf der Trommel (das sogenannte latente Bild).',
     err: 'Nicht ganz. Durch den Lichteinfall wird der Fotoleiter kurzzeitig leitfähig, die Ladung fließt ab. An den dunklen (nicht belichteten) Stellen bleibt die Ladung erhalten.'
   },
-  4: {
+  8: {
     ok:  'Richtig! Ungleichnamige Ladungen ziehen sich an. Die Tonerpartikel tragen die entgegengesetzte Ladung zu den geladenen Trommelbereichen und werden deshalb elektrostatisch angezogen – sie haften dort.',
     err: 'Nicht ganz. Das entscheidende Prinzip ist die elektrostatische Anziehung: Tonerpartikel und geladene Trommelbereiche tragen entgegengesetzte Ladungen, sodass sich der Toner genau dort ablagert.'
   },
-  5: {
+  9: {
     ok:  'Richtig! Das Papier erhält die entgegengesetzte Ladung der Tonerpartikel. Da ungleichnamige Ladungen sich anziehen, wechseln die Tonerpartikel von der Trommel auf das Papier – die Anziehung zum Papier ist stärker als die Haftung an der Trommel.',
     err: 'Nicht ganz. Damit der Toner zum Papier hin angezogen wird, muss das Papier die entgegengesetzte Ladung der Tonerpartikel tragen. So zieht das Papier den Toner von der Trommel ab.'
   },
-  6: {
+  10: {
     ok:  'Richtig! Die Heizwalzen funktionieren wie ein Heizdraht (ähnlich einem Toaster): Elektrische Energie wird durch den ohmschen Widerstand in Wärmeenergie umgewandelt. Diese Wärme schmilzt den Kunststoff des Toners und verbindet ihn dauerhaft mit dem Papier.',
     err: 'Nicht ganz. Die Heizwalzen sind elektrisch beheizt. Im Heizwiderstand wird elektrische Energie in Wärmeenergie umgewandelt – dasselbe Prinzip wie bei einem Heizdraht oder einer Herdplatte.'
   }
@@ -407,6 +536,34 @@ function checkSC(n, correct) {
 }
 
 // ── Multiple Choice ──
+const mcFeedback = {
+  1: {
+    ok:      '✓ Richtig! Es gibt genau zwei Ladungsarten (positiv/negativ), Elektronen tragen die negative, Protonen die betragsgleiche positive Elementarladung. Ungleichnamige Ladungen ziehen sich an, gleichnamige stoßen sich ab. Und: Die Anziehung zwischen Proton und Elektron hält das Wasserstoffatom zusammen.',
+    partial: 'Teilweise richtig. Grün = richtig gewählt, rot = falsch gewählt, grün/transparent = richtig, aber übersehen. Achte besonders auf die Aussagen zu Anziehung/Abstoßung und zur elektrischen Neutralität.',
+    err:     '✗ Noch nicht ganz. Merke: Es gibt zwei Ladungsarten; Elektronen tragen die negative, Protonen die betragsgleich positive Elementarladung; ungleichnamige Ladungen ziehen sich an, gleichnamige stoßen sich ab; die Anziehung von Proton und Elektron stabilisiert das Wasserstoffatom.'
+  },
+  2: {
+    ok:      '✓ Richtig! Strom ist die gerichtete Bewegung geladener Teilchen – in Metallen durch Elektronen, in Lösungen und Schmelzen auch durch Ionen. Die Stromstärke misst die Ladungsmenge pro Zeit (Einheit Ampere). Die technische Stromrichtung ist per Definition vom Plus- zum Minuspol festgelegt, unabhängig von der tatsächlichen Bewegungsrichtung der Elektronen.',
+    partial: 'Teilweise richtig. Beachte besonders den Unterschied zwischen der technischen Stromrichtung (Definition) und der tatsächlichen Bewegungsrichtung der Elektronen (entgegengesetzt) sowie die Einheiten von Stromstärke und Spannung.',
+    err:     '✗ Noch nicht ganz. Merke: Strom entsteht durch bewegte Ladungsträger, auch Ionen; Stromstärke = Ladung pro Zeit, Einheit Ampere; die technische Stromrichtung ist definitionsgemäß vom Plus- zum Minuspol festgelegt – Elektronen bewegen sich tatsächlich in die Gegenrichtung.'
+  },
+  3: {
+    ok:      '✓ Richtig! Beim Reiben werden Elektronen übertragen, sodass beide Körper entgegengesetzt gleich große Ladungen tragen – welches Material sich wie auflädt, hängt von den beteiligten Materialien ab. Papierschnipsel werden durch Polarisation angezogen, Metallkörper durch Influenz (Ladungsverschiebung), wobei die Nettoladung dabei null bleibt.',
+    partial: 'Teilweise richtig. Achte auf den Unterschied zwischen Isolatoren (Polarisation) und Leitern (Influenz) sowie darauf, dass bei der Influenz keine neue Nettoladung entsteht.',
+    err:     '✗ Noch nicht ganz. Merke: Reibung überträgt Elektronen, es entsteht keine neue Ladung; je nach Material lädt sich mal der eine, mal der andere Körper positiv auf; sowohl bei Isolatoren (Polarisation) als auch bei Leitern (Influenz) kann ein neutraler Körper angezogen werden, ohne selbst aufgeladen zu sein.'
+  },
+  4: {
+    ok:      '✓ Richtig! Jeder geladene Körper erzeugt ein elektrisches Feld, das sich durch Feldlinien darstellen lässt (von + nach –). Positive Ladungen erfahren eine Kraft in Feldlinienrichtung, negative entgegengesetzt; je dichter die Feldlinien, desto stärker das Feld. Es gilt F = q·E.',
+    partial: 'Teilweise richtig. Achte besonders auf die Richtung der Feldlinien (von + nach –) und darauf, dass die Kraftrichtung vom Vorzeichen der Ladung abhängt.',
+    err:     '✗ Noch nicht ganz. Merke: Feldlinien verlaufen von positiven zu negativen Ladungen; die Kraftrichtung auf ein Teilchen hängt vom Vorzeichen seiner Ladung ab; es gilt F = q·E, und dichtere Feldlinien bedeuten ein stärkeres Feld.'
+  },
+  5: {
+    ok:      '✓ Richtig! Spannung ist die Ursache für Stromfluss, wird in Volt gemessen und ist stets zwischen zwei Punkten definiert (z. B. den Polen einer Batterie oder zwischen zwei unterschiedlich geladenen Körpern). Ein Spannungsmessgerät wird daher an zwei Punkten angeschlossen, und eine größere Spannung führt tendenziell zu größerem Stromfluss.',
+    partial: 'Teilweise richtig. Beachte, dass Spannung immer zwischen zwei Punkten definiert ist – nie an einem einzelnen Punkt – und auch ohne fließenden Strom vorliegen kann.',
+    err:     '✗ Noch nicht ganz. Merke: Spannung wird in Volt gemessen, ist immer zwischen zwei Punkten definiert und ist die Ursache für Stromfluss – sie kann auch bestehen, ohne dass bereits Strom fließt.'
+  }
+};
+
 function checkMC(n, correct) {
   const opts = document.querySelectorAll('#opts' + n + ' .option');
   const fb   = document.getElementById('fb' + n);
@@ -429,15 +586,16 @@ function checkMC(n, correct) {
   const allPicked  = correct.every(k => selected.includes(k));
   const noneWrong  = selected.every(k => correct.includes(k));
   fb.classList.add('show');
+  const texts = mcFeedback[n] || {};
   if (allPicked && noneWrong) {
     fb.classList.add('fb-correct');
-    fb.textContent = '✓ Richtig! Gleichnamige Ladungen stoßen sich ab, ungleichnamige ziehen sich an. Beim Reiben wandern Elektronen. Durch Influenz verschieben sich Ladungen in einem neutralen Körper, sodass er von einem geladenen Körper angezogen wird.';
+    fb.textContent = texts.ok || '✓ Richtig! Alle korrekten Aussagen gewählt.';
   } else if (allPicked || noneWrong) {
     fb.classList.add('fb-partial');
-    fb.textContent = 'Teilweise richtig. Achte darauf, alle drei richtigen Aussagen zu wählen und keine falschen dabei zu haben. Grün = richtig, rot = falsch gewählt, grün/transparent = richtig, aber vergessen.';
+    fb.textContent = texts.partial || 'Teilweise richtig. Grün = richtig, rot = falsch gewählt, grün/transparent = richtig, aber vergessen.';
   } else {
     fb.classList.add('fb-wrong');
-    fb.textContent = '✗ Noch nicht ganz. Die grün hinterlegten Aussagen sind korrekt. Merke: Ungleichnamig = anziehend; Reibung überträgt Elektronen; Influenz ermöglicht Anziehung ohne direkte Ladung.';
+    fb.textContent = texts.err || '✗ Noch nicht ganz. Die grün hinterlegten Aussagen sind korrekt.';
   }
 }
 
@@ -515,8 +673,8 @@ renderSort();
 
 function checkSort() {
   const items = document.querySelectorAll('#sortList .sort-item');
-  const fb    = document.getElementById('fb7');
-  const btn   = document.querySelector('#task7 .btn-check');
+  const fb    = document.getElementById('fb11');
+  const btn   = document.querySelector('#task11 .btn-check');
   let correct = 0;
   items.forEach((item, i) => {
     item.draggable = false;
