@@ -49,8 +49,32 @@
   header .sub { font-size: 13px; opacity: 0.7; }
   header .meta { text-align: right; font-size: 13px; opacity: 0.8; }
 
+  /* ── Mode selection ── */
+  #mode-select { margin-bottom: 1.5rem; }
+  .mode-card {
+    background: #fff;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.5rem;
+    margin-bottom: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .mode-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(79,70,229,0.14); }
+  .mode-card h3 { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
+  .mode-card p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  .anon-hint {
+    display: none;
+    background: #fef9c3; border: 0.5px solid #fde047;
+    border-radius: var(--radius); padding: 0.75rem 1rem;
+    font-size: 13px; color: #713f12; margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
   /* ── Auth card ── */
   .auth-card {
+    display: none;
     background: #fff;
     border: 0.5px solid var(--border);
     border-radius: var(--radius);
@@ -291,10 +315,87 @@
       <h1>Java-Grundlagen – Klasse MusikPlayer</h1>
       <div class="sub">Informatik · EF · Digitales Arbeitsblatt</div>
     </div>
-    <div class="meta">
-      Deine Antworten werden gespeichert.
+    <div class="meta" id="header-meta">
+      Wähle unten deinen Modus.
     </div>
   </header>
+
+  <!-- ══ Vollständiger Quellcode ══ -->
+  <div class="task" id="full-code">
+    <div class="task-header">
+      <span class="task-num">Quellcode</span>
+      <span class="task-question">Die vollständige Klasse <code style="font-family:monospace;font-size:13px;">MusikPlayer</code> – lies sie dir in Ruhe durch, du brauchst sie für alle folgenden Aufgaben.</span>
+    </div>
+    <div class="task-body">
+      <div class="code-block"><span class="kw">public class</span> <span class="tp">MusikPlayer</span> {
+
+  <span class="kw">private int</span> aktuelleLautstaerke;
+  <span class="kw">private int</span> maxLautstaerke;
+  <span class="kw">private boolean</span> spielt;
+  <span class="kw">private int</span> aktuellerTitel;
+
+  <span class="kw">public</span> <span class="tp">MusikPlayer</span>() {
+    <span class="kw">this</span>.aktuelleLautstaerke = <span class="nm">5</span>;
+    <span class="kw">this</span>.maxLautstaerke = <span class="nm">10</span>;
+    <span class="kw">this</span>.spielt = <span class="kw">false</span>;
+    <span class="kw">this</span>.aktuellerTitel = <span class="nm">1</span>;
+  }
+
+  <span class="kw">public void</span> starten() {
+    <span class="kw">this</span>.spielt = <span class="kw">true</span>;
+    System.out.println(<span class="st">"Musik läuft."</span>);
+  }
+
+  <span class="kw">public void</span> stoppen() {
+    <span class="kw">this</span>.spielt = <span class="kw">false</span>;
+    System.out.println(<span class="st">"Musik gestoppt."</span>);
+  }
+
+  <span class="kw">public void</span> lauter() {
+    <span class="kw">if</span> (<span class="kw">this</span>.aktuelleLautstaerke &lt; <span class="kw">this</span>.maxLautstaerke) {
+      <span class="kw">this</span>.aktuelleLautstaerke++;
+    }
+  }
+
+  <span class="kw">public void</span> leiser() {
+    <span class="kw">if</span> (<span class="kw">this</span>.aktuelleLautstaerke &gt; <span class="nm">0</span>) {
+      <span class="kw">this</span>.aktuelleLautstaerke--;
+    }
+  }
+
+  <span class="kw">public void</span> naechsterTitel() {
+    <span class="kw">this</span>.aktuellerTitel++;
+    System.out.println(<span class="st">"Titel: "</span> + <span class="kw">this</span>.aktuellerTitel);
+  }
+
+  <span class="kw">public void</span> spieleBisTitel(<span class="kw">int</span> pTitel) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="kw">this</span>.aktuellerTitel; i &lt; pTitel; i++) {
+      <span class="kw">this</span>.naechsterTitel();
+    }
+  }
+
+  <span class="kw">public int</span> gibAktuellenTitel() {
+    <span class="kw">return this</span>.aktuellerTitel;
+  }
+
+  <span class="kw">public boolean</span> spieltGerade() {
+    <span class="kw">return this</span>.spielt;
+  }
+}</div>
+    </div>
+  </div>
+
+  <!-- ══ Mode selection ══ -->
+  <div id="mode-select">
+    <div class="mode-card" onclick="selectMode('saved')">
+      <h3>🔐 Mit Anmeldung – Ergebnisse speichern</h3>
+      <p>Melde dich mit deiner Schul-E-Mail-Adresse an. Deine Antworten werden gespeichert und können später wieder geladen werden.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('anon')">
+      <h3>👤 Ohne Anmeldung – nicht gespeichert</h3>
+      <p>Bearbeite die Aufgaben direkt, ohne dich anzumelden. Du erhältst wie gewohnt Feedback zu deinen Antworten, sie gehen aber beim Schließen der Seite verloren.</p>
+    </div>
+  </div>
 
   <!-- ══ Auth ══ -->
   <div class="auth-card" id="auth-card">
@@ -307,12 +408,17 @@
       <button class="btn btn-primary" onclick="login()">Anmelden</button>
     </div>
     <div id="auth-status"></div>
+    <button class="btn btn-secondary" onclick="backToModeSelect()">‹ Zurück zur Auswahl</button>
   </div>
 
   <div id="user-bar">
     <span>Angemeldet als</span>
     <span class="email-tag" id="user-email-display"></span>
     <button class="btn btn-danger" onclick="logout()">Abmelden</button>
+  </div>
+
+  <div class="anon-hint" id="anon-hint">
+    ℹ️ Du bearbeitest die Aufgaben ohne Anmeldung. Deine Antworten werden <strong>nicht gespeichert</strong> und gehen beim Schließen der Seite verloren.
   </div>
 
   <!-- ══ Quiz ══ -->
@@ -322,15 +428,9 @@
     <div class="task">
       <div class="task-header">
         <span class="task-num">Aufgabe 1</span>
-        <span class="task-question">Welche der folgenden Variablen ist ein Attribut der Klasse <code style="font-family:monospace;font-size:13px;">MusikPlayer</code>?</span>
+        <span class="task-question">Welche der folgenden Variablen ist ein Attribut der Klasse <code style="font-family:monospace;font-size:13px;">MusikPlayer</code> (siehe Quellcode oben)?</span>
       </div>
       <div class="task-body">
-        <div class="code-block"><span class="kw">public class</span> <span class="tp">MusikPlayer</span> {
-  <span class="kw">private int</span> aktuelleLautstaerke;
-  <span class="kw">private int</span> maxLautstaerke;
-  <span class="kw">private boolean</span> spielt;
-  <span class="kw">public void</span> starten() { ... }
-}</div>
         <div class="choices" id="q1">
           <label class="choice"><input type="radio" name="q1" value="a"> <span><code>starten()</code></span></label>
           <label class="choice"><input type="radio" name="q1" value="b"> <span><code>aktuelleLautstaerke</code></span></label>
@@ -362,13 +462,9 @@
     <div class="task">
       <div class="task-header">
         <span class="task-num">Aufgabe 3</span>
-        <span class="task-question">Welche der folgenden Methoden ist eine Getter-Methode?</span>
+        <span class="task-question">Welche der folgenden Methoden der Klasse <code style="font-family:monospace;font-size:13px;">MusikPlayer</code> (siehe Quellcode oben) ist eine Getter-Methode?</span>
       </div>
       <div class="task-body">
-        <div class="code-block"><span class="kw">public int</span>     gibAktuellenTitel()       { <span class="kw">return this</span>.aktuellerTitel; }
-<span class="kw">public void</span>    starten()                 { <span class="kw">this</span>.spielt = <span class="kw">true</span>; }
-<span class="kw">public void</span>    stoppen()                 { <span class="kw">this</span>.spielt = <span class="kw">false</span>; }
-<span class="kw">public void</span>    lauter()                  { ... }</div>
         <div class="choices" id="q3">
           <label class="choice"><input type="radio" name="q3" value="a"> <span><code>starten()</code></span></label>
           <label class="choice"><input type="radio" name="q3" value="b"> <span><code>stoppen()</code></span></label>
@@ -400,12 +496,9 @@
     <div class="task">
       <div class="task-header">
         <span class="task-num">Aufgabe 5</span>
-        <span class="task-question">Was gibt die Methode <code style="font-family:monospace;font-size:13px;">spieltGerade()</code> zurück, wenn der Player gerade nicht spielt?</span>
+        <span class="task-question">Was gibt die Methode <code style="font-family:monospace;font-size:13px;">spieltGerade()</code> (siehe Quellcode oben) zurück, wenn der Player gerade nicht spielt?</span>
       </div>
       <div class="task-body">
-        <div class="code-block"><span class="kw">public boolean</span> spieltGerade() {
-  <span class="kw">return this</span>.spielt;
-}</div>
         <div class="choices" id="q5">
           <label class="choice"><input type="radio" name="q5" value="a"> <span><code>0</code></span></label>
           <label class="choice"><input type="radio" name="q5" value="b"> <span><code>null</code></span></label>
@@ -420,16 +513,9 @@
     <div class="task">
       <div class="task-header">
         <span class="task-num">Aufgabe 6</span>
-        <span class="task-question">Ein <code style="font-family:monospace;font-size:13px;">MusikPlayer</code>-Objekt wird mit dem Standardkonstruktor erzeugt. Dann wird <code style="font-family:monospace;font-size:13px;">spieleBisTitel(3)</code> aufgerufen. Wie lautet die vollständige Konsolenausgabe?</span>
+        <span class="task-question">Ein <code style="font-family:monospace;font-size:13px;">MusikPlayer</code>-Objekt wird mit dem Standardkonstruktor erzeugt (siehe Quellcode oben). Dann wird <code style="font-family:monospace;font-size:13px;">spieleBisTitel(3)</code> aufgerufen. Wie lautet die vollständige Konsolenausgabe?</span>
       </div>
       <div class="task-body">
-        <div class="code-block"><span class="cm">// Standardkonstruktor setzt aktuellerTitel = 1</span>
-<span class="kw">public void</span> spieleBisTitel(<span class="kw">int</span> pTitel) {
-  <span class="kw">for</span>(<span class="kw">int</span> i = <span class="kw">this</span>.aktuellerTitel; i &lt; pTitel; i++) {
-    <span class="kw">this</span>.naechsterTitel();
-  }
-}
-<span class="cm">// naechsterTitel() gibt aus: "Titel: " + aktuellerTitel</span></div>
         <div class="choices" id="q6">
           <label class="choice"><input type="radio" name="q6" value="a">
             <span>Titel: 1<br>Titel: 2<br>Titel: 3</span></label>
@@ -483,13 +569,9 @@
     <div class="task">
       <div class="task-header">
         <span class="task-num">Aufgabe 8</span>
-        <span class="task-question">Erkläre in eigenen Worten, was die Methode <code style="font-family:monospace;font-size:13px;">starten()</code> bewirkt.</span>
+        <span class="task-question">Erkläre in eigenen Worten, was die Methode <code style="font-family:monospace;font-size:13px;">starten()</code> (siehe Quellcode oben) bewirkt.</span>
       </div>
       <div class="task-body">
-        <div class="code-block"><span class="kw">public void</span> starten() {
-  <span class="kw">this</span>.spielt = <span class="kw">true</span>;
-  System.out.println(<span class="st">"Musik läuft."</span>);
-}</div>
         <p class="input-label">Deine Antwort (1–2 Sätze):</p>
         <textarea class="short-answer" id="q8" rows="3" placeholder="Die Methode starten() …"></textarea>
       </div>
@@ -497,8 +579,8 @@
 
     <!-- ── Action row ── -->
     <div class="action-row">
-      <button class="btn btn-primary" onclick="checkAndSave()">✓ Auswerten &amp; Speichern</button>
-      <button class="btn btn-secondary" onclick="loadAnswers()">↺ Gespeicherte laden</button>
+      <button class="btn btn-primary" id="check-btn" onclick="checkAndSave()">✓ Auswerten &amp; Speichern</button>
+      <button class="btn btn-secondary" id="load-btn" onclick="loadAnswers()">↺ Gespeicherte laden</button>
       <div class="save-status">
         <span class="dot" id="dot"></span>
         <span id="save-text">Noch nicht gespeichert.</span>
@@ -533,39 +615,64 @@ const FEEDBACK = {
   q6: { ok:'Richtig! Die Schleife läuft für i = 1 und i = 2 (nicht für i = 3, da i < pTitel). Es werden also zwei Mal <code>naechsterTitel()</code> aufgerufen → Titel 2, dann Titel 3.', err:'Nicht ganz. Die Schleife startet bei <code>aktuellerTitel = 1</code> und läuft solange <code>i < 3</code>, also für i = 1 und i = 2. Das ergibt zwei Aufrufe: Titel 2 und Titel 3.' },
 };
 
+// ── Moduswahl ──────────────────────────────────
+let currentMode = null; // 'saved' | 'anon'
+
+function selectMode(mode) {
+  currentMode = mode;
+  document.getElementById('mode-select').style.display = 'none';
+  if (mode === 'saved') {
+    document.getElementById('header-meta').textContent = 'Deine Antworten werden gespeichert.';
+    checkExistingSession();
+  } else {
+    document.getElementById('header-meta').textContent = 'Deine Antworten werden nicht gespeichert.';
+    document.getElementById('anon-hint').style.display = 'block';
+    document.getElementById('quiz').style.display = 'block';
+    document.getElementById('check-btn').textContent = '✓ Auswerten';
+    document.getElementById('load-btn').style.display = 'none';
+  }
+}
+
+function backToModeSelect() {
+  location.reload();
+}
+
 // ── Auth ─────────────────────────────────────
+async function checkExistingSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    onLoggedIn(session);
+  } else {
+    document.getElementById('auth-card').style.display = 'block';
+  }
+}
+
 async function login() {
   const email    = document.getElementById('email-input').value.trim();
   const password = document.getElementById('password-input').value;
   if (!email || !password) { setAuthStatus('Bitte E-Mail und Passwort eingeben.'); return; }
   setAuthStatus('Anmeldung …');
-  const { error } = await sb.auth.signInWithPassword({ email, password });
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
   if (error) { setAuthStatus('Fehler: ' + error.message); return; }
-  // Auth-State-Handler übernimmt ab hier
+  onLoggedIn(data.session);
 }
 
 async function logout() {
   await sb.auth.signOut();
-  document.getElementById('quiz').style.display = 'none';
-  document.getElementById('auth-card').style.display = 'block';
-  document.getElementById('user-bar').style.display = 'none';
-  setStatus('Abgemeldet.', false);
+  location.reload();
+}
+
+function onLoggedIn(session) {
+  document.getElementById('auth-card').style.display = 'none';
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-email-display').textContent = session.user.email;
+  document.getElementById('quiz').style.display = 'block';
+  loadAnswers();
 }
 
 function setAuthStatus(msg) {
   document.getElementById('auth-status').textContent = msg;
 }
-
-// Check session on load & on auth state change
-sb.auth.onAuthStateChange((event, session) => {
-  if (session) {
-    document.getElementById('auth-card').style.display = 'none';
-    document.getElementById('user-bar').style.display = 'flex';
-    document.getElementById('user-email-display').textContent = session.user.email;
-    document.getElementById('quiz').style.display = 'block';
-    loadAnswers();
-  }
-});
 
 // ── Save / Load ───────────────────────────────
 function collectAnswers() {
@@ -608,6 +715,12 @@ async function checkAndSave() {
     : `✗ ${dzCorrect} von 4 Zuordnungen richtig. Überprüfe deine Antworten.`;
   fb7.className = 'feedback ' + (dzCorrect === 4 ? 'fb-correct' : 'fb-wrong');
   fb7.style.display = 'block';
+
+  // Im anonymen Modus wird nicht gespeichert
+  if (currentMode !== 'saved') {
+    setStatus('Ausgewertet (ohne Anmeldung nicht gespeichert).', false);
+    return;
+  }
 
   // Save to Supabase
   const { data: { user } } = await sb.auth.getUser();
