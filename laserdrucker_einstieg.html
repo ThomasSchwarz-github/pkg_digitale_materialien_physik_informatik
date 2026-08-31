@@ -215,6 +215,10 @@
     letter-spacing: 0.05em; text-transform: uppercase;
   }
 
+  .task-context {
+    font-size: 13.5px; line-height: 1.75; color: var(--gray-text);
+    margin-bottom: 0.85rem;
+  }
   .task-q {
     font-size: 15px; line-height: 1.65; font-weight: 500;
     margin-bottom: 1rem;
@@ -500,88 +504,120 @@
     <p>Wende dein Wissen jetzt auf den Laserdrucker an und verfolge Schritt für Schritt, wie mithilfe von Ladung, Licht und Wärme ein Blatt Papier bedruckt wird.</p>
   </div>
 
-  <!-- ── Aufgabe 6: SC Fotoleiter ── -->
+  <!-- ── Aufgabe 6: MC Toner (B1) ── -->
   <div class="task-card" id="task6">
     <div class="task-header">
       <span class="task-num">Aufgabe 6</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Die Trommel eines Laserdruckers besteht aus einem <strong>Fotoleiter</strong>. Welche besondere Eigenschaft hat dieses Material?</p>
+    <p class="task-context">Betrachtet in der Abbildung den Tonerbehälter.</p>
+    <p class="task-q">Welche der folgenden Aussagen über den Toner und seine Aufladung sind plausibel?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts6">
-      <label class="option"><input type="radio" name="q6" value="a"> Es leitet elektrischen Strom immer und erzeugt dabei Licht.</label>
-      <label class="option"><input type="radio" name="q6" value="b"> Im Dunkeln isoliert es; bei Lichteinfall wird es elektrisch leitfähig.</label>
-      <label class="option"><input type="radio" name="q6" value="c"> Es leitet Strom besser als metallische Leiter wie Kupfer oder Silber.</label>
-      <label class="option"><input type="radio" name="q6" value="d"> Es leitet Strom nur bei sehr hohen Temperaturen.</label>
+      <label class="option"><input type="checkbox" value="a"> Toner besteht aus feinen, festen Farbpigment-Partikeln.</label>
+      <label class="option"><input type="checkbox" value="b"> Toner ist eine Flüssigkeit, ähnlich wie die Tinte eines Tintenstrahldruckers.</label>
+      <label class="option"><input type="checkbox" value="c"> Typische Tonerpartikel sind nur wenige Mikrometer groß, also deutlich kleiner als ein Sandkorn.</label>
+      <label class="option"><input type="checkbox" value="d"> Typische Tonerpartikel sind mehrere Millimeter groß, vergleichbar mit kleinen Sandkörnern.</label>
+      <label class="option"><input type="checkbox" value="e"> Die negative Aufladung der Tonerpartikel entsteht durch Reibung an anderen Bauteilen im Inneren des Tonerbehälters.</label>
+      <label class="option"><input type="checkbox" value="f"> Die negative Aufladung der Tonerpartikel entsteht dadurch, dass der Tonerbehälter beheizt wird.</label>
+      <label class="option"><input type="checkbox" value="g"> Die negative Aufladung der Tonerpartikel hat nichts mit Reibung zu tun, sondern beruht auf Magnetismus.</label>
+      <label class="option"><input type="checkbox" value="h"> Damit der Toner später gezielt an bestimmten Stellen haften und an anderen nicht haften bleibt, muss er selbst eine definierte elektrische Ladung tragen.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(6,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(6, ['a','c','e','h'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb6"></div>
   </div>
 
-  <!-- ── Aufgabe 7: SC Belichten ── -->
+  <!-- ── Aufgabe 7: MC Fotoleiter/Bildtrommel (B2) ── -->
   <div class="task-card" id="task7">
     <div class="task-header">
       <span class="task-num">Aufgabe 7</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Die aufgeladene Trommel wird von einem Laserstrahl abgetastet. Was geschieht an den vom Laser getroffenen Stellen?</p>
+    <p class="task-context">Auf der Bildtrommel, deren Kern typischerweise aus Aluminium besteht, sitzt eine dünne Schicht aus einem sogenannten Fotoleiter, die zuvor gleichmäßig negativ aufgeladen wurde. Der Laser trifft nun einzelne Punkte dieser Schicht.</p>
+    <p class="task-q">Welche der folgenden Aussagen sind plausibel bzw. korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts7">
-      <label class="option"><input type="radio" name="q7" value="a"> Die Ladung an diesen Stellen wird verstärkt.</label>
-      <label class="option"><input type="radio" name="q7" value="b"> Der Fotoleiter wird leitfähig – die Ladung fließt ab. Die Stelle wird entladen.</label>
-      <label class="option"><input type="radio" name="q7" value="c"> Die Ladung wechselt ihr Vorzeichen (+ wird –).</label>
-      <label class="option"><input type="radio" name="q7" value="d"> Der Laser heizt die Trommel auf, was die Ladung verstärkt.</label>
+      <label class="option"><input type="checkbox" value="a"> Ein Fotoleiter ist ein Material, das im Dunkeln praktisch wie ein Isolator wirkt, aber unter Lichteinwirkung lokal leitfähig wird.</label>
+      <label class="option"><input type="checkbox" value="b"> Ein Fotoleiter ist ein Material, das leitfähig ist und durch Lichtbestrahlung elektrisch aufgeladen werden kann.</label>
+      <label class="option"><input type="checkbox" value="c"> Trifft Laserlicht auf eine Stelle der Fotoleiterschicht, kann die dort zuvor aufgebrachte Ladung über die dadurch leitfähig gewordene Stelle abfließen.</label>
+      <label class="option"><input type="checkbox" value="d"> Damit die Ladung überhaupt abfließen kann, muss der Kern der Trommel unter der Fotoleiterschicht elektrisch leitend und geerdet sein.</label>
+      <label class="option"><input type="checkbox" value="e"> Trifft Laserlicht auf eine Stelle der Fotoleiterschicht, wird dort zusätzliche negative Ladung erzeugt, statt vorhandene Ladung abzubauen.</label>
+      <label class="option"><input type="checkbox" value="f"> Nach der Belichtung tragen die getroffenen Stellen der Trommel eine deutlich geringere Ladung als die unbelichteten, weiterhin stark negativ geladenen Bereiche.</label>
+      <label class="option"><input type="checkbox" value="g"> Nach der Belichtung ist die Ladungsverteilung auf der gesamten Trommel wieder vollständig einheitlich.</label>
+      <label class="option"><input type="checkbox" value="h"> In modernen Laserdruckern werden meist organische Fotoleiter (kurz: OPC) eingesetzt, die sich unter anderem durch eine gute Beweglichkeit positiver Ladungsträger („Löcher") auszeichnen, wodurch die negative Oberflächenladungsschicht an den belichteten Stellen effektiv neutralisiert werden kann.</label>
+      <label class="option"><input type="checkbox" value="i"> Fotoleiter sind grundsätzlich Metalle, da nur Metalle überhaupt elektrisch leitfähig sein können.</label>
+      <label class="option"><input type="checkbox" value="j"> Da die belichteten Stellen nach der Entladung kaum noch Ladung tragen, werden sie vom ebenfalls negativ geladenen Toner deutlich weniger stark abgestoßen als die unbelichteten Bereiche – dadurch kann der Toner dort haften bleiben.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(7,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(7, ['a','c','d','f','h','j'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb7"></div>
   </div>
 
-  <!-- ── Aufgabe 8: SC Toner ── -->
+  <!-- ── Aufgabe 8: MC Corona-Draht/Walze (B3) ── -->
   <div class="task-card" id="task8">
     <div class="task-header">
       <span class="task-num">Aufgabe 8</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Toner besteht aus winzigen Kunststoffpartikeln, die elektrisch geladen sind. Welches physikalische Grundprinzip aus der Elektrostatik sorgt dafür, dass der Toner an den richtigen Stellen der Trommel haftet?</p>
+    <p class="task-context">Damit die Bildtrommel gleichmäßig geladen werden kann, muss sie in Wechselwirkung mit einem Bauteil gebracht werden, das eine sehr hohe negative Spannung gegenüber der Trommel trägt. Bei der einen Lösung handelt es sich um einen extrem dünnen Draht (Corona-Draht), an dem durch das starke elektrische Feld eine sogenannte Corona-Entladung auftritt; die dabei entstehenden ionisierten Luftteilchen wandern zur Trommel. Bei der anderen Lösung handelt es sich um eine Walze, die die Trommel direkt oder nahezu berührt. In beiden Fällen kommt es durch die hohe Spannungsdifferenz zu einer Entladung, bei der Ladungsträger auf die Trommel übertragen werden.</p>
+    <p class="task-q">Welche der folgenden Aussagen sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts8">
-      <label class="option"><input type="radio" name="q8" value="a"> Gleichnamige Ladungen stoßen sich ab – der Toner wird von der Trommel abgestoßen und bleibt dabei hängen.</label>
-      <label class="option"><input type="radio" name="q8" value="b"> Ungleichnamige Ladungen ziehen sich an – Toner und geladene Trommelbereiche tragen entgegengesetzte Ladungen.</label>
-      <label class="option"><input type="radio" name="q8" value="c"> Reibung sorgt dafür, dass der Toner gleichmäßig auf die Trommel aufgetragen wird.</label>
-      <label class="option"><input type="radio" name="q8" value="d"> Der Toner haftet durch Luftdruck an der Trommeloberfläche.</label>
+      <label class="option"><input type="checkbox" value="a"> Am dünnen Draht konzentriert sich das elektrische Feld besonders stark, da sich Feldlinien an einem Leiter mit kleinem Krümmungsradius stark verdichten.</label>
+      <label class="option"><input type="checkbox" value="b"> Mit einer breiten, flachen Metallplatte statt eines dünnen Drahtes ließe sich dieselbe Feldüberhöhung erzielen.</label>
+      <label class="option"><input type="checkbox" value="c"> Das durch die hohe Feldstärke am Draht entstehende Ozon macht die Corona-Methode zu einem umweltfreundlicheren Verfahren.</label>
+      <label class="option"><input type="checkbox" value="d"> Bei der Walze tritt aufgrund der geringeren Ausdehnung des Feldes im schmalen Spalt deutlich weniger Ozon auf als beim Draht.</label>
+      <label class="option"><input type="checkbox" value="e"> Bei der Walze kommt es aufgrund des sehr geringen Abstands zur Trommel ebenfalls zu kleinen Entladungen im schmalen Luftspalt.</label>
+      <label class="option"><input type="checkbox" value="f"> Die Walzen-Methode kommt vollständig ohne jede Entladung oder Ionisierung aus, die Ladung wird rein mechanisch übertragen.</label>
+      <label class="option"><input type="checkbox" value="g"> Ein Nachteil der Walzen-Methode ist der direkte oder nahezu direkte Kontakt, der zu Verschleiß führen kann, während der Draht berührungslos arbeitet.</label>
+      <label class="option"><input type="checkbox" value="h"> Beide Verfahren sind bezüglich Verschleiß und Nebenprodukten völlig gleichwertig, es gibt keinerlei Unterschiede.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(8,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(8, ['a','d','e','g'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb8"></div>
   </div>
 
-  <!-- ── Aufgabe 9: SC Übertragen ── -->
+  <!-- ── Aufgabe 9: MC Entwicklerwalze/Spannungsniveaus (B4) ── -->
   <div class="task-card" id="task9">
     <div class="task-header">
       <span class="task-num">Aufgabe 9</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Damit der Toner von der Trommel auf das Papier wechselt, wird das Papier elektrisch aufgeladen. Welche Ladung muss das Papier tragen, damit der Toner dorthin angezogen wird?</p>
+    <p class="task-context">Bevor der Toner auf die Bildtrommel gelangt, sitzt er auf einer sogenannten Entwicklerwalze. Auch diese Walze trägt eine definierte, negative Spannung. Betrachtet folgende drei Spannungsniveaus: Die unbelichteten Bereiche der Trommel sind weiterhin stark negativ geladen (z. B. −600 V), die belichteten Bereiche sind nur noch schwach negativ geladen, also fast neutral (z. B. −100 V). Die Entwicklerwalze liegt mit ihrer Spannung genau zwischen diesen beiden Werten (z. B. −350 V). Auf ihr sitzt der negativ geladene Toner.</p>
+    <p class="task-q">Welche der folgenden Aussagen sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts9">
-      <label class="option"><input type="radio" name="q9" value="a"> Dieselbe Ladung wie die Tonerpartikel.</label>
-      <label class="option"><input type="radio" name="q9" value="b"> Die entgegengesetzte Ladung wie die Tonerpartikel.</label>
-      <label class="option"><input type="radio" name="q9" value="c"> Gar keine Ladung – der Toner haftet durch die Schwerkraft auf dem horizontalen Papier.</label>
-      <label class="option"><input type="radio" name="q9" value="d"> Abwechselnd positive und negative Ladung im Millisekundentakt.</label>
+      <label class="option"><input type="checkbox" value="a"> Zwischen der Entwicklerwalze und den unbelichteten, stark negativ geladenen Trommelbereichen ist die Walze das elektrisch positivere Bauteil (weniger stark negativ).</label>
+      <label class="option"><input type="checkbox" value="b"> Zwischen der Entwicklerwalze und den belichteten, schwach negativ geladenen Trommelbereichen ist die Walze ebenfalls das elektrisch positivere Bauteil.</label>
+      <label class="option"><input type="checkbox" value="c"> Da die Walze gegenüber den unbelichteten Bereichen positiver ist, wirkt auf den negativ geladenen Toner dort eine Kraft in Richtung Walze – der Toner bleibt auf der Walze und wandert nicht zur Trommel.</label>
+      <label class="option"><input type="checkbox" value="d"> Der Toner überträgt sich ausschließlich auf die unbelichteten Bereiche der Trommel, nicht auf die belichteten.</label>
+      <label class="option"><input type="checkbox" value="e"> Der Toner haftet an den belichteten Bereichen letztlich nicht wegen einer Anziehung durch ungleichnamige Ladungen, sondern weil die belichteten Bereiche relativ zur Walze das elektrisch positivere Ziel darstellen.</label>
+      <label class="option"><input type="checkbox" value="f"> Ob der Toner zu einer bestimmten Trommelstelle wandert, hängt allein davon ab, ob diese Stelle negativ geladen ist – das genaue Spannungsniveau spielt keine Rolle.</label>
+      <label class="option"><input type="checkbox" value="g"> Wäre die Spannung der Entwicklerwalze genauso stark negativ wie die unbelichteten Trommelbereiche, gäbe es zwischen Walze und diesen Bereichen keine resultierende Kraft auf den Toner.</label>
+      <label class="option"><input type="checkbox" value="h"> Wäre die Entwicklerwalze stärker negativ geladen als sowohl die belichteten als auch die unbelichteten Trommelbereiche, würde der Toner auf keinen der beiden Bereiche übertragen.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(9,'b')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(9, ['a','c','e','g'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb9"></div>
   </div>
 
-  <!-- ── Aufgabe 10: SC Energieumwandlung Fixieren ── -->
+  <!-- ── Aufgabe 10: MC Übertragung/Fixierung (B5) ── -->
   <div class="task-card" id="task10">
     <div class="task-header">
       <span class="task-num">Aufgabe 10</span>
-      <span class="task-type">Single Choice</span>
+      <span class="task-type">Multiple Choice</span>
     </div>
-    <p class="task-q">Im Fixierer wird der Toner von zwei beheizten Walzen dauerhaft mit dem Papier verschmolzen. Welche Energieumwandlung findet in den elektrischen Heizwalzen statt?</p>
+    <p class="task-context">Damit der Toner von der Bildtrommel auf das Papier wechselt, befindet sich hinter dem Papier eine Übertragungswalze, die positiv geladen ist. Nach der Übertragung ist der Toner jedoch noch nicht dauerhaft mit dem Papier verbunden – dafür sorgt erst die anschließende Fixiereinheit, durch die das Papier hindurchläuft.</p>
+    <p class="task-q">Welche der folgenden Aussagen sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
     <div class="options" id="opts10">
-      <label class="option"><input type="radio" name="q10" value="a"> Lichtenergie → Wärmeenergie</label>
-      <label class="option"><input type="radio" name="q10" value="b"> Chemische Energie → mechanische Energie</label>
-      <label class="option"><input type="radio" name="q10" value="c"> Elektrische Energie → Wärmeenergie</label>
-      <label class="option"><input type="radio" name="q10" value="d"> Kernenergie → Wärmeenergie</label>
+      <label class="option"><input type="checkbox" value="a"> Wäre die Übertragungswalze stattdessen negativ geladen, würden die negativ geladenen Tonerpartikel von ihr abgestoßen und blieben auf der Trommel, statt auf das Papier überzugehen.</label>
+      <label class="option"><input type="checkbox" value="b"> Die Übertragungswalze ist ebenfalls negativ geladen, jedoch stärker als der Toner.</label>
+      <label class="option"><input type="checkbox" value="c"> Da Toner und Übertragungswalze entgegengesetzte Ladungen tragen, zieht die Walze den Toner unmittelbar an – anders als bei der Übertragung von der Entwicklerwalze auf die Trommel, wo es auf einen Unterschied zwischen gleichnamigen Ladungen ankam.</label>
+      <label class="option"><input type="checkbox" value="d"> Nach der Übertragung auf das Papier ist der Toner bereits dauerhaft und abriebfest mit dem Papier verbunden.</label>
+      <label class="option"><input type="checkbox" value="e"> Zur dauerhaften Fixierung wird das Papier zwischen zwei Walzen hindurchgeführt, die Wärme und Druck ausüben.</label>
+      <label class="option"><input type="checkbox" value="f"> Die Fixierung des Toners erfolgt durch eine weitere, noch stärkere elektrostatische Anziehungskraft.</label>
+      <label class="option"><input type="checkbox" value="g"> Damit der Toner beim Fixieren dauerhaft mit dem Papier verbunden werden kann, muss er ein thermoplastisches Material enthalten, das unter Hitze aufschmilzt und beim Abkühlen erstarrt.</label>
+      <label class="option"><input type="checkbox" value="h"> Die Fixierung ist ein rein mechanischer Vorgang und benötigt keinerlei Temperaturänderung.</label>
     </div>
-    <button class="btn-check" onclick="checkSC(10,'c')">Antwort prüfen</button>
+    <button class="btn-check" onclick="checkMC(10, ['a','c','e','g'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb10"></div>
   </div>
 
@@ -617,61 +653,6 @@
 </div><!-- .page -->
 
 <script>
-// ── Single Choice ──
-const scFeedback = {
-  6: {
-    ok:  'Richtig! Ein Fotoleiter (Halbleiter) isoliert im Dunkeln – deshalb bleibt die aufgebrachte Ladung auf der Trommel erhalten. Sobald Licht auf ihn trifft, werden Elektronen frei, der Stoff wird leitfähig, und die Ladung kann abfließen.',
-    err: 'Nicht ganz. Ein Fotoleiter verhält sich im Dunkeln wie ein Isolator. Erst durch Lichteinfall wird er leitfähig – daher der Name „Fotoleiter".'
-  },
-  7: {
-    ok:  'Richtig! Der Laser macht den Fotoleiter an den getroffenen Stellen leitfähig. Die Ladung fließt dort ab – es entsteht ein unsichtbares Ladungsbild auf der Trommel (das sogenannte latente Bild).',
-    err: 'Nicht ganz. Durch den Lichteinfall wird der Fotoleiter kurzzeitig leitfähig, die Ladung fließt ab. An den dunklen (nicht belichteten) Stellen bleibt die Ladung erhalten.'
-  },
-  8: {
-    ok:  'Richtig! Ungleichnamige Ladungen ziehen sich an. Die Tonerpartikel tragen die entgegengesetzte Ladung zu den geladenen Trommelbereichen und werden deshalb elektrostatisch angezogen – sie haften dort.',
-    err: 'Nicht ganz. Das entscheidende Prinzip ist die elektrostatische Anziehung: Tonerpartikel und geladene Trommelbereiche tragen entgegengesetzte Ladungen, sodass sich der Toner genau dort ablagert.'
-  },
-  9: {
-    ok:  'Richtig! Das Papier erhält die entgegengesetzte Ladung der Tonerpartikel. Da ungleichnamige Ladungen sich anziehen, wechseln die Tonerpartikel von der Trommel auf das Papier – die Anziehung zum Papier ist stärker als die Haftung an der Trommel.',
-    err: 'Nicht ganz. Damit der Toner zum Papier hin angezogen wird, muss das Papier die entgegengesetzte Ladung der Tonerpartikel tragen. So zieht das Papier den Toner von der Trommel ab.'
-  },
-  10: {
-    ok:  'Richtig! Die Heizwalzen funktionieren wie ein Heizdraht (ähnlich einem Toaster): Elektrische Energie wird durch den ohmschen Widerstand in Wärmeenergie umgewandelt. Diese Wärme schmilzt den Kunststoff des Toners und verbindet ihn dauerhaft mit dem Papier.',
-    err: 'Nicht ganz. Die Heizwalzen sind elektrisch beheizt. Im Heizwiderstand wird elektrische Energie in Wärmeenergie umgewandelt – dasselbe Prinzip wie bei einem Heizdraht oder einer Herdplatte.'
-  }
-};
-
-function checkSC(n, correct) {
-  const opts = document.querySelectorAll('#opts' + n + ' .option');
-  const fb   = document.getElementById('fb' + n);
-  const btn  = document.querySelector('#task' + n + ' .btn-check');
-  let selected = null;
-  opts.forEach(o => {
-    const inp = o.querySelector('input');
-    if (inp.checked) selected = inp.value;
-    inp.disabled = true;
-  });
-  btn.disabled = true;
-  opts.forEach(o => {
-    const v = o.querySelector('input').value;
-    if (v === correct) o.classList.add('opt-correct');
-    else if (v === selected) o.classList.add('opt-wrong');
-  });
-  fb.classList.add('show');
-  if (!selected) {
-    fb.classList.add('fb-wrong');
-    fb.textContent = 'Bitte wähle eine Antwort aus.';
-    return;
-  }
-  if (selected === correct) {
-    fb.classList.add('fb-correct');
-    fb.textContent = '✓ ' + (scFeedback[n] ? scFeedback[n].ok : 'Richtig!');
-  } else {
-    fb.classList.add('fb-wrong');
-    fb.textContent = '✗ ' + (scFeedback[n] ? scFeedback[n].err : 'Leider falsch.');
-  }
-}
-
 // ── Multiple Choice ──
 const mcFeedback = {
   1: {
@@ -698,6 +679,31 @@ const mcFeedback = {
     ok:      '✓ Richtig! Spannung ist die Ursache für Stromfluss, wird in Volt gemessen und ist stets zwischen zwei Punkten definiert (z. B. den Polen einer Batterie oder zwischen zwei unterschiedlich geladenen Körpern). Ein Spannungsmessgerät wird daher an zwei Punkten angeschlossen, und eine größere Spannung führt tendenziell zu größerem Stromfluss.',
     partial: 'Teilweise richtig. Beachte, dass Spannung immer zwischen zwei Punkten definiert ist – nie an einem einzelnen Punkt – und auch ohne fließenden Strom vorliegen kann.',
     err:     '✗ Noch nicht ganz. Merke: Spannung wird in Volt gemessen, ist immer zwischen zwei Punkten definiert und ist die Ursache für Stromfluss – sie kann auch bestehen, ohne dass bereits Strom fließt.'
+  },
+  6: {
+    ok:      '✓ Richtig! Toner besteht aus feinen, festen Farbpigment-Partikeln im Mikrometerbereich – keine Flüssigkeit. Die negative Aufladung entsteht durch Reibung im Tonerbehälter, und nur weil der Toner selbst eine definierte Ladung trägt, kann er später gezielt an den passenden Stellen der Trommel haften bleiben.',
+    partial: 'Teilweise richtig. Achte auf die Eigenschaften des Toners (fest, mikrometergroß) und darauf, wodurch die Ladung tatsächlich entsteht (Reibung, nicht Hitze oder Magnetismus).',
+    err:     '✗ Noch nicht ganz. Merke: Toner ist ein feines, festes Pulver aus mikrometergroßen Partikeln (keine Flüssigkeit); die negative Ladung entsteht durch Reibung im Tonerbehälter; erst eine definierte Ladung ermöglicht das gezielte Haften an bestimmten Trommelstellen.'
+  },
+  7: {
+    ok:      '✓ Richtig! Ein Fotoleiter isoliert im Dunkeln und wird erst durch Licht lokal leitfähig, sodass die Ladung an den belichteten Stellen über den geerdeten, leitenden Trommelkern abfließen kann. Belichtete Stellen tragen danach deutlich weniger Ladung als unbelichtete. Moderne OPC-Fotoleiter nutzen dabei die gute Beweglichkeit positiver Ladungsträger (Löcher), um die negative Oberflächenladung zu neutralisieren.',
+    partial: 'Teilweise richtig. Achte darauf, dass die Ladung an belichteten Stellen abfließt (nicht neu entsteht) und dass dafür ein leitender, geerdeter Trommelkern nötig ist.',
+    err:     '✗ Noch nicht ganz. Merke: Ein Fotoleiter isoliert im Dunkeln und wird erst durch Licht leitfähig; die zuvor aufgebrachte Ladung fließt dann über den leitenden, geerdeten Trommelkern ab; belichtete Stellen tragen danach deutlich weniger Ladung als unbelichtete.'
+  },
+  8: {
+    ok:      '✓ Richtig! An einem dünnen Draht verdichten sich Feldlinien wegen des kleinen Krümmungsradius besonders stark, was die hohe Feldstärke für die Corona-Entladung erzeugt. Auch bei der Walzen-Methode kommt es im schmalen Luftspalt zu kleinen Entladungen, allerdings mit weniger Ozon – dafür aber mit Verschleiß durch den direkten Kontakt, während der Draht berührungslos arbeitet.',
+    partial: 'Teilweise richtig. Achte auf den Zusammenhang zwischen Krümmungsradius und Feldstärke sowie auf die Vor- und Nachteile (Ozonbildung vs. Verschleiß) der beiden Methoden.',
+    err:     '✗ Noch nicht ganz. Merke: Ein dünner Draht erzeugt durch seinen kleinen Krümmungsradius eine starke Feldüberhöhung; bei der Walze entstehen im schmalen Spalt ebenfalls kleine Entladungen (mit weniger Ozon), dafür führt der direkte Kontakt zu Verschleiß, den der berührungslose Draht nicht hat.'
+  },
+  9: {
+    ok:      '✓ Richtig! Die Entwicklerwalze (−350 V) ist gegenüber den stark negativen, unbelichteten Bereichen (−600 V) das elektrisch positivere Bauteil – der negativ geladene Toner bleibt deshalb auf der Walze, statt zur Trommel zu wandern. Gegenüber den schwach geladenen, belichteten Stellen (−100 V) ist die Trommel dagegen positiver als die Walze, sodass der Toner dorthin übergeht. Entscheidend ist also das genaue Spannungsniveau, nicht nur das Vorzeichen der Ladung.',
+    partial: 'Teilweise richtig. Vergleiche die drei Spannungsniveaus genau: Entscheidend ist, welches Bauteil relativ zum anderen positiver ist – nicht nur, ob eine Stelle negativ geladen ist.',
+    err:     '✗ Noch nicht ganz. Merke: Die Entwicklerwalze liegt spannungsmäßig zwischen den unbelichteten und belichteten Trommelbereichen. Der negativ geladene Toner wandert dorthin, wo die Trommel relativ zur Walze positiver ist – das sind die belichteten (schwach negativ geladenen) Bereiche. Das genaue Spannungsniveau entscheidet, nicht nur das Vorzeichen der Ladung.'
+  },
+  10: {
+    ok:      '✓ Richtig! Die positiv geladene Übertragungswalze zieht den negativ geladenen Toner unmittelbar an (entgegengesetzte Ladungen) und überträgt ihn so von der Trommel auf das Papier. Dauerhaft haftet der Toner erst durch die Fixiereinheit: Dort schmilzt das thermoplastische Tonermaterial unter Druck und Wärme auf und verbindet sich beim Abkühlen fest mit dem Papier.',
+    partial: 'Teilweise richtig. Unterscheide zwischen der elektrostatischen Übertragung (Anziehung durch entgegengesetzte Ladungen) und der anschließenden Fixierung (Wärme und Druck, thermoplastisches Material) – das sind zwei getrennte Vorgänge.',
+    err:     '✗ Noch nicht ganz. Merke: Die positiv geladene Übertragungswalze zieht den negativ geladenen Toner an (entgegengesetzte Ladungen ziehen sich an) und überträgt ihn aufs Papier; dauerhaft fixiert wird der Toner erst danach durch Wärme und Druck, wobei sein thermoplastisches Material aufschmilzt und beim Abkühlen erstarrt.'
   }
 };
 
@@ -904,12 +910,8 @@ function setAuthStatus(msg) {
 // ── Speichern / Laden ─────────────────────────
 function collectAnswers() {
   const data = {};
-  [1,2,3,4,5].forEach(n => {
+  [1,2,3,4,5,6,7,8,9,10].forEach(n => {
     data['q' + n] = Array.from(document.querySelectorAll('#opts' + n + ' input:checked')).map(i => i.value);
-  });
-  [6,7,8,9,10].forEach(n => {
-    const sel = document.querySelector(`input[name="q${n}"]:checked`);
-    data['q' + n] = sel ? sel.value : null;
   });
   data['q11_order'] = Array.from(document.querySelectorAll('#sortList .sort-item')).map(el => el.dataset.id);
   return data;
@@ -948,19 +950,12 @@ async function loadAnswers() {
 
   const a = data.antworten;
 
-  [1,2,3,4,5].forEach(n => {
+  [1,2,3,4,5,6,7,8,9,10].forEach(n => {
     if (Array.isArray(a['q' + n])) {
       a['q' + n].forEach(v => {
         const inp = document.querySelector(`#opts${n} input[value="${v}"]`);
         if (inp) inp.checked = true;
       });
-    }
-  });
-
-  [6,7,8,9,10].forEach(n => {
-    if (a['q' + n]) {
-      const inp = document.querySelector(`input[name="q${n}"][value="${a['q' + n]}"]`);
-      if (inp) inp.checked = true;
     }
   });
 
