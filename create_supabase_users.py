@@ -1,3 +1,4 @@
+import configparser
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -18,22 +19,27 @@ else:
     DELETE_USERS    = True#False#
     SEND_MAIL       = False#
 
-test_dict = {"j.haas@pkg-overath.de": "js_1234"}#{"t.schwarz@pkg-online.de": "srz_pkgonline"}
+# User credentials live outside this file (not tracked by git) so no
+# passwords end up in the repository. Format: an .ini file with one
+# section per group, each line "email = password". See users.example.ini
+# for a template.
+USERS_FILE = "users.ini"
 
-users_lk_ph_abi28_dict = {
-    "johannes.friedrich@pkg-online.de" : "jf_2137",
-    "tristan.hartmann@pkg-online.de" : "th_3948",
-    "simon.haupts@pkg-online.de" : "sh_9416",
-    "samuel.horvath@pkg-online.de" : "sh_1872",
-    "alina.klug@pkg-online.de" : "ak_2787",
-    "julian.lenz@pkg-online.de" : "jl_1954",
-    "jeremias.nitzschmann@pkg-online.de" : "jn_4496",
-    "kateryna.rudaieva@pkg-online.de" : "kr_7218",
-    "ben.sass@pkg-online.de" : "bs_7729",
-    "moritz.schlegel@pkg-online.de" : "ms_8821"
-    }
+if not os.path.exists(USERS_FILE):
+    raise SystemExit(
+        f"User data file not found: {USERS_FILE}\n"
+        f"Create it next to this script (see users.example.ini for the format)."
+    )
 
-user_dicts = [test_dict]##[users_lk_ph_abi28_dict]
+user_config = configparser.ConfigParser()
+user_config.optionxform = str  # keep email addresses in their original case
+user_config.read(USERS_FILE, encoding="utf-8")
+user_groups = {section: dict(user_config.items(section)) for section in user_config.sections()}
+
+test_dict = user_groups.get("test", {})
+users_lk_ph_abi28_dict = user_groups.get("lk_ph_abi28", {})
+
+user_dicts = [users_lk_ph_abi28_dict]##[test_dict]##
 
 load_dotenv()
 
