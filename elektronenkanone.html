@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Die Elektronenkanone – Physik Q1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C;
+    --blue-mid: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-border: #B5D4F4;
+    --teal-dark: #0F6E56;
+    --teal-mid: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-border: #9FE1CB;
+    --gray-bg: #F8F7F4;
+    --gray-border: #D3D1C7;
+    --gray-text: #5F5E5A;
+    --text-main: #1a1917;
+    --ok: #16A34A;
+    --ok-bg: #F0FDF4;
+    --ok-border: #86EFAC;
+    --err: #DC2626;
+    --err-bg: #FEF2F2;
+    --err-border: #FECACA;
+    --warn-bg: #FFFBEB;
+    --warn-border: #FDE68A;
+    --warn-fg: #78350F;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #f5f3ef;
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  .page {
+    width: min(820px, 100%);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 13px; color: var(--gray-text); text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+  .back-link:hover { color: var(--blue-mid); }
+
+  .header {
+    border-bottom: 2px solid var(--text-main);
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.75rem;
+  }
+  .header .kurs {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gray-text); font-weight: 500; margin-bottom: 0.4rem;
+  }
+  .header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.9rem; font-weight: 600; line-height: 1.2;
+  }
+  .header .meta { margin-top: 0.5rem; font-size: 13px; color: var(--gray-text); }
+
+  .intro-box {
+    background: var(--blue-light);
+    border-left: 3px solid var(--blue-mid);
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px; line-height: 1.8;
+    color: var(--blue-dark);
+  }
+
+  /* Theorie-/Infobox */
+  .theory-box {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal-mid);
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 2rem;
+    border-radius: 0 6px 6px 0;
+  }
+  .theory-box h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--teal-dark); margin-bottom: 0.65rem;
+    display: flex; align-items: center; gap: 0.45rem;
+  }
+  .theory-box p {
+    font-size: 13.5px; line-height: 1.8;
+    color: #0d3b2e; margin-bottom: 0.75rem;
+  }
+  .theory-box p:last-child { margin-bottom: 0; }
+  .theory-box ul {
+    margin: 0 0 0.75rem 1.2rem;
+    font-size: 13.5px; line-height: 1.8; color: #0d3b2e;
+  }
+  .theory-box strong { color: var(--teal-dark); }
+
+  /* Section headers */
+  .section-header {
+    margin: 2.75rem 0 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--gray-border);
+  }
+  .section-header:first-of-type { margin-top: 0; }
+  .section-header h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.35rem; font-weight: 600;
+    color: var(--blue-dark);
+    margin-bottom: 0.45rem;
+  }
+  .section-header p {
+    font-size: 14px; line-height: 1.65;
+    color: var(--gray-text);
+  }
+
+  /* Mode selection */
+  .mode-select { margin-bottom: 2rem; }
+  .mode-card {
+    background: white;
+    border: 1.5px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .mode-card:hover { border-color: var(--blue-mid); box-shadow: 0 2px 12px rgba(24,95,165,0.1); }
+  .mode-card h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--blue-dark); margin-bottom: 0.35rem;
+  }
+  .mode-card p { font-size: 13.5px; line-height: 1.6; color: var(--gray-text); }
+
+  /* Auth */
+  .auth-card {
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .auth-card h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem; font-weight: 600;
+    color: var(--blue-dark); margin-bottom: 0.4rem;
+  }
+  .auth-card p { font-size: 13.5px; color: var(--gray-text); margin-bottom: 1rem; }
+  .input-row { display: flex; gap: 0.55rem; flex-wrap: wrap; }
+  .input-row input[type=email], .input-row input[type=password] {
+    flex: 1; min-width: 200px;
+    border: 1.5px solid var(--gray-border); border-radius: 7px;
+    padding: 0.55rem 0.8rem; font-size: 14px; font-family: inherit;
+    outline: none; transition: border-color 0.15s;
+  }
+  .input-row input:focus { border-color: var(--blue-mid); }
+  .btn-save {
+    background: var(--blue-mid); color: white; border: none;
+    border-radius: 6px; padding: 0.55rem 1.15rem;
+    font-size: 13.5px; font-weight: 500; cursor: pointer;
+    font-family: inherit; transition: background 0.15s;
+  }
+  .btn-save:hover { background: var(--blue-dark); }
+  .btn-outline {
+    background: transparent; border: 1.5px solid var(--gray-border);
+    color: var(--text-main); border-radius: 6px;
+    padding: 0.5rem 1rem; font-size: 13px; cursor: pointer;
+    font-family: inherit; transition: border-color 0.15s;
+  }
+  .btn-outline:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+  #auth-status { font-size: 13px; color: var(--gray-text); margin: 0.6rem 0; min-height: 1.2em; }
+
+  #user-bar {
+    display: none; align-items: center; gap: 10px;
+    font-size: 13px; margin-bottom: 1.5rem; flex-wrap: wrap;
+    color: var(--gray-text);
+  }
+  #user-bar .email-tag {
+    background: var(--blue-light); color: var(--blue-dark);
+    padding: 3px 10px; border-radius: 20px; font-weight: 500;
+  }
+
+  #anon-hint {
+    background: var(--warn-bg); border-left: 3px solid var(--warn-border);
+    color: var(--warn-fg); font-size: 13.5px; line-height: 1.6;
+    padding: 0.85rem 1.1rem; margin-bottom: 2rem;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Save action row */
+  .save-action-row {
+    display: none; gap: 1rem; flex-wrap: wrap; align-items: center;
+    margin-top: 2rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--gray-border);
+  }
+  .save-status { font-size: 13px; color: var(--gray-text); display: flex; align-items: center; gap: 7px; }
+  .save-status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-border); flex-shrink: 0; transition: background 0.3s; }
+  .save-status .dot.saved { background: var(--ok); }
+
+  /* Process diagram */
+  .diagram-wrap {
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.25rem 1rem 1rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+  }
+  .diagram-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--gray-text);
+    margin-bottom: 1rem; text-align: center;
+  }
+
+  /* Task cards */
+  .task-card {
+    background: white;
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .task-header {
+    display: flex; align-items: center; gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+  .task-num {
+    background: var(--blue-mid); color: white;
+    font-size: 11px; font-weight: 600;
+    padding: 0.2rem 0.55rem; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .task-type {
+    font-size: 11px; color: var(--gray-text); font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  .task-context {
+    font-size: 13.5px; line-height: 1.75; color: var(--gray-text);
+    margin-bottom: 0.85rem;
+  }
+  .task-q {
+    font-size: 15px; line-height: 1.65; font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .task-hint {
+    font-size: 12.5px; color: var(--gray-text);
+    margin-bottom: 0.85rem; font-style: italic;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+
+  .option {
+    display: flex; align-items: flex-start; gap: 0.65rem;
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid var(--gray-border); border-radius: 7px;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    user-select: none; font-size: 14px; line-height: 1.55;
+  }
+  .option:hover { border-color: var(--blue-mid); background: var(--blue-light); }
+  .option input { margin-top: 2px; flex-shrink: 0; accent-color: var(--blue-mid); cursor: pointer; }
+
+  .option.opt-correct { border-color: var(--ok-border); background: var(--ok-bg); }
+  .option.opt-wrong   { border-color: var(--err-border); background: var(--err-bg); }
+  .option.opt-missed  { border-color: var(--ok-border); background: var(--ok-bg); opacity: 0.65; }
+
+  .btn-check {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--blue-mid); color: white;
+    border: none; border-radius: 6px;
+    padding: 0.55rem 1.15rem;
+    font-size: 13.5px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-check:hover { background: var(--blue-dark); }
+  .btn-check:disabled { opacity: 0.45; cursor: default; }
+
+  .task-feedback {
+    margin-top: 0.85rem; padding: 0.65rem 0.9rem;
+    border-radius: 7px; font-size: 13.5px; line-height: 1.65;
+    display: none;
+  }
+  .task-feedback.show { display: block; }
+  .fb-correct { background: var(--ok-bg);   border: 1px solid var(--ok-border);  color: #14532D; }
+  .fb-partial  { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-fg); }
+  .fb-wrong    { background: var(--err-bg);  border: 1px solid var(--err-border); color: #7F1D1D; }
+
+  /* Footer */
+  .site-footer {
+    margin-top: 4rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--gray-border);
+    font-size: 12px; color: var(--gray-text);
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 2rem 1.25rem 4rem; }
+    .header h1 { font-size: 1.6rem; }
+    .task-card { padding: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="index_physik.html" class="back-link">‹ Physik-Übersicht</a>
+
+  <div class="header">
+    <div class="kurs">Physik · Qualifikationsphase Q1 – Ladungen, Felder und Induktion / Geladene Teilchen in Feldern</div>
+    <h1>Die Elektronenkanone</h1>
+    <div class="meta">Erzeugung eines Elektronenstrahls: Der Glühelektrische Effekt</div>
+  </div>
+
+  <div class="intro-box">
+    Fadenstrahlrohr, Elektronenstrahlablenkröhre, Oszilloskop und Röhrenfernseher haben eines gemeinsam: Sie benötigen einen gerichteten <strong>Elektronenstrahl</strong>. Erzeugt wird dieser in einer <strong>Elektronenkanone</strong>. Bevor die Elektronen beschleunigt und abgelenkt werden können, müssen sie zunächst überhaupt aus einem Metall <strong>austreten</strong> – das ist der erste Schritt, den wir hier genauer untersuchen.
+  </div>
+
+  <!-- ── Schemazeichnung ── -->
+  <div class="diagram-wrap">
+    <p class="diagram-title">Aufbau einer Elektronenkanone (Prinzipskizze)</p>
+    <img src="pics/Elektronenkanone_Schemazeichnung.svg" alt="Schematischer Aufbau einer Elektronenkanone mit Glühkathode, Wehneltzylinder, Anode und Elektronenstrahl" style="width:100%;display:block;border-radius:6px;">
+  </div>
+
+  <!-- ── Mode selection ── -->
+  <div class="mode-select" id="mode-select">
+    <div class="section-header" style="margin-top:0;">
+      <h2>Wie möchtest du die Aufgaben bearbeiten?</h2>
+      <p>Wähle, ob deine Ergebnisse in der Datenbank gespeichert werden sollen.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('saved')">
+      <h3>🔐 Mit Anmeldung – Ergebnisse speichern</h3>
+      <p>Melde dich mit deiner Schul-E-Mail-Adresse an. Am Ende kannst du deine Antworten speichern und beim nächsten Besuch wieder laden.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('anon')">
+      <h3>👤 Ohne Anmeldung – nicht gespeichert</h3>
+      <p>Bearbeite die Aufgaben direkt, ohne dich anzumelden. Du erhältst wie gewohnt sofort Feedback zu jeder Aufgabe – deine Ergebnisse gehen aber beim Schließen der Seite verloren.</p>
+    </div>
+  </div>
+
+  <!-- ── Auth ── -->
+  <div class="auth-card" id="auth-card" style="display:none;">
+    <h2>Anmelden</h2>
+    <p>Gib deine Schul-E-Mail-Adresse und dein Passwort ein.</p>
+    <div class="input-row">
+      <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de">
+      <input type="password" id="password-input" placeholder="Passwort"
+             onkeydown="if(event.key==='Enter') login()">
+      <button class="btn-save" onclick="login()">Anmelden</button>
+    </div>
+    <div id="auth-status"></div>
+    <button class="btn-outline" onclick="backToModeSelect()">‹ Zurück zur Auswahl</button>
+  </div>
+
+  <div id="user-bar">
+    <span>Angemeldet als</span>
+    <span class="email-tag" id="user-email-display"></span>
+    <button class="btn-outline" onclick="logout()">Abmelden</button>
+  </div>
+
+  <div id="anon-hint" style="display:none;">
+    ℹ️ Du bearbeitest die Aufgaben ohne Anmeldung. Deine Antworten werden <strong>nicht gespeichert</strong> und gehen beim Schließen der Seite verloren.
+  </div>
+
+  <div id="quiz-content" style="display:none;">
+
+  <div class="section-header">
+    <h2>Der Glühelektrische Effekt</h2>
+    <p>Wie schaffen es Elektronen überhaupt, ein festes Metall zu verlassen?</p>
+  </div>
+
+  <!-- ── Infotextblock: Glühelektrischer Effekt ── -->
+  <div class="theory-box">
+    <h3>📖 Hintergrundwissen: Der Glühelektrische Effekt (Edison-Richardson-Effekt)</h3>
+    <p>In einem Metall wie dem Wolframdraht einer Glühkathode gibt es sehr viele frei bewegliche <strong>Leitungselektronen</strong>, die sich – ähnlich wie Teilchen in einem Gas – ungeordnet und mit ganz unterschiedlichen Geschwindigkeiten durch das Metallgitter bewegen. Trotzdem verlassen sie das Metall bei Zimmertemperatur so gut wie nie von selbst.</p>
+    <p>Der Grund: Um die Metalloberfläche zu verlassen, muss ein Elektron eine Mindestenergie aufbringen, die sogenannte <strong>Austrittsarbeit W<sub>A</sub></strong> (auch Ablösearbeit genannt). Sie entsteht durch die anziehenden Kräfte der positiv geladenen Metallionen im Gitter und ist je nach Material unterschiedlich groß (bei Wolfram z. B. rund 4,5 eV).</p>
+    <p>Erhitzt man den Draht stark – bei einer Glühkathode geschieht das durch die <strong>Heizspannung U<sub>H</sub></strong>, die einen Heizstrom durch den dünnen Draht treibt und ihn auf mehrere hundert bis über tausend Grad Celsius aufheizt – verschiebt sich die Geschwindigkeitsverteilung der Leitungselektronen: Ein immer größerer Anteil von ihnen besitzt genügend thermische Energie, um W<sub>A</sub> zu überwinden und die Oberfläche zu verlassen.</p>
+    <ul>
+      <li>Dieses Austreten von Elektronen aus einem stark erhitzten Metall nennt man den <strong>Glühelektrischen Effekt</strong>.</li>
+      <li>Er findet im <strong>Vakuum</strong> statt – einerseits, damit die Elektronen nicht sofort mit Luftmolekülen zusammenstoßen, andererseits, damit der glühende Draht nicht sofort verbrennt (oxidiert).</li>
+      <li>Die ausgetretenen Elektronen bilden zunächst eine sogenannte <strong>Raumladungswolke</strong> in unmittelbarer Nähe des Drahtes. Erst ein von außen angelegtes elektrisches Feld (die Beschleunigungsspannung zwischen Kathode und Anode) zieht sie gezielt ab und beschleunigt sie zu einem gerichteten Elektronenstrahl.</li>
+      <li>Wichtig zur Abgrenzung: Der Glühelektrische Effekt hat <strong>nichts mit Licht</strong> zu tun – anders als der lichtelektrische (photoelektrische) Effekt, bei dem Licht Elektronen aus einem Metall herauslöst. Hier ist ausschließlich die <strong>thermische Energie</strong> durch Erhitzen entscheidend.</li>
+    </ul>
+    <p>Je höher die Heizspannung bzw. die Temperatur des Drahtes ist, desto mehr Elektronen erreichen pro Zeiteinheit die nötige Mindestenergie – der aus dem Draht austretende Elektronenstrom nimmt also mit der Temperatur zu.</p>
+  </div>
+
+  <!-- ── Aufgabe 1: MC Glühelektrischer Effekt – Mechanismus ── -->
+  <div class="task-card" id="task1">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 1</span>
+      <span class="task-type">Multiple Choice</span>
+    </div>
+    <p class="task-q">Welche der folgenden Aussagen zum Glühelektrischen Effekt beim Austritt von Elektronen aus dem Glühdraht sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
+    <div class="options" id="opts1">
+      <label class="option"><input type="checkbox" value="a"> Beim Glühelektrischen Effekt treten Elektronen aus einem Metall aus, weil sie durch das Erhitzen genügend thermische Energie erhalten, um die Austrittsarbeit des Metalls zu überwinden.</label>
+      <label class="option"><input type="checkbox" value="b"> In einem Metall bewegen sich die frei beweglichen Leitungselektronen bereits bei Zimmertemperatur ungeordnet mit sehr unterschiedlichen Geschwindigkeiten; beim Erhitzen nimmt der Anteil besonders schneller Elektronen zu.</label>
+      <label class="option"><input type="checkbox" value="c"> Die Austrittsarbeit ist bei jedem Metall exakt gleich groß, da sie ausschließlich von der Temperatur des Drahtes abhängt.</label>
+      <label class="option"><input type="checkbox" value="d"> Erst wenn die kinetische Energie eines Leitungselektrons mindestens so groß wie die Austrittsarbeit des Materials ist, kann es die Metalloberfläche verlassen.</label>
+      <label class="option"><input type="checkbox" value="e"> Der Glühelektrische Effekt ist im Grunde identisch mit dem lichtelektrischen (photoelektrischen) Effekt, da in beiden Fällen Licht die Elektronen aus dem Metall herauslöst.</label>
+      <label class="option"><input type="checkbox" value="f"> Damit möglichst viele Elektronen ungehindert austreten können und der Draht nicht sofort verbrennt, wird die Glühkathode im Vakuum betrieben.</label>
+      <label class="option"><input type="checkbox" value="g"> Ohne ein anliegendes elektrisches Beschleunigungsfeld zwischen Kathode und Anode können grundsätzlich keine Elektronen aus dem Glühdraht austreten, selbst wenn dieser stark erhitzt wird.</label>
+      <label class="option"><input type="checkbox" value="h"> Je höher die Heizspannung bzw. die Temperatur des Drahtes ist, desto mehr Elektronen können pro Zeiteinheit die nötige Mindestenergie erreichen und den Draht verlassen.</label>
+      <label class="option"><input type="checkbox" value="i"> Die ausgetretenen Elektronen besitzen unmittelbar nach dem Austritt aus dem Draht bereits die volle kinetische Energie, die sie später durch die Beschleunigungsspannung zwischen Kathode und Anode gewinnen.</label>
+      <label class="option"><input type="checkbox" value="j"> Die Austrittsarbeit ist die Energie, die mindestens aufgebracht werden muss, um ein Elektron aus dem Metall ins Vakuum zu befördern, und ist je nach Material unterschiedlich groß.</label>
+    </div>
+    <button class="btn-check" onclick="checkMC(1, ['a','b','d','f','h','j'])">Antwort prüfen</button>
+    <div class="task-feedback" id="fb1"></div>
+  </div>
+
+  <!-- ── Aufgabe 2: MC Heizspannung / Sättigungsstrom ── -->
+  <div class="task-card" id="task2">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 2</span>
+      <span class="task-type">Multiple Choice</span>
+    </div>
+    <p class="task-context">Bei konstanter Beschleunigungsspannung U<sub>A</sub> wird die Heizspannung U<sub>H</sub> der Glühkathode ausgehend von 0 V langsam erhöht. Dabei wird der zur Anode fließende Strom I<sub>A</sub> gemessen.</p>
+    <p class="task-q">Welche der folgenden Aussagen zu diesem Versuch sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein.</p>
+    <div class="options" id="opts2">
+      <label class="option"><input type="checkbox" value="a"> Bei sehr kleiner Heizspannung fließt zunächst kein messbarer Anodenstrom, da die Elektronen noch nicht genügend thermische Energie besitzen, um aus dem Draht auszutreten.</label>
+      <label class="option"><input type="checkbox" value="b"> Mit steigender Heizspannung – und damit steigender Drahttemperatur – nimmt der Anodenstrom zunächst deutlich zu, weil immer mehr Elektronen pro Zeiteinheit austreten.</label>
+      <label class="option"><input type="checkbox" value="c"> Der Anodenstrom steigt auch bei beliebig weiter erhöhter Heizspannung immer weiter unbegrenzt an, ohne sich jemals einem Grenzwert anzunähern.</label>
+      <label class="option"><input type="checkbox" value="d"> Ab einer bestimmten Heizspannung wächst der Anodenstrom kaum noch weiter, da bei der gegebenen Beschleunigungsspannung nahezu alle in dieser Zeit austretenden Elektronen bereits zur Anode hin abgesaugt werden (Sättigungsbereich).</label>
+      <label class="option"><input type="checkbox" value="e"> Erhöht man zusätzlich die Beschleunigungsspannung U<sub>A</sub> deutlich, bleibt der erreichbare Sättigungsstrom exakt gleich groß, unabhängig davon, wie viele Elektronen tatsächlich pro Zeit aus dem Draht austreten.</label>
+      <label class="option"><input type="checkbox" value="f"> Der erreichbare Sättigungsstrom hängt in erster Linie von der Temperatur (also von der Heizspannung) des Glühdrahtes ab, nicht von der Beschleunigungsspannung.</label>
+      <label class="option"><input type="checkbox" value="g"> Bringt man den Glühdraht durch zu starkes Heizen fast zum Schmelzen, stellt sich dadurch zwangsläufig ein besonders hoher, aber dauerhaft stabiler Sättigungsstrom ein.</label>
+      <label class="option"><input type="checkbox" value="h"> Die beobachtete Abhängigkeit des Anodenstroms von der Heizspannung ist ein experimenteller Beleg dafür, dass der Elektronenaustritt aus dem Draht ein temperaturabhängiger Vorgang ist.</label>
+      <label class="option"><input type="checkbox" value="i"> Da Metalle ohnehin frei bewegliche Elektronen enthalten, ist zum Austritt der Elektronen aus der Drahtoberfläche überhaupt keine Mindestenergie nötig – schon die kleinste Temperaturerhöhung führt zu einem sprunghaften, vollständigen Stromfluss.</label>
+      <label class="option"><input type="checkbox" value="j"> Kühlt man den Draht anschließend wieder ab, sinkt der Anodenstrom wieder, da die Zahl der Elektronen, die pro Zeit die Austrittsarbeit überwinden können, abnimmt.</label>
+    </div>
+    <button class="btn-check" onclick="checkMC(2, ['a','b','d','f','h','j'])">Antwort prüfen</button>
+    <div class="task-feedback" id="fb2"></div>
+  </div>
+
+  <!-- ── Speichern (nur im Modus "Mit Anmeldung") ── -->
+  <div class="save-action-row" id="save-action-row">
+    <button class="btn-save" onclick="saveResults()">💾 Ergebnisse speichern</button>
+    <div class="save-status">
+      <span class="dot" id="save-dot"></span>
+      <span id="save-text">Noch nicht gespeichert.</span>
+    </div>
+  </div>
+
+  </div><!-- /#quiz-content -->
+
+  <footer class="site-footer">
+    <span>Physik · Interaktive Lernmaterialien</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+
+</div><!-- .page -->
+
+<script>
+// ── Multiple Choice ──
+const mcFeedback = {
+  1: {
+    ok:      '✓ Richtig! Elektronen im Metall benötigen die Austrittsarbeit als Mindestenergie, um die Oberfläche zu verlassen; Erhitzen erhöht den Anteil ausreichend schneller Elektronen. Das Vakuum verhindert Zusammenstöße und Verbrennen des Drahtes, und mit steigender Temperatur treten mehr Elektronen pro Zeit aus.',
+    partial: 'Teilweise richtig. Grün = richtig gewählt, rot = falsch gewählt, grün/transparent = richtig, aber übersehen. Achte besonders auf den Unterschied zum lichtelektrischen Effekt und darauf, welche Energie die Elektronen direkt beim Austritt besitzen.',
+    err:     '✗ Noch nicht ganz. Merke: Elektronen müssen die materialabhängige Austrittsarbeit überwinden, was erst durch ausreichende Erhitzung gelingt; das geschieht im Vakuum, unabhängig von einem äußeren Beschleunigungsfeld, und ist nicht mit dem lichtelektrischen Effekt zu verwechseln.'
+  },
+  2: {
+    ok:      '✓ Richtig! Ohne ausreichende Heizspannung tritt kein Strom auf; mit steigender Temperatur steigt der Anodenstrom zunächst an und geht dann in einen Sättigungsbereich über, der von der Emissionsrate (Temperatur) abhängt, nicht von U_A. Die gesamte Kennlinie belegt die Temperaturabhängigkeit des Elektronenaustritts.',
+    partial: 'Teilweise richtig. Achte besonders darauf, wovon der Sättigungsstrom abhängt (Temperatur/Heizspannung, nicht die Beschleunigungsspannung) und dass der Elektronenaustritt eine Mindestenergie voraussetzt, statt sprunghaft bei jeder Temperatur vollständig einzusetzen.',
+    err:     '✗ Noch nicht ganz. Merke: Der Anodenstrom setzt erst oberhalb einer Mindesttemperatur ein, steigt dann mit der Heizspannung an und nähert sich einem von der Temperatur abhängigen Sättigungswert – unabhängig von U_A und keineswegs unbegrenzt oder sprunghaft.'
+  }
+};
+
+function checkMC(n, correct) {
+  const opts = document.querySelectorAll('#opts' + n + ' .option');
+  const fb   = document.getElementById('fb' + n);
+  const btn  = document.querySelector('#task' + n + ' .btn-check');
+  let selected = [];
+  opts.forEach(o => {
+    const inp = o.querySelector('input');
+    if (inp.checked) selected.push(inp.value);
+    inp.disabled = true;
+  });
+  btn.disabled = true;
+  opts.forEach(o => {
+    const v = o.querySelector('input').value;
+    const isRight = correct.includes(v);
+    const isSel   = selected.includes(v);
+    if (isRight && isSel)  o.classList.add('opt-correct');
+    else if (!isRight && isSel) o.classList.add('opt-wrong');
+    else if (isRight && !isSel) o.classList.add('opt-missed');
+  });
+  const allPicked  = correct.every(k => selected.includes(k));
+  const noneWrong  = selected.every(k => correct.includes(k));
+  fb.classList.add('show');
+  const texts = mcFeedback[n] || {};
+  if (allPicked && noneWrong) {
+    fb.classList.add('fb-correct');
+    fb.textContent = texts.ok || '✓ Richtig! Alle korrekten Aussagen gewählt.';
+  } else if (allPicked || noneWrong) {
+    fb.classList.add('fb-partial');
+    fb.textContent = texts.partial || 'Teilweise richtig. Grün = richtig, rot = falsch gewählt, grün/transparent = richtig, aber vergessen.';
+  } else {
+    fb.classList.add('fb-wrong');
+    fb.textContent = texts.err || '✗ Noch nicht ganz. Die grün hinterlegten Aussagen sind korrekt.';
+  }
+}
+</script>
+
+<!-- ══ Supabase (Speichern der Ergebnisse) ══ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ════════════════════════════════════════════
+//  KONFIGURATION
+// ════════════════════════════════════════════
+const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
+const ARBEITSBLATT_ID   = 'elektronenkanone_v1';
+// ════════════════════════════════════════════
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── Moduswahl ─────────────────────────────────
+function selectMode(mode) {
+  document.getElementById('mode-select').style.display = 'none';
+  if (mode === 'saved') {
+    checkExistingSession();
+  } else {
+    document.getElementById('quiz-content').style.display = 'block';
+    document.getElementById('anon-hint').style.display = 'block';
+  }
+}
+
+function backToModeSelect() {
+  location.reload();
+}
+
+// ── Auth ─────────────────────────────────────
+async function checkExistingSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    onLoggedIn(session);
+  } else {
+    document.getElementById('auth-card').style.display = 'block';
+  }
+}
+
+async function login() {
+  const email    = document.getElementById('email-input').value.trim();
+  const password = document.getElementById('password-input').value;
+  if (!email || !password) { setAuthStatus('Bitte E-Mail und Passwort eingeben.'); return; }
+  setAuthStatus('Anmeldung …');
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { setAuthStatus('Fehler: ' + error.message); return; }
+  onLoggedIn(data.session);
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+function onLoggedIn(session) {
+  document.getElementById('auth-card').style.display = 'none';
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-email-display').textContent = session.user.email;
+  document.getElementById('quiz-content').style.display = 'block';
+  document.getElementById('save-action-row').style.display = 'flex';
+  loadAnswers();
+}
+
+function setAuthStatus(msg) {
+  document.getElementById('auth-status').textContent = msg;
+}
+
+// ── Speichern / Laden ─────────────────────────
+function collectAnswers() {
+  const data = {};
+  [1,2].forEach(n => {
+    data['q' + n] = Array.from(document.querySelectorAll('#opts' + n + ' input:checked')).map(i => i.value);
+  });
+  return data;
+}
+
+async function saveResults() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { setSaveStatus('Nicht eingeloggt – Speichern nicht möglich.', false); return; }
+
+  const answers = collectAnswers();
+  const { error } = await sb.from('arbeitsblatt_antworten').upsert({
+    user_id:        user.id,
+    arbeitsblatt:   ARBEITSBLATT_ID,
+    antworten:      answers,
+    gespeichert_am: new Date().toISOString()
+  }, { onConflict: 'user_id,arbeitsblatt' });
+
+  if (error) {
+    setSaveStatus('Speichern fehlgeschlagen: ' + error.message, false);
+  } else {
+    setSaveStatus('Gespeichert um ' + new Date().toLocaleTimeString('de-DE'), true);
+  }
+}
+
+async function loadAnswers() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await sb.from('arbeitsblatt_antworten')
+    .select('antworten, gespeichert_am')
+    .eq('user_id', user.id)
+    .eq('arbeitsblatt', ARBEITSBLATT_ID)
+    .single();
+
+  if (error || !data) { setSaveStatus('Noch keine gespeicherten Antworten.', false); return; }
+
+  const a = data.antworten;
+
+  [1,2].forEach(n => {
+    if (Array.isArray(a['q' + n])) {
+      a['q' + n].forEach(v => {
+        const inp = document.querySelector(`#opts${n} input[value="${v}"]`);
+        if (inp) inp.checked = true;
+      });
+    }
+  });
+
+  const ts = new Date(data.gespeichert_am).toLocaleString('de-DE');
+  setSaveStatus('Geladen · gespeichert am ' + ts, true);
+}
+
+function setSaveStatus(msg, saved) {
+  document.getElementById('save-text').textContent = msg;
+  document.getElementById('save-dot').className = 'dot' + (saved ? ' saved' : '');
+}
+</script>
+</body>
+</html>
