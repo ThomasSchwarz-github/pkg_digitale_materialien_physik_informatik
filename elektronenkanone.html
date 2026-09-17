@@ -432,7 +432,7 @@
       <label class="option"><input type="checkbox" value="b"> Mit steigender Heizspannung – und damit steigender Drahttemperatur – nimmt der Anodenstrom zunächst deutlich zu, weil immer mehr Elektronen pro Zeiteinheit austreten.</label>
       <label class="option"><input type="checkbox" value="c"> Der Anodenstrom steigt auch bei beliebig weiter erhöhter Heizspannung immer weiter unbegrenzt an, ohne sich jemals einem Grenzwert anzunähern.</label>
       <label class="option"><input type="checkbox" value="d"> Ab einer bestimmten Heizspannung wächst der Anodenstrom kaum noch weiter, da bei der gegebenen Beschleunigungsspannung nahezu alle in dieser Zeit austretenden Elektronen bereits zur Anode hin abgesaugt werden (Sättigungsbereich).</label>
-      <label class="option"><input type="checkbox" value="e"> Erhöht man zusätzlich die Beschleunigungsspannung U<sub>A</sub> deutlich, bleibt der erreichbare Sättigungsstrom exakt gleich groß, unabhängig davon, wie viele Elektronen tatsächlich pro Zeit aus dem Draht austreten.</label>
+      <label class="option"><input type="checkbox" value="e"> Erhöht man zusätzlich die Beschleunigungsspannung UA deutlich, bleibt der erreichbare Sättigungsstrom exakt gleich groß, unabhängig davon, wie viele Elektronen tatsächlich pro Zeit aus dem Draht austreten.</label>
       <label class="option"><input type="checkbox" value="f"> Der erreichbare Sättigungsstrom hängt in erster Linie von der Temperatur (also von der Heizspannung) des Glühdrahtes ab, nicht von der Beschleunigungsspannung.</label>
       <label class="option"><input type="checkbox" value="g"> Bringt man den Glühdraht durch zu starkes Heizen fast zum Schmelzen, stellt sich dadurch zwangsläufig ein besonders hoher, aber dauerhaft stabiler Sättigungsstrom ein.</label>
       <label class="option"><input type="checkbox" value="h"> Die beobachtete Abhängigkeit des Anodenstroms von der Heizspannung ist ein experimenteller Beleg dafür, dass der Elektronenaustritt aus dem Draht ein temperaturabhängiger Vorgang ist.</label>
@@ -441,6 +441,31 @@
     </div>
     <button class="btn-check" onclick="checkMC(2, ['a','b','d','f','h','j'])">Antwort prüfen</button>
     <div class="task-feedback" id="fb2"></div>
+  </div>
+
+  <!-- ── Aufgabe 3: MC Wehneltzylinder / Beschleunigung an der Anode ── -->
+  <div class="task-card" id="task3">
+    <div class="task-header">
+      <span class="task-num">Aufgabe 3</span>
+      <span class="task-type">Multiple Choice</span>
+    </div>
+    <p class="task-context">Die aus der Glühkathode austretenden Elektronen werden zwischen Kathode und Anode durch die Beschleunigungsspannung U<sub>A</sub> beschleunigt und verlassen die Anodenöffnung mit der Geschwindigkeit v. Zwischen Glühkathode und Anode befindet sich außerdem der sogenannte <strong>Wehneltzylinder</strong> (vgl. Schemazeichnung oben).</p>
+    <p class="task-q">Welche der folgenden Aussagen zur Elektronenkanone sind korrekt?</p>
+    <p class="task-hint">Mehrere Antworten können richtig sein. Die genaue Berechnung von v ist hier noch nicht gefragt.</p>
+    <div class="options" id="opts3">
+      <label class="option"><input type="checkbox" value="a"> Der Wehneltzylinder umgibt die Glühkathode und liegt auf einem gegenüber der Kathode leicht negativen Potential; dadurch bündelt er die divergierende Elektronenwolke zu einem gerichteten Strahl und ermöglicht es, die Anzahl der zur Anode gelangenden Elektronen – und damit die Strahlintensität – zu regeln.</label>
+      <label class="option"><input type="checkbox" value="b"> Der Wehneltzylinder übernimmt die eigentliche Beschleunigung der Elektronen in Richtung Anode; ohne ihn könnten die Elektronen die Anode gar nicht erreichen.</label>
+      <label class="option"><input type="checkbox" value="c"> Der Wehneltzylinder liegt auf einem gegenüber der Kathode positiven Potential, um möglichst viele Elektronen aus der Raumladungswolke anzuziehen und zur Anode zu beschleunigen.</label>
+      <label class="option"><input type="checkbox" value="d"> Vernachlässigt man die Anfangsgeschwindigkeit der Elektronen beim Austritt aus dem Glühdraht, gilt für ihre Geschwindigkeit an der Anodenöffnung näherungsweise die Energiebilanz E_kin = e · U_A, da die im elektrischen Feld am Elektron verrichtete Arbeit vollständig in kinetische Energie umgewandelt wird.</label>
+      <label class="option"><input type="checkbox" value="e"> Die kinetische Energie, die ein Elektron beim Durchlaufen der Beschleunigungsspannung U_A gewinnt, entspricht genau dem Betrag, um den seine potentielle Energie (Lageenergie) im elektrischen Feld zwischen Kathode und Anode abnimmt.</label>
+      <label class="option"><input type="checkbox" value="f"> Die kinetische Energie der Elektronen an der Anodenöffnung hängt in erster Linie von der Heizspannung U_H ab, da diese die Elektronen zusätzlich beschleunigt.</label>
+      <label class="option"><input type="checkbox" value="g"> Je größer die Beschleunigungsspannung U_A gewählt wird, desto kleiner ist die kinetische Energie, mit der die Elektronen die Anodenöffnung verlassen.</label>
+      <label class="option"><input type="checkbox" value="h"> Die Anode besitzt eine kleine Öffnung, durch die ein Teil der beschleunigten Elektronen hindurchtreten kann und so den Elektronenstrahl bildet, der die Elektronenkanone verlässt.</label>
+      <label class="option"><input type="checkbox" value="i"> Das elektrische Feld zwischen Kathode und Anode ist so gerichtet, dass die Kraft auf die negativ geladenen Elektronen von der Kathode in Richtung Anode zeigt und sie dadurch beschleunigt.</label>
+      <label class="option"><input type="checkbox" value="j"> Sowohl die Heizspannung U_H als auch die Beschleunigungsspannung U_A sorgen gemeinsam dafür, dass Elektronen überhaupt erst aus dem Glühdraht austreten können.</label>
+    </div>
+    <button class="btn-check" onclick="checkMC(3, ['a','d','e','h','i'])">Antwort prüfen</button>
+    <div class="task-feedback" id="fb3"></div>
   </div>
 
   <!-- ── Speichern (nur im Modus "Mit Anmeldung") ── -->
@@ -473,6 +498,11 @@ const mcFeedback = {
     ok:      '✓ Richtig! Ohne ausreichende Heizspannung tritt kein Strom auf; mit steigender Temperatur steigt der Anodenstrom zunächst an und geht dann in einen Sättigungsbereich über, der von der Emissionsrate (Temperatur) abhängt, nicht von U_A. Die gesamte Kennlinie belegt die Temperaturabhängigkeit des Elektronenaustritts.',
     partial: 'Teilweise richtig. Achte besonders darauf, wovon der Sättigungsstrom abhängt (Temperatur/Heizspannung, nicht die Beschleunigungsspannung) und dass der Elektronenaustritt eine Mindestenergie voraussetzt, statt sprunghaft bei jeder Temperatur vollständig einzusetzen.',
     err:     '✗ Noch nicht ganz. Merke: Der Anodenstrom setzt erst oberhalb einer Mindesttemperatur ein, steigt dann mit der Heizspannung an und nähert sich einem von der Temperatur abhängigen Sättigungswert – unabhängig von U_A und keineswegs unbegrenzt oder sprunghaft.'
+  },
+  3: {
+    ok:      '✓ Richtig! Der Wehneltzylinder liegt auf negativem Potential gegenüber der Kathode und bündelt bzw. reguliert den Elektronenstrahl, beschleunigt die Elektronen aber nicht selbst. Die eigentliche Beschleunigung übernimmt das elektrische Feld zwischen Kathode und Anode: Die dabei am Elektron verrichtete Arbeit e·U_A wird vollständig in kinetische Energie umgewandelt (Energieerhaltung) – unabhängig von der Heizspannung U_H, die nur für den Austritt der Elektronen aus dem Draht verantwortlich ist.',
+    partial: 'Teilweise richtig. Achte besonders auf die Rolle des Wehneltzylinders (er beschleunigt nicht, sondern bündelt/reguliert den Strahl) und darauf, dass die kinetische Energie der Elektronen an der Anode von U_A abhängt, nicht von U_H.',
+    err:     '✗ Noch nicht ganz. Merke: U_H sorgt nur dafür, dass Elektronen aus dem Draht austreten; die anschließende Beschleunigung – und damit die kinetische Energie an der Anodenöffnung – hängt von der Beschleunigungsspannung U_A ab (E_kin = e·U_A). Der Wehneltzylinder liegt auf negativem Potential und bündelt/reguliert den Strahl, beschleunigt aber nicht.'
   }
 };
 
@@ -582,7 +612,7 @@ function setAuthStatus(msg) {
 // ── Speichern / Laden ─────────────────────────
 function collectAnswers() {
   const data = {};
-  [1,2].forEach(n => {
+  [1,2,3].forEach(n => {
     data['q' + n] = Array.from(document.querySelectorAll('#opts' + n + ' input:checked')).map(i => i.value);
   });
   return data;
@@ -621,7 +651,7 @@ async function loadAnswers() {
 
   const a = data.antworten;
 
-  [1,2].forEach(n => {
+  [1,2,3].forEach(n => {
     if (Array.isArray(a['q' + n])) {
       a['q' + n].forEach(v => {
         const inp = document.querySelector(`#opts${n} input[value="${v}"]`);
