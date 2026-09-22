@@ -664,8 +664,13 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <div class="lg:col-span-2 relative border border-slate-700 rounded-xl p-1 bg-slate-800 shadow-2xl overflow-hidden flex flex-col">
                 <div class="absolute top-4 left-4 z-10 bg-slate-900/80 p-2 rounded text-xs text-slate-300 font-mono border border-slate-700 backdrop-blur-sm">
                     Status: <span id="status-text" class="text-rose-400">Aus (Heizung &lt; 4V)</span><br>
-                    v<sub>x</sub>: <span id="velo-text">0</span> m/s
+                    v<sub>x</sub>: <span id="velo-text">0</span> m/s<br>
+                    <span id="cursor-text" class="hidden text-sky-300">Fadenkreuz: Maus über die Röhre bewegen</span>
                 </div>
+                <button id="btn-messmodus" type="button" class="absolute top-4 right-4 z-10 bg-slate-700 hover:bg-sky-600 text-white text-xs py-2 px-3 rounded shadow transition-colors flex items-center gap-1 border border-slate-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v3m0 12v3m9-9h-3M6 12H3m14.66-5.66l-2.12 2.12M8.46 15.54l-2.12 2.12m0-11.32l2.12 2.12m7.08 7.08l2.12 2.12M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <span id="messmodus-label">Messmodus: Aus</span>
+                </button>
                 <!-- Das Canvas Element für die Zeichnung -->
                 <canvas id="simCanvas" width="800" height="500" class="w-full h-full object-contain"></canvas>
             </div>
@@ -714,26 +719,54 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 </div>
             </div>
         </div>
-        
+
+        <!-- Messwerte Section -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4 border-b border-slate-700 pb-2">
+                <h2 class="text-xl font-semibold text-slate-200 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h4m0 0l-3-3m3 3l-3 3M4 7h.01M4 12h.01M4 17h.01"></path></svg>
+                    Messwerte
+                </h2>
+                <div class="flex flex-wrap gap-2">
+                    <button id="btn-clear-table" type="button" class="bg-slate-700 hover:bg-slate-600 text-white text-xs py-2 px-3 rounded transition-colors">Tabelle leeren</button>
+                    <button id="btn-export-csv" type="button" class="bg-slate-700 hover:bg-sky-600 text-white text-xs py-2 px-3 rounded transition-colors">CSV exportieren</button>
+                    <button id="btn-export-txt" type="button" class="bg-slate-700 hover:bg-sky-600 text-white text-xs py-2 px-3 rounded transition-colors">Als Text exportieren</button>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 mb-3">Aktiviere den <strong>Messmodus</strong> oben rechts am Bildschirm, bewege die Maus mit dem Fadenkreuz über die Röhre und klicke auf einen Punkt des sichtbaren Elektronenstrahls. Der Punkt wird zusammen mit den aktuellen Spannungswerten (U<sub>H</sub>, U<sub>B</sub>, U<sub>A</sub>) in der Tabelle gespeichert. x und y werden dabei relativ zum Eintritt in den Plattenkondensator bzw. zur Mittelachse in Zentimetern angegeben.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border-collapse">
+                    <thead>
+                        <tr class="text-slate-400 border-b border-slate-700">
+                            <th class="py-2 pr-4">#</th>
+                            <th class="py-2 pr-4">U<sub>H</sub> (V)</th>
+                            <th class="py-2 pr-4">U<sub>B</sub> (V)</th>
+                            <th class="py-2 pr-4">U<sub>A</sub> (V)</th>
+                            <th class="py-2 pr-4">x (cm)</th>
+                            <th class="py-2 pr-4">y (cm)</th>
+                            <th class="py-2 pr-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="messwerte-body"></tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Info Section -->
         <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 text-sm text-slate-300 leading-relaxed shadow-lg">
-            <h3 class="text-lg font-semibold text-slate-200 mb-2">Physikalische Grundlagen &amp; Maße</h3>
-            <p class="mb-2">Die Simulation verwendet eine exakte physikalische Berechnung der Bahnkurve. Maße des Kondensators: <strong>Länge <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo>=</mo><mn>10</mn><mtext>&nbsp;cm</mtext></mrow><annotation encoding="application/x-tex">l = 10\text{ cm}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6944em;"></span><span class="mord mathnormal" style="margin-right: 0.0197em;">l</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">10</span><span class="mord text"><span class="mord">&nbsp;cm</span></span></span></span></span></span></strong> und <strong>Plattenabstand <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>6</mn><mtext>&nbsp;cm</mtext></mrow><annotation encoding="application/x-tex">d = 6\text{ cm}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6944em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">6</span><span class="mord text"><span class="mord">&nbsp;cm</span></span></span></span></span></span></strong>.</p>
-            <ul class="list-disc list-inside space-y-1 mb-4 text-slate-400">
-                <li><strong>x-Richtung:</strong> Gleichförmige Bewegung mit <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>x</mi></msub><mo>=</mo><msqrt><mfrac><mrow><mn>2</mn><mo>⋅</mo><mi>e</mi><mo>⋅</mo><msub><mi>U</mi><mi>B</mi></msub></mrow><msub><mi>m</mi><mi>e</mi></msub></mfrac></msqrt></mrow><annotation encoding="application/x-tex"> v_x = \sqrt{\frac{2 \cdot e \cdot U_B}{m_e}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.5806em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.1514em;"><span class="" style="top: -2.55em; margin-left: -0.0359em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 1.84em; vertical-align: -0.6332em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.2068em;"><span class="svg-align" style="top: -3.8em;"><span class="pstrut" style="height: 3.8em;"></span><span class="mord" style="padding-left: 1em;"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.8886em;"><span class="" style="top: -2.655em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.1645em;"><span class="" style="top: -2.357em; margin-left: 0em; margin-right: 0.0714em;"><span class="pstrut" style="height: 2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.143em;"><span class=""></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.4103em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mbin mtight">⋅</span><span class="mord mathnormal mtight">e</span><span class="mbin mtight">⋅</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right: 0.109em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3567em; margin-left: -0.109em; margin-right: 0.0714em;"><span class="pstrut" style="height: 2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right: 0.0502em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.1433em;"><span class=""></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.4451em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span class="" style="top: -3.1668em;"><span class="pstrut" style="height: 3.8em;"></span><span class="hide-tail" style="min-width: 1.02em; height: 1.88em;"><svg width="400em" height="1.88em" viewBox="0 0 400000 1944" preserveAspectRatio="xMinYMin slice"><path d="M983 90
-l0 -0
-c4,-6.7,10,-10,18,-10 H400000v40
-H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
-s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
-c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
-c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
-c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
-c53.7,-170.3,84.5,-266.8,92.5,-289.5z
-M1001 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.6332em;"><span class=""></span></span></span></span></span></span></span></span></span></li>
-                <li><strong>y-Richtung:</strong> Gleichmäßig beschleunigte Bewegung mit <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>y</mi></msub><mo>=</mo><mfrac><mrow><mi>e</mi><mo>⋅</mo><msub><mi>U</mi><mi>A</mi></msub></mrow><mrow><msub><mi>m</mi><mi>e</mi></msub><mo>⋅</mo><mi>d</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex"> a_y = \frac{e \cdot U_A}{m_e \cdot d} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7167em; vertical-align: -0.2861em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.1514em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right: 0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.2861em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 1.3337em; vertical-align: -0.4451em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.8886em;"><span class="" style="top: -2.655em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.1645em;"><span class="" style="top: -2.357em; margin-left: 0em; margin-right: 0.0714em;"><span class="pstrut" style="height: 2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.143em;"><span class=""></span></span></span></span></span></span><span class="mbin mtight">⋅</span><span class="mord mathnormal mtight">d</span></span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.4103em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">e</span><span class="mbin mtight">⋅</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right: 0.109em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3567em; margin-left: -0.109em; margin-right: 0.0714em;"><span class="pstrut" style="height: 2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">A</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.1433em;"><span class=""></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.4451em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></li>
+            <h3 class="text-lg font-semibold text-slate-200 mb-2">Aufbau, Funktionsweise &amp; Maße</h3>
+            <p class="mb-3">Die Simulation zeigt eine Elektronenstrahlröhre: In der Glühkathode werden Elektronen freigesetzt, anschließend in Richtung einer Anode beschleunigt und danach zwischen zwei parallelen Kondensatorplatten abgelenkt, bevor sie auf einem Leuchtschirm als Punkt sichtbar werden.</p>
+
+            <p class="font-semibold text-slate-200 mb-1">Einstellbare Größen</p>
+            <ul class="list-disc list-inside space-y-2 mb-4 text-slate-400">
+                <li><strong>Heizspannung U<sub>H</sub>:</strong> liegt an der Glühwendel (Kathode) an und erhitzt diese. Ab einer bestimmten Temperatur tritt der <em>glühelektrische Effekt</em> auf: Elektronen im Metall der Kathode erhalten genügend thermische Energie, um die Austrittsarbeit zu überwinden und aus der Kathode auszutreten. Erst dadurch stehen überhaupt freie Elektronen für den Strahl zur Verfügung.</li>
+                <li><strong>Beschleunigungsspannung U<sub>B</sub>:</strong> liegt zwischen Kathode und Anode an und beschleunigt die freigesetzten Elektronen, bevor sie durch die Anodenöffnung in den Raum zwischen den Ablenkplatten eintreten.</li>
+                <li><strong>Ablenkspannung U<sub>A</sub>:</strong> liegt an den beiden parallelen Kondensatorplatten an. Zwischen den Platten entsteht dadurch ein <em>homogenes elektrisches Feld</em> senkrecht zur ursprünglichen Flugrichtung der Elektronen (vertikal), das den Strahl je nach Polung nach oben oder unten ablenkt.</li>
             </ul>
-            <p>Die resultierende Bahnkurve innerhalb der Platten ist eine exakte Parabel: <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>⋅</mo><mfrac><msub><mi>U</mi><mi>A</mi></msub><mrow><msub><mi>U</mi><mi>B</mi></msub><mo>⋅</mo><mi>d</mi></mrow></mfrac><mo>⋅</mo><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex"> y(x) = \frac{1}{4} \cdot \frac{U_A}{U_B \cdot d} \cdot x^2 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.0359em;">y</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 1.1901em; vertical-align: -0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.8451em;"><span class="" style="top: -2.655em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.394em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.345em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right: 0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right: 0.2222em;"></span></span><span class="base"><span class="strut" style="height: 1.3339em; vertical-align: -0.4453em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.8886em;"><span class="" style="top: -2.655em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right: 0.109em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3567em; margin-left: -0.109em; margin-right: 0.0714em;"><span class="pstrut" style="height: 2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right: 0.0502em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.1433em;"><span class=""></span></span></span></span></span></span><span class="mbin mtight">⋅</span><span class="mord mathnormal mtight">d</span></span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.4103em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right: 0.109em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3567em; margin-left: -0.109em; margin-right: 0.0714em;"><span class="pstrut" style="height: 2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">A</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.1433em;"><span class=""></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.4453em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right: 0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right: 0.2222em;"></span></span><span class="base"><span class="strut" style="height: 0.8141em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.8141em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></p>
-            <p class="text-xs mt-4 text-slate-500 italic">Nutze die Skala am Ausgang des Kondensators, um die Ablenkung <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.625em; vertical-align: -0.1944em;"></span><span class="mord mathnormal" style="margin-right: 0.0359em;">y</span></span></span></span></span> in Zentimetern direkt abzulesen!</p>
+
+            <p class="mb-2">Maße des Plattenkondensators: <strong>Länge <span>\(l = 10\text{ cm}\)</span></strong> und <strong>Plattenabstand <span>\(d = 6\text{ cm}\)</span></strong>.</p>
+
+            <p class="text-xs mt-4 text-slate-500 italic">Nutze die Skala am Ausgang des Kondensators, um die Ablenkung <span>\(y\)</span> in Zentimetern direkt abzulesen!</p>
         </div>
 
     </div>
@@ -776,6 +809,11 @@ M1001 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlis
             ua: 0  // Ablenkspannung -500 bis 500V
         };
 
+        // --- Messmodus State ---
+        let messModus = false;
+        let mousePos = null; // {x, y} in Canvas-Pixel-Koordinaten
+        let measurements = []; // { uh, ub, ua, x, y } - x/y in cm
+
         // --- DOM Elemente ---
         const canvas = document.getElementById('simCanvas');
         const ctx = canvas.getContext('2d');
@@ -791,6 +829,15 @@ M1001 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlis
         const statusText = document.getElementById('status-text');
         const veloText = document.getElementById('velo-text');
         const btnReset = document.getElementById('btn-reset');
+
+        // --- Messmodus DOM Elemente ---
+        const btnMessmodus = document.getElementById('btn-messmodus');
+        const messmodusLabel = document.getElementById('messmodus-label');
+        const cursorText = document.getElementById('cursor-text');
+        const messwerteBody = document.getElementById('messwerte-body');
+        const btnClearTable = document.getElementById('btn-clear-table');
+        const btnExportCsv = document.getElementById('btn-export-csv');
+        const btnExportTxt = document.getElementById('btn-export-txt');
 
         // --- Event Listeners ---
         sliderUh.addEventListener('input', (e) => {
@@ -823,6 +870,185 @@ M1001 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlis
             sliderUb.dispatchEvent(new Event('input'));
             sliderUa.dispatchEvent(new Event('input'));
         });
+
+        // --- Messmodus: Fadenkreuz & Datenaufnahme ---
+
+        btnMessmodus.addEventListener('click', () => {
+            messModus = !messModus;
+            messmodusLabel.textContent = 'Messmodus: ' + (messModus ? 'An' : 'Aus');
+            btnMessmodus.classList.toggle('bg-sky-600', messModus);
+            canvas.style.cursor = messModus ? 'crosshair' : 'default';
+            cursorText.classList.toggle('hidden', !messModus);
+            if (!messModus) {
+                mousePos = null;
+            } else {
+                cursorText.textContent = 'Fadenkreuz: Maus über die Röhre bewegen';
+            }
+            draw();
+        });
+
+        // Wandelt eine Mausposition (Client-Koordinaten) in Canvas-interne Pixel um,
+        // da das Canvas per CSS skaliert dargestellt wird (width/height 800x500 intern).
+        function getCanvasPos(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (evt.clientX - rect.left) * scaleX,
+                y: (evt.clientY - rect.top) * scaleY
+            };
+        }
+
+        // Wandelt Canvas-Pixel in physikalische Koordinaten (cm) um.
+        // x = 0 am Eintritt in den Plattenkondensator, y = 0 auf der Mittelachse (positiv nach oben).
+        function toPhysical(pxX, pxY) {
+            return {
+                x: (pxX - plattenStart) / cmToPx,
+                y: (originY - pxY) / cmToPx
+            };
+        }
+
+        canvas.addEventListener('mousemove', (evt) => {
+            if (!messModus) return;
+            mousePos = getCanvasPos(evt);
+            const phys = toPhysical(mousePos.x, mousePos.y);
+            cursorText.textContent = `Fadenkreuz: x = ${phys.x.toFixed(2)} cm, y = ${phys.y.toFixed(2)} cm`;
+            draw();
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            if (!messModus) return;
+            mousePos = null;
+            cursorText.textContent = 'Fadenkreuz: Maus über die Röhre bewegen';
+            draw();
+        });
+
+        canvas.addEventListener('click', (evt) => {
+            if (!messModus) return;
+            const pos = getCanvasPos(evt);
+            const beamVisible = state.uh > 4.0 && state.ub > 0;
+            if (!beamVisible) {
+                cursorText.textContent = 'Strahl nicht sichtbar – kein Messpunkt aufgenommen.';
+                return;
+            }
+            const phys = toPhysical(pos.x, pos.y);
+            measurements.push({ uh: state.uh, ub: state.ub, ua: state.ua, x: phys.x, y: phys.y });
+            renderTable();
+        });
+
+        function drawCrosshair(pos) {
+            ctx.save();
+            ctx.strokeStyle = 'rgba(248, 113, 113, 0.8)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, 0); ctx.lineTo(pos.x, canvasHeight);
+            ctx.moveTo(0, pos.y); ctx.lineTo(canvasWidth, pos.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(248, 113, 113, 1)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // --- Messwerte-Tabelle ---
+
+        function renderTable() {
+            messwerteBody.innerHTML = '';
+
+            if (measurements.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="7" class="py-3 text-slate-500 italic">Noch keine Messpunkte aufgenommen.</td>';
+                messwerteBody.appendChild(tr);
+                return;
+            }
+
+            measurements.forEach((m, i) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-slate-700/50 text-slate-300';
+                tr.innerHTML = `
+                    <td class="py-2 pr-4 text-slate-500">${i + 1}</td>
+                    <td class="py-2 pr-4 font-mono">${m.uh.toFixed(1)}</td>
+                    <td class="py-2 pr-4 font-mono">${m.ub.toFixed(0)}</td>
+                    <td class="py-2 pr-4 font-mono">${m.ua.toFixed(0)}</td>
+                    <td class="py-2 pr-4 font-mono">${m.x.toFixed(2)}</td>
+                    <td class="py-2 pr-4 font-mono">${m.y.toFixed(2)}</td>
+                    <td class="py-2 pr-4"><button data-index="${i}" class="btn-delete-row text-rose-400 hover:text-rose-300 text-xs" title="Messpunkt löschen">✕</button></td>
+                `;
+                messwerteBody.appendChild(tr);
+            });
+
+            messwerteBody.querySelectorAll('.btn-delete-row').forEach((btn) => {
+                btn.addEventListener('click', (evt) => {
+                    const idx = parseInt(evt.currentTarget.dataset.index, 10);
+                    measurements.splice(idx, 1);
+                    renderTable();
+                });
+            });
+        }
+
+        btnClearTable.addEventListener('click', () => {
+            if (measurements.length === 0) return;
+            if (confirm('Alle Messwerte wirklich löschen?')) {
+                measurements = [];
+                renderTable();
+            }
+        });
+
+        // --- Export ---
+
+        function downloadTextFile(content, filename, mime) {
+            const blob = new Blob(["﻿" + content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportCSV() {
+            if (measurements.length === 0) {
+                alert('Keine Messwerte vorhanden.');
+                return;
+            }
+            const deNum = (n, dec) => n.toFixed(dec).replace('.', ',');
+            const lines = ['U_H (V);U_B (V);U_A (V);x (cm);y (cm)'];
+            measurements.forEach((m) => {
+                lines.push([deNum(m.uh, 1), deNum(m.ub, 0), deNum(m.ua, 0), deNum(m.x, 2), deNum(m.y, 2)].join(';'));
+            });
+            downloadTextFile(lines.join('\r\n'), 'messwerte_elektronenstrahlablenkroehre.csv', 'text/csv;charset=utf-8');
+        }
+
+        function exportTXT() {
+            if (measurements.length === 0) {
+                alert('Keine Messwerte vorhanden.');
+                return;
+            }
+            const headers = ['#', 'U_H (V)', 'U_B (V)', 'U_A (V)', 'x (cm)', 'y (cm)'];
+            const rows = measurements.map((m, i) => [
+                String(i + 1), m.uh.toFixed(1), m.ub.toFixed(0), m.ua.toFixed(0), m.x.toFixed(2), m.y.toFixed(2)
+            ]);
+            const widths = headers.map((h, i) => Math.max(h.length, ...rows.map((r) => r[i].length)) + 2);
+            const pad = (s, w) => s + ' '.repeat(Math.max(0, w - s.length));
+
+            let out = headers.map((h, i) => pad(h, widths[i])).join('') + '\n';
+            out += '-'.repeat(widths.reduce((a, w) => a + w, 0)) + '\n';
+            rows.forEach((r) => {
+                out += r.map((c, i) => pad(c, widths[i])).join('') + '\n';
+            });
+
+            downloadTextFile(out, 'messwerte_elektronenstrahlablenkroehre.txt', 'text/plain;charset=utf-8');
+        }
+
+        btnExportCsv.addEventListener('click', exportCSV);
+        btnExportTxt.addEventListener('click', exportTXT);
 
 
         function updateStatus() {
@@ -1203,11 +1429,11 @@ M1001 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlis
                 
                 if (endY < wandOben) {
                     endY = wandOben;
-                    endX = plattenEnde + (wandOben - currentY) / steigung;
+                    endX = plattenEnde + (wandOben - currentY) / steigungPx;
                     hitWall = true; // Trifft Röhrenwand
                 } else if (endY > wandUnten) {
                     endY = wandUnten;
-                    endX = plattenEnde + (wandUnten - currentY) / steigung;
+                    endX = plattenEnde + (wandUnten - currentY) / steigungPx;
                     hitWall = true;
                 }
                 
@@ -1250,9 +1476,14 @@ M1001 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlis
             drawPlates();
             drawScale();
             drawBeam();
-            
+
             // Reset Shadow für zukünftige Draw-Calls
             ctx.shadowBlur = 0;
+
+            // Fadenkreuz im Messmodus zuletzt zeichnen (liegt über allem)
+            if (messModus && mousePos) {
+                drawCrosshair(mousePos);
+            }
         }
 
         // --- Download Funktion ---
@@ -1275,6 +1506,7 @@ M1001 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlis
         // --- Init ---
         // Einmaliges Ausführen beim Start, um Grundzustand zu zeichnen
         updateStatus();
+        renderTable();
         draw();
         
         // Handle window resize für Responsivität des Canvas
