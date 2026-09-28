@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Millikan-Versuch - Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- KaTeX für mathematische Formeln -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 65vh;
+            border-radius: 0.5rem;
+            background-color: #1e293b;
+            cursor: pointer;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #475569;
+            border-radius: 2px;
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 16px; width: 16px; border-radius: 50%;
+            background: #38bdf8; cursor: pointer; border: none;
+        }
+        input[type=range]::-moz-range-track {
+            height: 4px; background: #475569; border-radius: 2px;
+        }
+        input[type=range]:focus { outline: none; }
+
+        .glow-text { text-shadow: 0 0 5px rgba(56, 189, 248, 0.5); }
+        .back-link { display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.95rem; text-decoration: none; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); background: rgba(56, 189, 248, 0.08); padding: 0.45rem 0.75rem; border-radius: 0.5rem; align-self: flex-start; }
+        .back-link:hover { background: rgba(56, 189, 248, 0.18); }
+
+        .seg-btn { background: #334155; color: #cbd5e1; padding: 0.4rem 0.6rem; font-size: 0.8rem; transition: background-color 0.15s; }
+        .seg-btn:hover { background: #475569; }
+        .seg-btn.active { background: #0284c7; color: white; }
+        .step-btn { background: #334155; color: #e2e8f0; font-size: 0.75rem; padding: 0.3rem 0; border-radius: 0.25rem; font-family: ui-monospace, monospace; transition: background-color 0.15s; }
+        .step-btn:hover { background: #0284c7; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto w-full flex-grow flex flex-col gap-6">
+
+        <!-- Header -->
+        <header class="text-center mb-2 relative">
+            <h1 class="text-3xl md:text-4xl font-bold text-sky-400 glow-text mb-2">Millikan-Versuch</h1>
+            <p class="text-slate-400">Simulation: Öltröpfchen im elektrischen Feld eines Plattenkondensators zum Schweben bringen</p>
+
+            <button onclick="downloadHTML()" class="hidden md:flex absolute top-0 right-0 bg-slate-700 hover:bg-sky-600 text-white text-sm py-2 px-4 rounded shadow transition-colors items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Als HTML speichern
+            </button>
+        </header>
+        <a href="index_physik.html" class="back-link">← Zurück zur Übersicht</a>
+
+        <!-- Canvas + Bedienfeld -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow">
+
+            <!-- Simulation -->
+            <div class="lg:col-span-2 self-start relative border border-slate-700 rounded-xl p-1 bg-slate-800 shadow-2xl overflow-hidden flex flex-col">
+                <div class="absolute bottom-4 left-4 z-10 bg-slate-900/80 p-2 rounded text-xs text-slate-300 font-mono border border-slate-700 backdrop-blur-sm">
+                    Spannung: <span id="status-u" class="text-sky-400">aus</span><br>
+                    Tröpfchen im Kondensator: <span id="status-n">0</span><br>
+                    Zeitraffer: <span id="status-t">10×</span>
+                </div>
+                <div id="hint-overlay" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div class="bg-slate-900/80 border border-slate-700 rounded px-4 py-3 text-sm text-slate-300 text-center">
+                        Klicke auf <strong class="text-sky-400">„Öltröpfchen einsprühen“</strong>,<br>um zu beginnen.
+                    </div>
+                </div>
+                <canvas id="simCanvas" width="800" height="600"></canvas>
+            </div>
+
+            <!-- Bedienfeld -->
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 flex flex-col gap-5 shadow-xl">
+                <h2 class="text-xl font-semibold text-slate-200 border-b border-slate-700 pb-2 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    Steuerung
+                </h2>
+
+                <!-- Einsprühen -->
+                <div class="flex gap-2">
+                    <button id="btn-spray" class="flex-grow bg-sky-600 hover:bg-sky-500 text-white py-2 px-3 rounded transition-colors text-sm font-semibold">💧 Öltröpfchen einsprühen</button>
+                    <button id="btn-clear" class="bg-slate-700 hover:bg-slate-600 text-white py-2 px-3 rounded transition-colors text-sm" title="Alle Tröpfchen entfernen">Leeren</button>
+                </div>
+
+                <!-- Spannung -->
+                <div>
+                    <label class="flex justify-between text-sm font-medium text-slate-300 mb-2">
+                        <span>Spannung U</span>
+                        <span id="val-u" class="text-sky-400 font-mono">0,0 V</span>
+                    </label>
+                    <input type="range" id="slider-u" min="0" max="800" step="0.1" value="0">
+                    <div class="grid grid-cols-6 gap-1 mt-2">
+                        <button class="step-btn" data-step="-10">−10</button>
+                        <button class="step-btn" data-step="-1">−1</button>
+                        <button class="step-btn" data-step="-0.1">−0,1</button>
+                        <button class="step-btn" data-step="0.1">+0,1</button>
+                        <button class="step-btn" data-step="1">+1</button>
+                        <button class="step-btn" data-step="10">+10</button>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Feineinstellung in Volt. Maximal 800 V.</p>
+                </div>
+
+                <!-- Schalter und Polung -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="btn-switch" class="bg-slate-700 hover:bg-slate-600 text-white py-2 px-2 rounded transition-colors text-sm">Spannung: <strong id="switch-label" class="text-rose-400">AUS</strong></button>
+                    <button id="btn-polarity" class="bg-slate-700 hover:bg-slate-600 text-white py-2 px-2 rounded transition-colors text-sm">Obere Platte: <strong id="polarity-label">+</strong></button>
+                </div>
+
+                <!-- Anzeige-Modus -->
+                <div>
+                    <p class="text-sm font-medium text-slate-300 mb-2">Angezeigte Tröpfchengröße</p>
+                    <div class="flex rounded overflow-hidden border border-slate-600">
+                        <button id="mode-mass" class="seg-btn flex-1">Masse m</button>
+                        <button id="mode-radius" class="seg-btn active flex-1">Radius r</button>
+                    </div>
+                    <p id="mode-desc" class="text-xs text-slate-500 mt-1">Schwerere Variante: Nur der Radius wird angezeigt – die Masse musst du selbst berechnen.</p>
+                </div>
+
+                <!-- Zeitraffer -->
+                <div>
+                    <p class="text-sm font-medium text-slate-300 mb-2">Zeitraffer</p>
+                    <div class="flex rounded overflow-hidden border border-slate-600">
+                        <button class="seg-btn flex-1 time-btn" data-factor="1">1×</button>
+                        <button class="seg-btn flex-1 time-btn" data-factor="5">5×</button>
+                        <button class="seg-btn flex-1 time-btn active" data-factor="10">10×</button>
+                        <button class="seg-btn flex-1 time-btn" data-factor="25">25×</button>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Echte Öltröpfchen sinken nur etwa 0,05 bis 0,3 mm pro Sekunde.</p>
+                </div>
+
+                <!-- Ausgewähltes Tröpfchen -->
+                <div class="mt-auto pt-4 border-t border-slate-700">
+                    <p class="text-sm font-medium text-slate-300 mb-2">Ausgewähltes Tröpfchen</p>
+                    <div id="sel-box" class="bg-slate-900/60 rounded p-3 text-xs font-mono text-slate-300 border border-slate-700 min-h-[4.5rem]">
+                        Klicke auf ein Tröpfchen, um es auszuwählen.
+                    </div>
+                    <button id="btn-record" class="mt-2 w-full bg-slate-700 hover:bg-sky-600 text-white py-2 px-3 rounded transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed" disabled>Messwert in Tabelle übernehmen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messwerte -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4 border-b border-slate-700 pb-2">
+                <h2 class="text-xl font-semibold text-slate-200 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h4m0 0l-3-3m3 3l-3 3M4 7h.01M4 12h.01M4 17h.01"></path></svg>
+                    Messwerte
+                </h2>
+                <div class="flex flex-wrap gap-2">
+                    <button id="btn-clear-table" type="button" class="bg-slate-700 hover:bg-slate-600 text-white text-xs py-2 px-3 rounded transition-colors">Tabelle leeren</button>
+                    <button id="btn-export-csv" type="button" class="bg-slate-700 hover:bg-sky-600 text-white text-xs py-2 px-3 rounded transition-colors">CSV exportieren</button>
+                </div>
+            </div>
+
+            <!-- Optionale Anmeldung zum dauerhaften Speichern (Supabase) -->
+            <div id="auth-panel" class="bg-slate-900/60 border border-slate-700 rounded p-3 mb-4 text-sm" style="display:none;">
+                <div id="auth-loggedout">
+                    <p class="text-slate-300 mb-2">🔐 <strong>Messwerte dauerhaft speichern?</strong> <span class="text-slate-400">Melde dich mit deiner Schul-E-Mail-Adresse an. Deine Tabelle wird dann automatisch gespeichert und beim nächsten Besuch wieder geladen. Ohne Anmeldung gehen die Messwerte beim Schließen der Seite verloren.</span></p>
+                    <div class="flex flex-wrap gap-2">
+                        <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de" class="flex-1 min-w-[200px] bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+                        <input type="password" id="password-input" placeholder="Passwort" class="flex-1 min-w-[140px] bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+                        <button id="btn-login" type="button" class="bg-sky-600 hover:bg-sky-500 text-white text-xs py-2 px-4 rounded transition-colors font-semibold">Anmelden</button>
+                    </div>
+                </div>
+                <div id="auth-loggedin" class="flex flex-wrap items-center gap-2" style="display:none;">
+                    <span class="text-slate-400">Angemeldet als</span>
+                    <span id="user-email-display" class="bg-sky-900/60 text-sky-300 px-2 py-0.5 rounded-full text-xs font-medium"></span>
+                    <span class="text-slate-400 text-xs">· Messwerte werden automatisch gespeichert.</span>
+                    <button id="btn-logout" type="button" class="ml-auto bg-slate-700 hover:bg-slate-600 text-white text-xs py-1.5 px-3 rounded transition-colors">Abmelden</button>
+                </div>
+                <p id="auth-status" class="text-xs text-slate-400 mt-2 min-h-[1em]"></p>
+            </div>
+
+            <p class="text-xs text-slate-500 mb-3">Wähle ein Tröpfchen aus und regle die Spannung so, dass es schwebt. Übernimm dann den Messwert in die Tabelle. Berechne anschließend aus deinen Messwerten die Ladung der Tröpfchen.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border-collapse">
+                    <thead>
+                        <tr class="text-slate-400 border-b border-slate-700">
+                            <th class="py-2 pr-4">#</th>
+                            <th class="py-2 pr-4">Tröpfchen</th>
+                            <th class="py-2 pr-4" id="th-param">m bzw. r</th>
+                            <th class="py-2 pr-4">U (V)</th>
+                            <th class="py-2 pr-4">obere Platte</th>
+                            <th class="py-2 pr-4">Zustand</th>
+                            <th class="py-2 pr-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="messwerte-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 text-sm text-slate-300 leading-relaxed shadow-lg">
+            <h3 class="text-lg font-semibold text-slate-200 mb-2">Aufbau, Durchführung &amp; Daten</h3>
+            <p class="mb-3">Mit einem Zerstäuber werden feine Öltröpfchen durch ein kleines Loch in der oberen Platte in einen waagerechten Plattenkondensator gesprüht. Beim Zerstäuben laden sich die Tröpfchen durch Reibung elektrisch auf. Ohne Spannung sinken die Tröpfchen langsam nach unten. Legst du eine passende Spannung an, kannst du ein einzelnes Tröpfchen zum Schweben bringen.</p>
+
+            <p class="font-semibold text-slate-200 mb-1">So gehst du vor</p>
+            <ul class="list-disc list-inside space-y-1 mb-4 text-slate-400">
+                <li>Sprühe Öltröpfchen ein und wähle ein Tröpfchen per Mausklick aus.</li>
+                <li>Schalte die Spannung ein und regle sie, bis das Tröpfchen schwebt. Steigt das Tröpfchen trotz kleiner Spannung, stimmt die Polung nicht – polen um.</li>
+                <li>Übernimm den Messwert in die Tabelle, wenn das Tröpfchen schwebt.</li>
+                <li>Manche Tröpfchen lassen sich gar nicht zum Schweben bringen. Überlege, woran das liegen könnte.</li>
+            </ul>
+
+            <p class="font-semibold text-slate-200 mb-1">Daten der Anordnung</p>
+            <ul class="list-disc list-inside space-y-1 mb-4 text-slate-400">
+                <li>Plattenabstand: <span>\(d = 5{,}0\ \text{mm}\)</span></li>
+                <li>Fallbeschleunigung: <span>\(g = 9{,}81\ \frac{\text{m}}{\text{s}^2}\)</span></li>
+                <li>Dichte des Öls: <span>\(\rho_\text{Öl} = 875\ \frac{\text{kg}}{\text{m}^3}\)</span> (wird im Modus „Radius r“ benötigt)</li>
+                <li>Der Auftrieb der Tröpfchen in Luft wird vernachlässigt.</li>
+            </ul>
+
+            <p class="text-xs mt-4 text-slate-500 italic">Hinweis zur Simulation: Die Tröpfchen bewegen sich wegen der Luftreibung praktisch sofort mit konstanter Geschwindigkeit. Masse, Radius und Ladung der Tröpfchen werden zufällig erzeugt; die Ladung wird nicht angezeigt – sie sollst du selbst bestimmen.</p>
+        </div>
+
+    </div>
+
+    <!-- Supabase (optionales Speichern der Messwerte) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ================================================================
+        // Physikalische Konstanten und Daten der Anordnung
+        // ================================================================
+        const e = 1.602e-19;        // Elementarladung (C)
+        const g = 9.81;             // Fallbeschleunigung (m/s^2)
+        const D = 5.0e-3;           // Plattenabstand (m)
+        const RHO = 875;            // Dichte des Öls (kg/m^3)
+        const ETA = 1.81e-5;        // Viskosität der Luft (Pa s)
+        const U_MAX = 800;          // maximale Spannung (V)
+
+        // ================================================================
+        // Geometrie der Darstellung (Canvas-Pixel)
+        // ================================================================
+        const W = 800, H = 600;
+        const PLATE_X0 = 90, PLATE_X1 = 690;     // Plattenbereich
+        const PLATE_T = 14;                       // Plattendicke
+        const Y_TOP = 70;                         // Unterkante obere Platte
+        const Y_BOT = 470;                        // Oberkante untere Platte
+        const PX_PER_M = (Y_BOT - Y_TOP) / D;     // 400 px = 5 mm
+        const HOLE_X = (PLATE_X0 + PLATE_X1) / 2; // Loch in der oberen Platte
+        const HOLE_W = 26;
+
+        // ================================================================
+        // Zustand
+        // ================================================================
+        let state = {
+            u: 0,             // eingestellte Spannung (V)
+            on: false,        // Spannung eingeschaltet?
+            polarity: 1,      // +1: obere Platte positiv, -1: obere Platte negativ
+            mode: 'radius',   // 'mass' | 'radius'
+            timeFactor: 10
+        };
+        let drops = [];
+        let nextId = 1;
+        let selectedId = null;
+        let measurements = [];
+        let sprayPuffs = [];  // kurze Sprühnebel-Animation
+
+        // ================================================================
+        // DOM
+        // ================================================================
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const sliderU = document.getElementById('slider-u');
+        const valU = document.getElementById('val-u');
+        const statusU = document.getElementById('status-u');
+        const statusN = document.getElementById('status-n');
+        const statusT = document.getElementById('status-t');
+        const switchLabel = document.getElementById('switch-label');
+        const polarityLabel = document.getElementById('polarity-label');
+        const selBox = document.getElementById('sel-box');
+        const btnRecord = document.getElementById('btn-record');
+        const hintOverlay = document.getElementById('hint-overlay');
+        const modeDesc = document.getElementById('mode-desc');
+        const tbody = document.getElementById('messwerte-body');
+
+        // ================================================================
+        // Formatierung (deutsches Dezimalkomma, Hochzahlen)
+        // ================================================================
+        const SUP = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+        function fmt(x, digits) {
+            return x.toFixed(digits).replace('.', ',');
+        }
+        // Wissenschaftliche Schreibweise mit 3 geltenden Ziffern, z. B. "2,31·10⁻¹⁵"
+        function sci(x, sig = 3) {
+            if (x === 0) return '0';
+            let exp = Math.floor(Math.log10(Math.abs(x)));
+            let mant = x / Math.pow(10, exp);
+            if (Math.abs(parseFloat(mant.toFixed(sig - 1))) >= 10) { mant /= 10; exp += 1; }
+            const expStr = String(exp).split('').map(c => SUP[c]).join('');
+            return fmt(mant, sig - 1) + '·10' + expStr;
+        }
+        function paramText(d) {
+            return state.mode === 'mass'
+                ? 'm = ' + sci(d.m) + ' kg'
+                : 'r = ' + fmt(d.r * 1e6, 3) + ' µm';
+        }
+        function paramPlain(d) {
+            // für CSV: ohne Hochzahl-Zeichen
+            return state.mode === 'mass'
+                ? d.m.toExponential(2).replace('.', ',') + ' kg'
+                : fmt(d.r * 1e6, 3) + ' µm';
+        }
+
+        // ================================================================
+        // Tröpfchen erzeugen
+        // ================================================================
+        // Radius zufällig, Ladung als ganzzahliges Vielfaches von e (beide Vorzeichen, gelegentlich 0).
+        // Geladene Tröpfchen werden so gewählt, dass die Schwebespannung zwischen 60 V und U_MAX liegt.
+        function randomDrop(x, y) {
+            for (let tries = 0; tries < 200; tries++) {
+                const r = (0.55 + Math.random() * 0.85) * 1e-6;       // 0,55 ... 1,4 µm
+                const m = RHO * 4 / 3 * Math.PI * r ** 3;
+                if (Math.random() < 0.08) {
+                    return makeDrop(x, y, r, m, 0);                     // ungeladenes Tröpfchen
+                }
+                // kleine Ladungszahlen bevorzugen
+                const n = 1 + Math.floor(Math.pow(Math.random(), 1.6) * 7); // 1 ... 7
+                const uSchwebe = m * g * D / (n * e);
+                if (uSchwebe < 60 || uSchwebe > U_MAX - 20) continue;
+                const sign = Math.random() < 0.7 ? -1 : 1;
+                return makeDrop(x, y, r, m, sign * n);
+            }
+            return null;
+        }
+        function makeDrop(x, y, r, m, n) {
+            return { id: nextId++, x, y, r, m, n, q: n * e, v: 0, age: 0 };
+        }
+
+        function spray() {
+            const count = 5 + Math.floor(Math.random() * 3);
+            for (let i = 0; i < count; i++) {
+                // Tröpfchen treten durch das Loch ein und verteilen sich im oberen Bereich.
+                // Mindestabstand zu allen anderen Tröpfchen, damit sich die Beschriftungen nicht überdecken.
+                let x, y, ok = false;
+                for (let tries = 0; tries < 60 && !ok; tries++) {
+                    x = HOLE_X + (Math.random() - 0.5) * 380;
+                    y = (0.25 + Math.random() * 1.4) * 1e-3;             // 0,25 ... 1,65 mm unter der oberen Platte
+                    ok = drops.every(o => Math.abs(yToPx(o.y) - yToPx(y)) > 18 || Math.abs(o.x - x) > 170);
+                }
+                if (!ok) continue;
+                const d = randomDrop(x, y);
+                if (d) drops.push(d);
+            }
+            sprayPuffs.push({ t: 0 });
+            hintOverlay.style.display = 'none';
+        }
+
+        // ================================================================
+        // Physik: Stokes-Reibung -> Tröpfchen bewegen sich sofort mit Endgeschwindigkeit
+        // v (nach unten positiv) = (m g + q E_unten) / (6 π η r)
+        // ================================================================
+        function fieldDown() {
+            // E-Feld nach unten positiv: obere Platte +  -> Feld zeigt nach unten
+            return state.on ? state.polarity * state.u / D : 0;
+        }
+        function velocity(d) {
+            return (d.m * g + d.q * fieldDown()) / (6 * Math.PI * ETA * d.r);
+        }
+        function fallVelocity(d) {
+            return d.m * g / (6 * Math.PI * ETA * d.r);
+        }
+        function isFloating(d) {
+            // schwebt, wenn die Geschwindigkeit unter 1 % der freien Sinkgeschwindigkeit liegt
+            return Math.abs(d.v) < 0.01 * fallVelocity(d);
+        }
+
+        function step(dtReal) {
+            const dt = dtReal * state.timeFactor;
+            for (const d of drops) {
+                d.v = velocity(d);
+                d.y += d.v * dt;
+                d.age += dtReal;
+            }
+            // Tröpfchen, die eine Platte erreichen, bleiben dort haften und verschwinden
+            const before = drops.length;
+            drops = drops.filter(d => d.y > 0 && d.y < D);
+            if (drops.length !== before && selectedId !== null && !drops.some(d => d.id === selectedId)) {
+                selectedId = null;
+            }
+            sprayPuffs.forEach(p => p.t += dtReal);
+            sprayPuffs = sprayPuffs.filter(p => p.t < 1.2);
+        }
+
+        // ================================================================
+        // Zeichnen
+        // ================================================================
+        function yToPx(y) { return Y_TOP + y * PX_PER_M; }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+
+            // Lichtkegel der Beleuchtung (von links)
+            const grad = ctx.createLinearGradient(PLATE_X0, 0, PLATE_X1, 0);
+            grad.addColorStop(0, 'rgba(253, 224, 71, 0.10)');
+            grad.addColorStop(1, 'rgba(253, 224, 71, 0.02)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(PLATE_X0, Y_TOP, PLATE_X1 - PLATE_X0, Y_BOT - Y_TOP);
+
+            // Feldlinien (dezent), nur bei eingeschalteter Spannung
+            const E = fieldDown();
+            if (E !== 0) {
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+                ctx.lineWidth = 1;
+                for (let x = PLATE_X0 + 40; x < PLATE_X1; x += 60) {
+                    ctx.beginPath(); ctx.moveTo(x, Y_TOP + 4); ctx.lineTo(x, Y_BOT - 4); ctx.stroke();
+                    const ym = (Y_TOP + Y_BOT) / 2, dir = E > 0 ? 1 : -1;
+                    ctx.beginPath();
+                    ctx.moveTo(x, ym + 6 * dir); ctx.lineTo(x - 4, ym - 4 * dir); ctx.lineTo(x + 4, ym - 4 * dir);
+                    ctx.closePath(); ctx.fill();
+                }
+            }
+
+            // Platten
+            const topSign = state.polarity > 0 ? '+' : '−';
+            const botSign = state.polarity > 0 ? '−' : '+';
+            const topCol = !state.on ? '#64748b' : (state.polarity > 0 ? '#ef4444' : '#3b82f6');
+            const botCol = !state.on ? '#64748b' : (state.polarity > 0 ? '#3b82f6' : '#ef4444');
+            ctx.fillStyle = topCol;
+            ctx.fillRect(PLATE_X0, Y_TOP - PLATE_T, HOLE_X - HOLE_W / 2 - PLATE_X0, PLATE_T);
+            ctx.fillRect(HOLE_X + HOLE_W / 2, Y_TOP - PLATE_T, PLATE_X1 - HOLE_X - HOLE_W / 2, PLATE_T);
+            ctx.fillStyle = botCol;
+            ctx.fillRect(PLATE_X0, Y_BOT, PLATE_X1 - PLATE_X0, PLATE_T);
+            if (state.on) {
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                for (let x = PLATE_X0 + 30; x < PLATE_X1; x += 60) {
+                    if (Math.abs(x - HOLE_X) > HOLE_W) ctx.fillText(topSign, x, Y_TOP - PLATE_T / 2);
+                    ctx.fillText(botSign, x, Y_BOT + PLATE_T / 2);
+                }
+            }
+
+            // Zerstäuber über dem Loch
+            ctx.fillStyle = '#475569';
+            ctx.beginPath();
+            ctx.ellipse(HOLE_X - 55, 22, 26, 14, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillRect(HOLE_X - 32, 18, 32, 7);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+            ctx.fillText('Zerstäuber', HOLE_X - 88, 22);
+            // Sprühnebel
+            for (const p of sprayPuffs) {
+                const a = Math.max(0, 1 - p.t / 1.2);
+                ctx.fillStyle = `rgba(251, 191, 36, ${0.35 * a})`;
+                for (let k = 0; k < 14; k++) {
+                    const px = HOLE_X + Math.sin(k * 7.3) * (6 + 30 * p.t);
+                    const py = 28 + ((k * 13) % 40) * (0.5 + p.t);
+                    ctx.beginPath(); ctx.arc(px, py, 1.6, 0, 2 * Math.PI); ctx.fill();
+                }
+            }
+
+            // Skala (Okularskala) rechts
+            ctx.strokeStyle = '#94a3b8'; ctx.fillStyle = '#94a3b8';
+            ctx.lineWidth = 1;
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+            const sx = PLATE_X1 + 24;
+            ctx.beginPath(); ctx.moveTo(sx, Y_TOP); ctx.lineTo(sx, Y_BOT); ctx.stroke();
+            for (let i = 0; i <= 50; i++) {
+                const y = Y_TOP + i * 0.1e-3 * PX_PER_M;
+                const len = i % 10 === 0 ? 10 : (i % 5 === 0 ? 7 : 4);
+                ctx.beginPath(); ctx.moveTo(sx, y); ctx.lineTo(sx + len, y); ctx.stroke();
+                if (i % 10 === 0) ctx.fillText(fmt(i / 10, 0) + ' mm', sx + 14, y);
+            }
+            // Bemaßung d
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = 'italic 13px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText('d = 5,0 mm', PLATE_X0 - 10, (Y_TOP + Y_BOT) / 2);
+
+            // Tröpfchen
+            for (const d of drops) {
+                const px = d.x, py = yToPx(d.y);
+                // Darstellungsradius proportional zum echten Radius (0,55 µm -> 3,3 px, 1,4 µm -> 8,4 px)
+                const rad = d.r * 1e6 * 6;
+                const sel = d.id === selectedId;
+                const glow = ctx.createRadialGradient(px, py, rad * 0.8, px, py, rad * 2.2);
+                glow.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
+                glow.addColorStop(1, 'rgba(251, 191, 36, 0)');
+                ctx.fillStyle = glow;
+                ctx.beginPath(); ctx.arc(px, py, rad * 2.2, 0, 2 * Math.PI); ctx.fill();
+                ctx.fillStyle = '#fbbf24';
+                ctx.beginPath(); ctx.arc(px, py, rad, 0, 2 * Math.PI); ctx.fill();
+                if (sel) {
+                    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+                    ctx.beginPath(); ctx.arc(px, py, rad + 7, 0, 2 * Math.PI); ctx.stroke();
+                }
+                // Beschriftung: Nummer und angezeigte Größe
+                ctx.font = (sel ? 'bold ' : '') + '11px Inter, sans-serif';
+                ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+                ctx.fillStyle = sel ? '#7dd3fc' : '#cbd5e1';
+                const label = '#' + d.id + '  ' + paramText(d);
+                const lx = px + rad + 9 + ctx.measureText(label).width > PLATE_X1 ? px - rad - 9 - ctx.measureText(label).width : px + rad + 9;
+                ctx.fillText(label, lx, py);
+            }
+        }
+
+        // ================================================================
+        // Anzeige aktualisieren
+        // ================================================================
+        function updateUI() {
+            valU.textContent = fmt(state.u, 1) + ' V';
+            statusU.textContent = state.on ? fmt(state.u, 1) + ' V' : 'aus';
+            statusU.className = state.on ? 'text-sky-400' : 'text-rose-400';
+            statusN.textContent = drops.length;
+            statusT.textContent = state.timeFactor + '×';
+            switchLabel.textContent = state.on ? 'EIN' : 'AUS';
+            switchLabel.className = state.on ? 'text-emerald-400' : 'text-rose-400';
+            polarityLabel.textContent = state.polarity > 0 ? '+' : '−';
+            polarityLabel.className = state.polarity > 0 ? 'text-red-400' : 'text-blue-400';
+
+            const d = drops.find(dd => dd.id === selectedId);
+            if (!d) {
+                selBox.innerHTML = 'Klicke auf ein Tröpfchen, um es auszuwählen.';
+                btnRecord.disabled = true;
+                return;
+            }
+            const vmm = d.v * 1e3;   // mm/s (echte Zeit)
+            let zustand, col;
+            if (isFloating(d)) { zustand = 'schwebt'; col = 'text-emerald-400'; }
+            else if (vmm > 0) { zustand = 'sinkt'; col = 'text-amber-400'; }
+            else { zustand = 'steigt'; col = 'text-rose-400'; }
+            selBox.innerHTML =
+                `Tröpfchen <span class="text-sky-400">#${d.id}</span><br>` +
+                `${paramText(d)}<br>` +
+                `v = ${fmt(Math.abs(vmm), 4)} mm/s ` +
+                `(<span class="${col}">${zustand}</span>)`;
+            btnRecord.disabled = false;
+        }
+
+        // ================================================================
+        // Messwerttabelle
+        // ================================================================
+        function zustandVon(d) {
+            if (isFloating(d)) return 'schwebt';
+            return d.v > 0 ? 'sinkt' : 'steigt';
+        }
+        function record() {
+            const d = drops.find(dd => dd.id === selectedId);
+            if (!d) return;
+            measurements.push({
+                id: d.id,
+                param: paramText(d),
+                paramPlain: paramPlain(d),
+                u: state.on ? state.u : 0,
+                polarity: state.polarity > 0 ? '+' : '−',
+                zustand: zustandVon(d)
+            });
+            renderTable();
+            saveMeasurements();
+        }
+        function renderTable() {
+            tbody.innerHTML = measurements.map((mw, i) => `
+                <tr class="border-b border-slate-700/60 text-slate-300">
+                    <td class="py-2 pr-4 text-slate-500">${i + 1}</td>
+                    <td class="py-2 pr-4">#${mw.id}</td>
+                    <td class="py-2 pr-4 font-mono">${mw.param}</td>
+                    <td class="py-2 pr-4 font-mono">${fmt(mw.u, 1)}</td>
+                    <td class="py-2 pr-4">${mw.polarity}</td>
+                    <td class="py-2 pr-4 ${mw.zustand === 'schwebt' ? 'text-emerald-400' : 'text-amber-400'}">${mw.zustand}</td>
+                    <td class="py-2 pr-4"><button data-index="${i}" class="btn-delete-row text-rose-400 hover:text-rose-300 text-xs" title="Messwert löschen">✕</button></td>
+                </tr>`).join('');
+        }
+        tbody.addEventListener('click', ev => {
+            const b = ev.target.closest('.btn-delete-row');
+            if (!b) return;
+            measurements.splice(parseInt(b.dataset.index, 10), 1);
+            renderTable();
+            saveMeasurements();
+        });
+        document.getElementById('btn-clear-table').addEventListener('click', () => {
+            if (currentUser && measurements.length > 0 &&
+                !confirm('Alle Messwerte löschen? Sie werden auch aus deinem gespeicherten Stand entfernt.')) return;
+            measurements = [];
+            renderTable();
+            saveMeasurements();
+        });
+        document.getElementById('btn-export-csv').addEventListener('click', () => {
+            const lines = ['Nr;Tröpfchen;Größe;U (V);obere Platte;Zustand'];
+            measurements.forEach((mw, i) => {
+                lines.push([i + 1, '#' + mw.id, mw.paramPlain, fmt(mw.u, 1), mw.polarity, mw.zustand].join(';'));
+            });
+            const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'millikan_messwerte.csv';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        });
+
+        // ================================================================
+        // Bedienelemente
+        // ================================================================
+        function setU(u) {
+            state.u = Math.min(U_MAX, Math.max(0, Math.round(u * 10) / 10));
+            sliderU.value = state.u;
+        }
+        sliderU.addEventListener('input', () => setU(parseFloat(sliderU.value)));
+        document.querySelectorAll('.step-btn').forEach(b =>
+            b.addEventListener('click', () => setU(state.u + parseFloat(b.dataset.step))));
+        document.getElementById('btn-switch').addEventListener('click', () => { state.on = !state.on; });
+        document.getElementById('btn-polarity').addEventListener('click', () => { state.polarity *= -1; });
+        document.getElementById('btn-spray').addEventListener('click', spray);
+        document.getElementById('btn-clear').addEventListener('click', () => { drops = []; selectedId = null; });
+        btnRecord.addEventListener('click', record);
+
+        function setMode(mode) {
+            state.mode = mode;
+            document.getElementById('mode-mass').classList.toggle('active', mode === 'mass');
+            document.getElementById('mode-radius').classList.toggle('active', mode === 'radius');
+            modeDesc.textContent = mode === 'mass'
+                ? 'Einfache Variante: Die Masse jedes Tröpfchens wird angezeigt.'
+                : 'Schwerere Variante: Nur der Radius wird angezeigt – die Masse musst du selbst berechnen.';
+        }
+        document.getElementById('mode-mass').addEventListener('click', () => setMode('mass'));
+        document.getElementById('mode-radius').addEventListener('click', () => setMode('radius'));
+
+        document.querySelectorAll('.time-btn').forEach(b => b.addEventListener('click', () => {
+            state.timeFactor = parseInt(b.dataset.factor, 10);
+            document.querySelectorAll('.time-btn').forEach(bb => bb.classList.toggle('active', bb === b));
+        }));
+
+        // Tröpfchen per Klick auswählen
+        canvas.addEventListener('click', ev => {
+            const rect = canvas.getBoundingClientRect();
+            const mx = (ev.clientX - rect.left) * (W / rect.width);
+            const my = (ev.clientY - rect.top) * (H / rect.height);
+            let best = null, bestDist = 22;
+            for (const d of drops) {
+                const dist = Math.hypot(d.x - mx, yToPx(d.y) - my);
+                if (dist < bestDist) { best = d; bestDist = dist; }
+            }
+            selectedId = best ? best.id : null;
+        });
+
+        // ================================================================
+        // Hauptschleife
+        // ================================================================
+        let last = performance.now();
+        function loop(now) {
+            const dt = Math.min(0.05, (now - last) / 1000);
+            last = now;
+            step(dt);
+            draw();
+            updateUI();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+
+        // ================================================================
+        // Optionale Anmeldung: Messwerte in Supabase speichern
+        // (Tabelle arbeitsblatt_antworten, ein Eintrag pro Schüler)
+        // ================================================================
+        const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
+        const ARBEITSBLATT_ID   = 'millikan_versuch_v1';
+
+        // Ohne Supabase-Bibliothek (z. B. offline gespeicherte Seite) läuft die Simulation einfach ohne Login.
+        const sb = typeof supabase !== 'undefined' ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+        let currentUser = null;
+        let saveChain = Promise.resolve();
+
+        const authPanel = document.getElementById('auth-panel');
+        const authStatus = document.getElementById('auth-status');
+        function setAuthStatus(msg) { authStatus.textContent = msg; }
+
+        function showLoggedIn(user) {
+            currentUser = user;
+            document.getElementById('auth-loggedout').style.display = 'none';
+            document.getElementById('auth-loggedin').style.display = 'flex';
+            document.getElementById('user-email-display').textContent = user.email;
+        }
+        function showLoggedOut() {
+            currentUser = null;
+            document.getElementById('auth-loggedout').style.display = 'block';
+            document.getElementById('auth-loggedin').style.display = 'none';
+        }
+
+        async function login() {
+            const email = document.getElementById('email-input').value.trim();
+            const password = document.getElementById('password-input').value;
+            if (!email || !password) { setAuthStatus('Bitte E-Mail und Passwort eingeben.'); return; }
+            setAuthStatus('Anmeldung …');
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
+            if (error) { setAuthStatus('Fehler: ' + error.message); return; }
+            document.getElementById('password-input').value = '';
+            showLoggedIn(data.user);
+            await loadMeasurements();
+        }
+
+        async function logout() {
+            await sb.auth.signOut();
+            showLoggedOut();
+            // Tabelle leeren, damit die nächste Person am Rechner die Messwerte nicht sieht
+            measurements = [];
+            renderTable();
+            setAuthStatus('Abgemeldet. Deine Messwerte sind gespeichert.');
+        }
+
+        // Gespeicherte Messwerte laden. Bereits vor der Anmeldung aufgenommene Werte werden angehängt.
+        async function loadMeasurements() {
+            setAuthStatus('Lade gespeicherte Messwerte …');
+            const { data, error } = await sb.from('arbeitsblatt_antworten')
+                .select('antworten, gespeichert_am')
+                .eq('user_id', currentUser.id)
+                .eq('arbeitsblatt', ARBEITSBLATT_ID)
+                .maybeSingle();
+            if (error) { setAuthStatus('Laden fehlgeschlagen: ' + error.message); return; }
+            const saved = data && Array.isArray(data.antworten.messwerte) ? data.antworten.messwerte : [];
+            const unsaved = measurements.length;
+            measurements = saved.concat(measurements);
+            renderTable();
+            if (unsaved > 0) {
+                await saveMeasurements();
+            } else if (data) {
+                setAuthStatus(saved.length + ' Messwert(e) geladen · gespeichert am ' + new Date(data.gespeichert_am).toLocaleString('de-DE'));
+            } else {
+                setAuthStatus('Noch keine gespeicherten Messwerte.');
+            }
+        }
+
+        // Ganze Tabelle speichern. Aufrufe werden nacheinander ausgeführt, damit der neueste Stand gewinnt.
+        function saveMeasurements() {
+            if (!sb || !currentUser) return Promise.resolve();
+            const snapshot = measurements.slice();
+            saveChain = saveChain.then(async () => {
+                setAuthStatus('Speichere …');
+                const { error } = await sb.from('arbeitsblatt_antworten').upsert({
+                    user_id:        currentUser.id,
+                    arbeitsblatt:   ARBEITSBLATT_ID,
+                    antworten:      { messwerte: snapshot },
+                    gespeichert_am: new Date().toISOString()
+                }, { onConflict: 'user_id,arbeitsblatt' });
+                setAuthStatus(error
+                    ? 'Speichern fehlgeschlagen: ' + error.message
+                    : 'Gespeichert um ' + new Date().toLocaleTimeString('de-DE'));
+            });
+            return saveChain;
+        }
+
+        if (sb) {
+            authPanel.style.display = 'block';
+            document.getElementById('btn-login').addEventListener('click', login);
+            document.getElementById('password-input').addEventListener('keydown', ev => { if (ev.key === 'Enter') login(); });
+            document.getElementById('btn-logout').addEventListener('click', logout);
+            // Bestehende Sitzung übernehmen
+            sb.auth.getSession().then(({ data: { session } }) => {
+                if (session) { showLoggedIn(session.user); loadMeasurements(); }
+            });
+        }
+
+        // ================================================================
+        // Seite als HTML speichern
+        // ================================================================
+        function downloadHTML() {
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'millikan_versuch.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
