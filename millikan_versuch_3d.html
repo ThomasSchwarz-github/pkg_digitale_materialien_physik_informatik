@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Millikan-Versuch (3D-Labor) · Schwebe- und Fallmethode</title>
+<link rel="icon" href="data:,">
+<meta name="description" content="Virtuelles 3D-Labor (WebGL) zum Millikan-Versuch: mehrere Öltröpfchen mit unterschiedlicher Ladung einsprühen, eines auswählen, zum Schweben bringen und die Fallgeschwindigkeit an der Okularskala stoppen.">
+<style>
+:root{
+  --bg:#f2efe8; --surface:#fffdf9; --surface2:#f7f3ec; --ink:#1d2329; --muted:#5b6570; --line:#e2dbcf;
+  --accent:#1f5b9e; --accent-ink:#fff; --accent-soft:#e3ecf7; --c1:#2f6db5; --c2:#cf6d27;
+  --good:#1d7a45; --warn:#a2580a; --bad:#b23a2e; --grid:#e8e2d7; --axis:#8a8f96; --shadow:0 1px 2px rgba(30,25,15,.06),0 6px 22px rgba(30,25,15,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16191d; --surface:#1f2328; --surface2:#262b31; --ink:#e7e9ec; --muted:#9aa3ad; --line:#323840;
+    --accent:#6ea6e6; --accent-ink:#0d1520; --accent-soft:#22324a; --c1:#6ea6e6; --c2:#ee9a5c;
+    --good:#58c48a; --warn:#e3a35b; --bad:#e8786a; --grid:#2c3238; --axis:#7d858e; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16191d; --surface:#1f2328; --surface2:#262b31; --ink:#e7e9ec; --muted:#9aa3ad; --line:#323840;
+  --accent:#6ea6e6; --accent-ink:#0d1520; --accent-soft:#22324a; --c1:#6ea6e6; --c2:#ee9a5c;
+  --good:#58c48a; --warn:#e3a35b; --bad:#e8786a; --grid:#2c3238; --axis:#7d858e; --shadow:none;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+.mono{font-variant-numeric:tabular-nums}
+.back-link{display:inline-flex;align-items:center;gap:.35rem;margin:14px 16px 0;font-size:.92rem;text-decoration:none;color:var(--accent);border:1px solid var(--line);background:var(--surface);padding:.4rem .7rem;border-radius:10px;align-self:flex-start}
+.back-link:hover{background:var(--accent-soft)}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 16px 12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{flex:none}
+.brand h1{font-size:20px;margin:0;letter-spacing:-.01em}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.help{position:relative}
+.help summary{cursor:pointer;list-style:none;padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px}
+.help summary::-webkit-details-marker{display:none}
+.help[open] .helpBody{display:block}
+.helpBody{position:absolute;right:0;top:44px;z-index:20;width:min(560px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;box-shadow:0 10px 40px rgba(0,0,0,.18);font-size:14px;max-height:80vh;overflow:auto}
+.helpBody h3{margin:.6em 0 .3em;font-size:14px}
+.helpBody ol,.helpBody ul{margin:.2em 0 .6em;padding-left:1.2em}
+.helpBody li{margin:.2em 0}
+.formula{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:.3em 0;font-size:13.5px;font-variant-numeric:tabular-nums}
+.lab{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;padding:0 16px 16px}
+.stage{position:relative;border-radius:14px;overflow:hidden;height:min(70vh,740px);min-height:420px;background:#cfc8bb;box-shadow:var(--shadow)}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.hud{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap;pointer-events:none;z-index:5}
+.chip{background:rgba(255,253,249,.88);color:#1d2329;border-radius:999px;padding:4px 11px;font-size:13px;backdrop-filter:blur(6px);display:inline-flex;align-items:center;gap:6px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:#9aa0a6}
+.chip.on .dot{background:#22a35a;box-shadow:0 0 0 3px rgba(34,163,90,.2)}
+.chip.good{color:#0d6b3a}
+.chip.warn{color:#9a4a07}
+.camBar{position:absolute;left:10px;bottom:10px;display:flex;gap:4px;flex-wrap:wrap;max-width:calc(100% - 20px);z-index:5}
+.camBar button{background:rgba(255,253,249,.88);color:#1d2329;border:0;border-radius:8px;padding:5px 9px;font-size:12.5px;cursor:pointer;backdrop-filter:blur(6px);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.camBar button[aria-pressed="true"]{background:#1f5b9e;color:#fff}
+.runBar{position:absolute;right:10px;bottom:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;z-index:5}
+.runBar button{border:0;border-radius:10px;padding:9px 13px;cursor:pointer;background:rgba(255,253,249,.92);color:#1d2329;box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:14px}
+.runBar button.primary{background:#1f5b9e;color:#fff;font-weight:600}
+.runBar button:disabled{opacity:.5;cursor:default}
+.toast{position:absolute;left:50%;top:52px;transform:translateX(-50%) translateY(-6px);background:rgba(29,35,41,.92);color:#fff;padding:9px 14px;border-radius:10px;font-size:14px;max-width:min(520px,calc(100% - 24px));text-align:center;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:6}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.eyepiece{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle at 50% 50%, transparent 0 37%, rgba(4,7,9,.55) 46%, rgba(2,4,5,.98) 62%);z-index:1}
+.stage.scopeMode .eyepiece{opacity:1}
+.graticule{position:absolute;inset:0;display:none;pointer-events:none;z-index:2}
+.forceCanvas{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none;z-index:4}
+.stage.scopeMode.showForces .forceCanvas{display:block}
+.stage.scopeMode .graticule{display:block}
+.scopeCross{position:absolute;left:50%;top:10%;bottom:10%;width:1px;background:rgba(255,255,255,.22)}
+.gtick{position:absolute;left:35%;right:35%;height:1px;background:rgba(130,235,180,.5)}
+.gtick.major{background:rgba(170,255,205,.9);height:1.4px;left:28%;right:28%}
+.glabel{position:absolute;right:-8px;transform:translate(100%,-50%);font-size:10.5px;color:#bdf2d3;font-variant-numeric:tabular-nums;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.gLive{position:absolute;left:8%;right:8%;height:2px;background:#fff;box-shadow:0 0 6px rgba(255,255,255,.85);display:none}
+.gLive.show{display:block}
+.gLiveLabel{position:absolute;left:-6px;transform:translate(-100%,-50%);font-size:11px;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.7);font-weight:600}
+.gCap{position:absolute;left:2%;right:2%;height:2px;display:none}
+.gCap.show{display:block}
+.gCap.start{background:#59e39b;box-shadow:0 0 6px rgba(89,227,155,.8)}
+.gCap.stop{background:#ff8f3d;box-shadow:0 0 6px rgba(255,143,61,.8)}
+.gCap span{position:absolute;right:-6px;transform:translate(100%,-50%);font-size:11px;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.7)}
+.gCap.start span{color:#bdf9d8}
+.gCap.stop span{color:#ffd9b8}
+.scopeHint{position:absolute;left:50%;top:8px;transform:translateX(-50%);font-size:12.5px;color:#d9f3e4;background:rgba(10,20,14,.55);padding:4px 10px;border-radius:999px;display:none;text-align:center;max-width:calc(100% - 24px);z-index:3}
+.stage.scopeMode .scopeHint{display:block}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px 14px;max-height:min(70vh,740px);min-height:420px;overflow:auto;box-shadow:var(--shadow)}
+.grp{padding:12px 0;border-bottom:1px solid var(--line)}
+.grp:last-child{border-bottom:0}
+.grp h3{margin:0 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.row{margin:10px 0 0}
+.row label{display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.row label output{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+.row input[type=range]{width:100%;accent-color:var(--accent);margin:6px 0 0}
+.row .hint{font-size:12.5px;color:var(--muted);margin-top:2px}
+.toggleBtn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);cursor:pointer;font-weight:600;text-align:left}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface2);margin-top:6px}
+.seg button{flex:1;border:0;background:transparent;padding:7px 6px;cursor:pointer;font-size:13.5px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.toggleBtn .led{width:12px;height:12px;border-radius:50%;background:#8b9096;flex:none}
+.toggleBtn.on{border-color:var(--good)}
+.toggleBtn.on .led{background:#22a35a;box-shadow:0 0 0 4px rgba(34,163,90,.18)}
+.meter{height:6px;border-radius:4px;background:var(--line);margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--good);transition:width .12s linear}
+.actBtn{width:100%;border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:9px 10px;cursor:pointer;font-size:13.5px;font-weight:600;margin-top:8px}
+.actBtn:disabled{opacity:.45;cursor:default}
+.actBtn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-top:8px;cursor:pointer}
+.check input{accent-color:var(--accent);margin-top:3px}
+.sub{font-size:13px;color:var(--muted);margin:6px 0 0}
+.dropSel{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.dropChip{border:1px solid var(--line);background:var(--surface2);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;font-weight:600}
+.dropChip.sel{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.wrap{padding:0 16px 32px;display:grid;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);min-width:0}
+.cardHead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.cardHead h2{font-size:17px;margin:0;margin-right:auto}
+.btn{border:1px solid var(--line);background:var(--surface2);border-radius:9px;padding:7px 12px;cursor:pointer;font-size:14px}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.btn:disabled{opacity:.5;cursor:default}
+.scroll-x{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+.tbl th{text-align:right;font-weight:600;color:var(--muted);font-size:12.5px;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl td.l,.tbl th.l{text-align:left}
+.tbl .del{border:0;background:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 4px}
+.tbl .del:hover{color:#c0392b}
+.empty{color:var(--muted);font-size:14px;padding:10px 0}
+.note{color:var(--muted);font-size:13px;margin:8px 0 0}
+.legend{font-size:13px;color:var(--muted);margin:8px 0 0;display:grid;gap:2px}
+.chartWrap{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+#chart{width:100%;height:320px;display:block}
+.fitOut{font-size:14px;margin:8px 0 0}
+.fitOut b{font-variant-numeric:tabular-nums}
+@media (max-width:920px){
+  .lab{grid-template-columns:1fr}
+  .stage{height:58vh;min-height:320px}
+  .panel{max-height:none;min-height:0}
+}
+@media (max-width:520px){
+  .runBar{left:10px;right:10px;bottom:46px;justify-content:center}
+  .runBar button{padding:8px 10px;font-size:13px}
+  .stage{height:64vh}
+}
+@media print{
+  .stage,.panel,header .help,.cardHead button,.tbl .del,.back-link{display:none!important}
+  .lab{display:none}
+  body{background:#fff}
+}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<a href="index_physik.html" class="back-link">← Zurück zur Übersicht</a>
+<header class="top">
+  <div class="brand">
+    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#1f5b9e"></rect><rect x="7" y="13" width="26" height="4" rx="1.5" fill="#fff"></rect><rect x="7" y="23" width="26" height="4" rx="1.5" fill="#fff"></rect><circle cx="20" cy="20" r="2.6" fill="#ffd166"></circle><path d="M20 16v-4M20 28v-4" stroke="#cfe0f2" stroke-width="2" stroke-linecap="round"></path></svg>
+    <div><h1>Millikan-Labor</h1><p>3D-Labor (WebGL) · Schwebemethode mit Fallzeitmessung</p></div>
+  </div>
+  <details class="help">
+    <summary>Anleitung</summary>
+    <div class="helpBody">
+      <h3>So gehst du vor</h3>
+      <ol>
+        <li>Klicke auf <b>Öltröpfchen einsprühen</b> – wie beim echten Zerstäuber kommt dabei immer eine ganze Wolke aus mehreren Tröpfchen (3–5) gleichzeitig heraus, nie nur eines gezielt. Jedes hat eine zufällige Ladung – auch das Vorzeichen ist zufällig, manche Tröpfchen sind positiv, andere negativ geladen.</li>
+        <li>Wechsle in den <b>Mikroskopblick</b> und tippe auf eines der Tröpfchen – oder wähle es unten im Panel aus –, um es zu verfolgen.</li>
+        <li>Schalte das <b>Feld</b> ein (auch direkt am Kippschalter am Gerät) und regle die Spannung (grob/fein), bis <i>genau dieses</i> Tröpfchen weder steigt noch sinkt. Die anderen Tröpfchen reagieren anders, weil sie andere Ladungen, Vorzeichen und Massen haben. Bringt keine Spannung das Tröpfchen zum Schweben, probiere die <b>Polung</b> umzudrehen – offenbar hat es das andere Vorzeichen. Klicke auf <b>Schwebespannung übernehmen</b>.</li>
+        <li>Erhöhe die Spannung wieder etwas, um den Tropfen ein Stück nach oben zu treiben, und schalte das Feld dann selbst aus – er fällt frei.</li>
+        <li>Starte die Stoppuhr an einem Skalenstrich deiner Wahl und stoppe sie an einem anderen. Übernimm die Fallzeit.</li>
+        <li>Übernimm das Gesamtergebnis (Schwebespannung, Polung, Δs, Δt – zunächst nur diese Rohdaten) in das <b>Messprotokoll</b>. Sprüh weitere Tröpfchen ein und wiederhole den Versuch mehrfach.</li>
+        <li>Exportiere das Protokoll als <b>CSV</b> und werte Radius, Masse und Ladung selbst aus. Zur Kontrolle kannst du im Panel optional die vollständige Auswertung einschalten.</li>
+      </ol>
+      <h3>Wie die vollständige Auswertung rechnet (wenn eingeschaltet)</h3>
+      <p class="formula">Reibungskraft (Stokes, mit Gleitkorrektur): F<sub>R</sub> = 6·π·η·r·v / C(r)</p>
+      <p class="formula">Sinkgeschwindigkeit bei ausgeschaltetem Feld: v<sub>fall</sub> = (2/9)·r²·ρ·g·C(r) / η</p>
+      <p class="formula">Kräftegleichgewicht beim Schweben: q·U<sub>schweb</sub> / d = (4/3)·π·r³·ρ·g</p>
+      <p>Dabei ist ρ = ρ<sub>Öl</sub>−ρ<sub>Luft</sub> mit Auftrieb bzw. ρ = ρ<sub>Öl</sub> ohne Auftrieb (Option im Panel), und C(r) die Cunningham-Gleitkorrektur, die hier immer verwendet wird. Aus Δs und Δt folgt v<sub>fall</sub>, daraus r; mit r und U<sub>schweb</sub> liefert die dritte Formel q.</p>
+      <h3>Gut zu wissen</h3>
+      <ul>
+        <li>Die Reaktionszeit beim Starten/Stoppen der Stoppuhr ist eine echte Fehlerquelle – genau wie im realen Versuch.</li>
+        <li>Die Tröpfchen fallen in dieser Simulation immer physikalisch korrekt mit Gleitreibung (Cunningham-Effekt), wie es bei echten, sehr kleinen Öltröpfchen der Fall ist – das ist keine Option, sondern feste Grundlage. Der <b>Auftrieb</b> (Dichteunterschied Öl/Luft) ist dagegen bewusst eine wählbare Vereinfachung: Er ist in dieser Simulation nur eine sehr kleine Korrektur (~0,1 %), zeigt aber, dass auch kleine Effekte das Ergebnis systematisch verschieben können.</li>
+        <li>Plattenabstand d = 6,00&nbsp;mm, Plattendurchmesser 8&nbsp;cm (wie beim realen Schulgerät). Trifft ein Tropfen eine Platte, ist er für die Messung verloren.</li>
+        <li>Mit der <b>Kräfte-Visualisierung</b> (Option im Panel) siehst du im Mikroskopblick Pfeile für die am ausgewählten Tröpfchen wirkenden Kräfte – nützlich, um das Kräftegleichgewicht beim Schweben nachzuvollziehen.</li>
+      </ul>
+      <h3>Ideen für Aufträge</h3>
+      <ul>
+        <li>Bestimme aus mehreren Tröpfchen einen Schätzwert für e und vergleiche ihn mit dem Literaturwert 1,602·10⁻¹⁹ C.</li>
+        <li>Untersuche, wie stark die Berücksichtigung des Auftriebs das Ergebnis verändert.</li>
+        <li>Diskutiere Fehlerquellen: Reaktionszeit, Ablesegenauigkeit, Luftströmungen, Verdunstung des Öltröpfchens.</li>
+      </ul>
+    </div>
+  </details>
+</header>
+
+<main class="lab">
+  <section class="stage" id="stage">
+    <canvas id="c" aria-label="3D-Ansicht des Millikan-Versuchs" data-engine="three.js r169"></canvas>
+    <div class="hud">
+      <span class="chip" id="chipField"><i class="dot"></i><span>Feld aus</span></span>
+      <span class="chip" id="chipState">kein Tropfen ausgewählt</span>
+      <span class="chip mono" id="chipSW">⏱ 0,00 s</span>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="eyepiece" aria-hidden="true"></div>
+    <canvas id="forceCanvas" class="forceCanvas" aria-hidden="true"></canvas>
+    <div class="graticule" id="graticule" aria-hidden="true">
+      <div class="scopeCross"></div>
+      <div class="gLive" id="gLive"><span class="gLiveLabel" id="gLiveLabel"></span></div>
+      <div class="gCap start" id="gStart"><span id="gStartLabel"></span></div>
+      <div class="gCap stop" id="gStop"><span id="gStopLabel"></span></div>
+    </div>
+    <div class="scopeHint">Tippe ein Tröpfchen an, um es zu verfolgen. Stoppuhr an zwei Skalenstrichen starten/stoppen.</div>
+    <div class="camBar" id="camBar">
+      <button data-cam="total" aria-pressed="true">Übersicht</button>
+      <button data-cam="cond">Nahaufnahme</button>
+      <button data-cam="scope">Mikroskopblick</button>
+    </div>
+    <div class="runBar">
+      <button id="btnSwReset" title="Stoppuhr zurücksetzen">⟲ 0</button>
+      <button id="btnSwStart">▶ Start</button>
+      <button id="btnSwStop" disabled="disabled">■ Stopp</button>
+      <button id="btnSpray" class="primary">Öltröpfchen einsprühen</button>
+    </div>
+  </section>
+
+  <aside class="panel" aria-label="Versuchsaufbau">
+    <div class="grp">
+      <h3>Tröpfchen im Kondensator</h3>
+      <p class="sub">Ein Sprühstoß erzeugt immer mehrere Tröpfchen (3–5) mit unterschiedlicher Ladung und Vorzeichen, bis zu 9 gleichzeitig im Kondensator. Antippen im Mikroskopblick oder hier auswählen:</p>
+      <div class="dropSel" id="dropSel"><span class="sub">Noch keine Tröpfchen.</span></div>
+    </div>
+
+    <div class="grp">
+      <h3>Kondensatorspannung</h3>
+      <button class="toggleBtn" id="btnField"><span class="led"></span><span id="fieldTxt">Feld einschalten</span></button>
+      <div class="row"><label><span>Polung</span></label>
+        <div class="seg" id="segPol"><button data-v="1" aria-pressed="true">Oben +</button><button data-v="-1" aria-pressed="false">Oben −</button></div>
+        <div class="hint">Manche Tröpfchen sind positiv, andere negativ geladen – pole um, wenn ein Tröpfchen bei keiner Spannung zum Schweben zu bringen ist.</div>
+      </div>
+      <div class="row"><label for="rUc"><span>Spannung grob</span> <output id="oUc">0 V</output></label><input type="range" id="rUc" min="0" max="2000" step="10" value="0"></div>
+      <div class="row"><label for="rUf"><span>Spannung fein</span> <output id="oUf">0,00 V</output></label><input type="range" id="rUf" min="-25" max="25" step="0.05" value="0"></div>
+      <div class="sub">Schwebe-Stabilität (ausgewähltes Tröpfchen)</div>
+      <div class="meter" aria-hidden="true"><i id="meterStab" style="width:0%"></i></div>
+      <button class="actBtn primary" id="btnTakeU" disabled="disabled">Schwebespannung übernehmen</button>
+    </div>
+
+    <div class="grp">
+      <h3>Fallversuch</h3>
+      <p class="sub">Treibe das ausgewählte Tröpfchen mit etwas höherer Spannung wieder nach oben und schalte das Feld dann selbst aus – es fällt frei. Lies die Skala im Mikroskopblick ab.</p>
+      <button class="actBtn" id="btnTakeT" disabled="disabled">Fallzeit übernehmen</button>
+    </div>
+
+    <div class="grp">
+      <h3>Kräfte-Visualisierung</h3>
+      <label class="check"><input type="checkbox" id="cbShowForces"> <span>Kräfte am ausgewählten Tröpfchen einzeichnen (im Mikroskopblick)</span></label>
+      <p class="sub">Zeigt Pfeile für Gravitationskraft (braun), elektrische Kraft (orange, nur bei eingeschaltetem Feld) und Auftriebskraft (blau, nur falls unten berücksichtigt). Die Pfeillängen zeigen nur die relativen Größenverhältnisse, keine Zahlenwerte.</p>
+    </div>
+
+    <div class="grp">
+      <h3>Auswertung</h3>
+      <p class="sub">Die Fallgesetze werden stets mit Cunningham-Gleitkorrektur ausgewertet (das entspricht der tatsächlichen Bewegung der Tröpfchen).</p>
+      <label class="check"><input type="checkbox" id="cbBuoyancy" checked="checked"> <span>Auftrieb berücksichtigen (Dichteunterschied Öl/Luft)</span></label>
+      <p class="sub" style="margin-top:12px">Standardmäßig werden nur die Rohdaten (Schwebespannung, Polung, Fallstrecke, Fallzeit) gespeichert – wertet sie selbst aus, z. B. nach dem CSV-Export.</p>
+      <label class="check"><input type="checkbox" id="cbShowEval"> <span>Vollständige Auswertung (Radius, Masse, Ladung) zusätzlich anzeigen</span></label>
+    </div>
+
+    <div class="grp">
+      <h3>Optionen</h3>
+      <label class="check"><input type="checkbox" id="cbSound" checked="checked"> <span>Geräusche</span></label>
+    </div>
+  </aside>
+</main>
+
+<section class="wrap">
+  <div class="card">
+    <div class="cardHead">
+      <h2>Aktueller Tropfen</h2>
+      <button class="btn primary" id="btnTakeAll" disabled="disabled">In Messprotokoll übernehmen</button>
+    </div>
+    <div class="scroll-x"><table class="tbl" id="curTable"></table></div>
+    <p class="note" id="curNote"><span class="empty">Noch kein Tropfen. Sprüh zuerst eins ein.</span></p>
+  </div>
+
+  <div class="card">
+    <div class="cardHead">
+      <h2>Messprotokoll</h2>
+      <button class="btn" id="btnCsv">CSV</button>
+      <button class="btn" id="btnClear">Leeren</button>
+    </div>
+    <div class="scroll-x"><table class="tbl" id="protoTable"><tbody><tr><td class="empty">Noch keine Einträge. Führe einen Versuch durch und klicke auf „In Messprotokoll übernehmen".</td></tr></tbody></table></div>
+    <div class="legend" id="legend"></div>
+    <div class="chartWrap">
+      <canvas id="chart" width="2748" height="640"></canvas>
+      <p class="fitOut" id="fitOut"></p>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* =========================================================
+   Physikalische Konstanten (SI-Einheiten)
+   ========================================================= */
+const G = 9.81;
+const ETA = 1.81e-5;          // Viskosität Luft, Pa·s
+const RHO_OIL = 885;          // Dichte Öl, kg/m³
+const RHO_AIR = 1.2;          // Dichte Luft, kg/m³
+const DRHO = RHO_OIL - RHO_AIR;
+const E_CHARGE = 1.602176634e-19; // C
+const LAMBDA_MFP = 6.8e-8;    // mittlere freie Weglänge Luft, m
+const CUNNINGHAM_A = 1.257;
+// Sowohl die tatsächliche (simulierte) Bewegung als auch die Auswertungsformel (evalDrop) nutzen
+// immer die Cunningham-korrigierte Reibung - das ist keine Option, sondern physikalisch korrekt
+// für diese winzigen Tröpfchen. Nur der Auftrieb (siehe evalDrop/S.buoyancy) ist wählbar.
+const cunninghamC = r => 1 + CUNNINGHAM_A * LAMBDA_MFP / r;
+const dragCoeff = r => 6 * Math.PI * ETA * r / cunninghamC(r);
+const PHYS_D = 0.00600;       // Plattenabstand, m (reales Schulgerät)
+const PLATE_R = 0.040;        // Plattenradius, m (8 cm Durchmesser)
+const Y_LIMIT = PHYS_D / 2;   // Plattenkontakt-Grenze, m (±3,0 mm) – die Mikroskop-Kamera zoomt direkt auf diesen echten Massstab, kein zusätzlicher Skalierungsfaktor nötig
+const MAX_DROPS = 9;
+const SPRAY_MIN = 3, SPRAY_MAX = 5; // ein Sprühstoß erzeugt immer mehrere Tröpfchen, nie nur eins gezielt
+
+const rand = (a, b) => a + Math.random() * (b - a);
+
+/* =========================================================
+   Zustand
+   ========================================================= */
+// polarity: +1 = obere Platte positiv ("normal"), -1 = umgepolt (obere Platte negativ)
+const S = { drops: [], field: false, polarity: 1, Uc: 0, Uf: 0, sw: { running: false, t: 0 }, sound: true, buoyancy: true, showEval: false, showForces: false };
+let selectedId = null, nextDropId = 1;
+const Uvalue = () => S.Uc + S.Uf;
+const Ueff = () => S.polarity * Uvalue(); // vorzeichenbehaftete Spannung (Polung berücksichtigt)
+const selectedDrop = () => S.drops.find(d => d.id === selectedId) || null;
+
+/* =========================================================
+   Renderer, Szene, Kameras
+   ========================================================= */
+const stage = document.getElementById('stage');
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const MAXANI = renderer.capabilities.getMaxAnisotropy();
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xc9c2b4);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.05).texture;
+scene.environmentIntensity = 0.55;
+
+/* ---- Geometrie-Layout (klein & kompakt, Tischgerät auf Stativ) ---- */
+const FOOT_Y = 0, HUB_Y = 0.11, CHAMBER_Y = 0.32;
+const LEG_R = 0.095;
+const columnTop = CHAMBER_Y - PHYS_D / 2 - 0.018;
+
+const camPersp = new THREE.PerspectiveCamera(40, 1, 0.01, 10);
+camPersp.position.set(0.34, CHAMBER_Y + 0.17, 0.42);
+const controls = new OrbitControls(camPersp, canvas);
+controls.target.set(0, CHAMBER_Y - 0.06, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 0.10;
+controls.maxDistance = 1.1;
+controls.maxPolarAngle = Math.PI * 0.49;
+
+const camOrtho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.001, 1);
+let activeCam = camPersp;
+
+/* Licht */
+scene.add(new THREE.HemisphereLight(0xfff4e4, 0x5d564c, 0.95));
+const key = new THREE.DirectionalLight(0xfff3e2, 2.1);
+key.position.set(0.5, 0.9, 0.6);
+key.target.position.set(0, CHAMBER_Y - 0.05, 0);
+key.castShadow = true;
+key.shadow.mapSize.set(1536, 1536);
+key.shadow.camera.left = -0.32; key.shadow.camera.right = 0.32;
+key.shadow.camera.top = 0.32; key.shadow.camera.bottom = -0.32;
+key.shadow.camera.near = 0.2; key.shadow.camera.far = 1.6;
+key.shadow.bias = -0.0004; key.shadow.normalBias = 0.01;
+scene.add(key, key.target);
+const fill = new THREE.DirectionalLight(0xdfeaff, 0.5);
+fill.position.set(-0.6, 0.7, -0.4);
+scene.add(fill);
+
+/* =========================================================
+   Hilfsfunktionen für Geometrie und Texturen
+   ========================================================= */
+function tex(w, h, draw, srgb = true) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = MAXANI;
+  return t;
+}
+const std = (color, rough = 0.6, metal = 0, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: metal, ...extra });
+function mesh(geo, mat, x = 0, y = 0, z = 0, parent = scene, shadow = true) {
+  const m = new THREE.Mesh(geo, mat);
+  m.position.set(x, y, z);
+  if (shadow) { m.castShadow = true; m.receiveShadow = true; }
+  parent.add(m);
+  return m;
+}
+const cylY = (r, len, mat, x, y, z, parent, seg = 28, shadow) => mesh(new THREE.CylinderGeometry(r, r, len, seg), mat, x, y, z, parent, shadow);
+function cylX(r, len, mat, x, y, z, parent, seg = 20) { const m = mesh(new THREE.CylinderGeometry(r, r, len, seg), mat, x, y, z, parent); m.rotation.z = Math.PI / 2; return m; }
+function cylZ(r, len, mat, x, y, z, parent, seg = 20) { const m = mesh(new THREE.CylinderGeometry(r, r, len, seg), mat, x, y, z, parent); m.rotation.x = Math.PI / 2; return m; }
+const box = (w, h, d, mat, x, y, z, parent, shadow) => mesh(new THREE.BoxGeometry(w, h, d), mat, x, y, z, parent, shadow);
+function strut(p0, p1, r, mat, parent, seg = 10) {
+  const dir = new THREE.Vector3().subVectors(p1, p0);
+  const len = dir.length();
+  const mid = new THREE.Vector3().addVectors(p0, p1).multiplyScalar(0.5);
+  const cyl = mesh(new THREE.CylinderGeometry(r, r, len, seg), mat, mid.x, mid.y, mid.z, parent);
+  cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+  return cyl;
+}
+
+const MAT = {
+  steelBody: std(0xe2e6ea, 0.35, 0.55),
+  steelDark: std(0x4b5056, 0.4, 0.6),
+  black: std(0x1c1e21, 0.55, 0.1),
+  brass: std(0xc9a557, 0.28, 0.85),
+  ceramic: std(0xf1ece2, 0.5, 0),
+  rubberBulb: std(0xb0352d, 0.75, 0),
+  rubberTube: std(0x2a2b2d, 0.85, 0),
+  terminalRed: std(0xc0392b, 0.4, 0.3),
+  terminalBlack: std(0x1c1e21, 0.4, 0.3),
+  switchLever: std(0xd23b2e, 0.4, 0.1),
+  bottleGlass: new THREE.MeshPhysicalMaterial({ color: 0xcfe0d4, roughness: 0.1, metalness: 0, transparent: true, opacity: 0.55 }),
+  hood: new THREE.MeshPhysicalMaterial({ color: 0xf2f6f5, roughness: 0.08, metalness: 0, transparent: true, opacity: 0.17, side: THREE.DoubleSide, clearcoat: 0.6, clearcoatRoughness: 0.2 }),
+  lampLens: new THREE.MeshStandardMaterial({ color: 0xfff4da, emissive: 0xffdf9a, emissiveIntensity: 1.4, roughness: 0.4 })
+};
+
+/* =========================================================
+   Kleine Stellfläche statt Laborraum
+   ========================================================= */
+(function buildPlatform() {
+  const topTex = tex(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#b9b2a2'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(0,0,0,0.05)';
+    for (let i = 0; i < 40; i++) ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+  });
+  const plat = mesh(new THREE.CylinderGeometry(0.34, 0.36, 0.014, 48), std(0xffffff, 0.85, 0, { map: topTex }), 0, -0.007, 0, scene, true);
+  void plat;
+})();
+
+/* =========================================================
+   Millikan-Apparatur (Stativgerät, angelehnt an ein reales Schulgerät)
+   ========================================================= */
+const rig = new THREE.Group(); scene.add(rig);
+
+/* ---- Stativ (Dreifuß) ---- */
+for (let i = 0; i < 3; i++) {
+  const a = i / 3 * Math.PI * 2 + Math.PI / 6;
+  const foot = new THREE.Vector3(Math.cos(a) * LEG_R, FOOT_Y, Math.sin(a) * LEG_R);
+  const hub = new THREE.Vector3(0, HUB_Y, 0);
+  strut(foot, hub, 0.0055, MAT.steelDark, rig);
+  mesh(new THREE.SphereGeometry(0.0065, 10, 8), MAT.black, foot.x, foot.y + 0.002, foot.z, rig, false);
+}
+cylY(0.015, 0.03, MAT.steelDark, 0, HUB_Y, 0, rig, 16);
+cylY(0.009, columnTop - HUB_Y, MAT.steelBody, 0, (HUB_Y + columnTop) / 2, 0, rig, 16);
+
+/* ---- Halterungsbügel mit Anschlussbuchsen (4-mm-Buchsen) ---- */
+const postBracket = new THREE.Group(); postBracket.position.set(0, columnTop - 0.012, 0); rig.add(postBracket);
+box(0.07, 0.014, 0.018, MAT.steelBody, 0, 0, -0.012, postBracket);
+const postX = [-0.026, -0.009, 0.009, 0.026];
+const postMats = [MAT.terminalRed, MAT.terminalBlack, MAT.terminalRed, MAT.terminalBlack];
+postX.forEach((x, i) => cylZ(0.0032, 0.016, postMats[i], x, 0, -0.012, postBracket, 10));
+
+/* ---- Feldschalter (klickbar) ---- */
+const switchGroup = new THREE.Group(); switchGroup.position.set(0.03, columnTop - 0.04, 0.018); rig.add(switchGroup);
+box(0.018, 0.011, 0.013, MAT.steelDark, 0, 0, 0, switchGroup);
+const leverPivot = new THREE.Group(); leverPivot.position.set(0, 0.0055, 0.004); switchGroup.add(leverPivot);
+box(0.005, 0.014, 0.005, MAT.switchLever, 0, 0.007, 0, leverPivot);
+function updateSwitchVisual() { leverPivot.rotation.z = S.field ? 0.4 : -0.4; }
+updateSwitchVisual();
+
+/* ---- Kondensatorkammer unter Kunststoffhaube ---- */
+const chamber = new THREE.Group(); chamber.position.set(0, CHAMBER_Y, 0); scene.add(chamber); // eigenständig, bleibt im Mikroskopblick sichtbar
+cylY(PLATE_R, 0.004, MAT.brass, 0, -PHYS_D / 2 - 0.002, 0, chamber, 44);
+cylY(PLATE_R, 0.004, MAT.brass, 0, PHYS_D / 2 + 0.002, 0, chamber, 44);
+for (let i = 0; i < 3; i++) {
+  // Versatz 60° statt 90°: keine der drei Stützen darf exakt auf x=0 liegen,
+  // sonst blockiert sie als Vollzylinder die Sichtachse der Mikroskop-Kamera (bei x=0, Blick entlang -Z).
+  const a = Math.PI / 3 + (i / 3) * Math.PI * 2;
+  cylY(0.0032, PHYS_D, MAT.ceramic, Math.cos(a) * PLATE_R * 0.8, 0, Math.sin(a) * PLATE_R * 0.8, chamber, 8);
+}
+const hoodR = PLATE_R * 1.22, hoodH = PHYS_D + 0.05;
+const hood = mesh(new THREE.CylinderGeometry(hoodR, hoodR, hoodH, 44, 1, true), MAT.hood, 0, 0, 0, chamber, false);
+hood.renderOrder = 2;
+mesh(new THREE.CircleGeometry(hoodR, 44), MAT.hood, 0, hoodH / 2, 0, chamber, false).rotation.x = -Math.PI / 2;
+cylY(0.006, 0.018, MAT.black, 0, hoodH / 2 + 0.008, 0, chamber, 16); // Einfüllöffnung oben
+
+/* ---- Zerstäuber mit Fläschchen ---- */
+const atomizer = new THREE.Group(); atomizer.position.set(-0.12, CHAMBER_Y + 0.02, 0.06); rig.add(atomizer);
+const bulb = mesh(new THREE.SphereGeometry(0.02, 20, 16), MAT.rubberBulb, 0, 0.1, 0, atomizer); bulb.scale.set(1, 1.15, 1);
+cylY(0.0045, 0.022, MAT.steelDark, 0, 0.078, 0, atomizer, 12);
+cylY(0.016, 0.05, MAT.bottleGlass, 0, 0.025, 0, atomizer, 20);
+cylY(0.009, 0.012, MAT.steelDark, 0, 0.056, 0, atomizer, 14);
+const nozzleTip = new THREE.Vector3(0, CHAMBER_Y + hoodH / 2 + 0.018, 0);
+const atomStart = new THREE.Vector3(atomizer.position.x, atomizer.position.y + 0.1, atomizer.position.z);
+const atomCurve = new THREE.CatmullRomCurve3([atomStart, new THREE.Vector3(-0.06, CHAMBER_Y + 0.12, 0.04), new THREE.Vector3(-0.015, CHAMBER_Y + hoodH / 2 + 0.03, 0.01), nozzleTip]);
+mesh(new THREE.TubeGeometry(atomCurve, 50, 0.0032, 8), MAT.rubberTube, 0, 0, 0, rig, true);
+cylY(0.003, 0.014, MAT.steelDark, nozzleTip.x, nozzleTip.y - 0.005, nozzleTip.z, rig, 10);
+
+/* ---- Beleuchtung der Kammer ---- */
+const lampGroup = new THREE.Group(); lampGroup.position.set(0, CHAMBER_Y, -(hoodR + 0.012)); rig.add(lampGroup);
+box(0.024, 0.024, 0.016, MAT.steelDark, 0, 0, 0, lampGroup);
+mesh(new THREE.CircleGeometry(0.009, 20), MAT.lampLens, 0, 0, 0.009, lampGroup, false);
+const chamberLight = new THREE.PointLight(0xffe6b0, 0.0, 0.25, 2);
+chamberLight.position.set(0, CHAMBER_Y, -(hoodR + 0.01)); scene.add(chamberLight);
+
+/* ---- Messmikroskop (schräger Einblick, Kosmetik) ---- */
+const scopeMount = new THREE.Group(); scopeMount.position.set(0, CHAMBER_Y - 0.006, hoodR + 0.01); rig.add(scopeMount);
+scopeMount.rotation.x = -0.4;
+cylZ(0.0095, 0.075, MAT.steelDark, 0, 0, 0.0375, scopeMount, 16);
+mesh(new THREE.CircleGeometry(0.0105, 20), MAT.black, 0, 0, 0.076, scopeMount, false);
+cylY(0.015, 0.05, MAT.steelBody, 0, -0.03, 0, scopeMount, 16);
+
+/* ---- Kleines Hochspannungsgerät neben dem Stativ ---- */
+const hvBox = new THREE.Group(); hvBox.position.set(0.19, 0, 0.06); rig.add(hvBox);
+const baseW = 0.09, baseH = 0.05, baseD = 0.07;
+box(baseW, baseH, baseD, MAT.steelBody, 0, baseH / 2, 0, hvBox);
+const panelCanvas = document.createElement('canvas'); panelCanvas.width = 360; panelCanvas.height = 160;
+const panelCtx = panelCanvas.getContext('2d');
+const panelTex = new THREE.CanvasTexture(panelCanvas); panelTex.colorSpace = THREE.SRGBColorSpace; panelTex.anisotropy = MAXANI;
+mesh(new THREE.PlaneGeometry(baseW * 0.78, baseH * 0.62), new THREE.MeshBasicMaterial({ map: panelTex }), 0, baseH / 2 + 0.004, baseD / 2 + 0.0005, hvBox, false);
+function drawPanel() {
+  const w = panelCanvas.width, h = panelCanvas.height, g = panelCtx;
+  g.fillStyle = '#0d1114'; g.fillRect(0, 0, w, h);
+  g.fillStyle = S.field ? '#19392b' : '#161a1c'; g.fillRect(w * 0.05, h * 0.14, w * 0.62, h * 0.72);
+  g.font = '700 ' + Math.floor(h * 0.4) + 'px ui-monospace,Consolas,monospace';
+  g.fillStyle = S.field ? '#59e39b' : '#4a5258'; g.textAlign = 'left'; g.textBaseline = 'middle';
+  const val = (S.field ? (S.polarity > 0 ? '+' : '−') + Uvalue().toFixed(1) : '0,0').replace('.', ',');
+  g.fillText(val, w * 0.08, h * 0.52);
+  g.font = '600 ' + Math.floor(h * 0.14) + 'px system-ui'; g.fillStyle = '#8d9aa0';
+  g.fillText('VOLT', w * 0.08, h * 0.88);
+  g.beginPath(); g.arc(w * 0.84, h * 0.5, h * 0.09, 0, Math.PI * 2);
+  g.fillStyle = S.field ? '#ffb020' : '#2e363b'; g.fill();
+  panelTex.needsUpdate = true;
+}
+drawPanel();
+function wireCurve(a, b, sag, parent) {
+  const mid = new THREE.Vector3((a.x + b.x) / 2, Math.min(a.y, b.y) - sag, (a.z + b.z) / 2);
+  const curve = new THREE.CatmullRomCurve3([a, mid, b]);
+  return mesh(new THREE.TubeGeometry(curve, 24, 0.0016, 6), MAT.black, 0, 0, 0, parent, true);
+}
+wireCurve(new THREE.Vector3(0.19 - 0.03, baseH, 0.06), new THREE.Vector3(0.009, columnTop - 0.012, -0.012), 0.025, rig);
+wireCurve(new THREE.Vector3(0.19 + 0.03, baseH, 0.06), new THREE.Vector3(-0.009, columnTop - 0.012, -0.012), 0.035, rig);
+
+/* =========================================================
+   Tröpfchen (bis zu MAX_DROPS gleichzeitig)
+   ========================================================= */
+// Kugeln werden als Einheitskugeln (Radius 1) angelegt und pro Bild per scale auf die tatsächliche,
+// proportionale Grösse gebracht - so ist ein grösserer realer Radius auch sichtbar grösser gezeichnet.
+const VIS_DROP_SCALE = 0.00012 / 0.90e-6; // mittlerer Radius (0,90 µm) entspricht der bisherigen festen Grösse
+const HIT_FACTOR = 0.0004 / 0.00012;      // bisheriges Verhältnis Klickziel/sichtbare Kugel beibehalten
+const MIN_HIT_R = 0.00035;                // Mindestgrösse fürs Klickziel, auch kleine Tröpfchen bleiben gut treffbar
+const dropMeshes = [], dropHitMeshes = [];
+for (let i = 0; i < MAX_DROPS; i++) {
+  const mat = new THREE.MeshStandardMaterial({ color: 0xfff2d0, emissive: 0xffdf9a, emissiveIntensity: 0.45, roughness: 0.25 });
+  const m = mesh(new THREE.SphereGeometry(1, 14, 10), mat, 0, 0, 0, chamber, false);
+  m.visible = false; dropMeshes.push(m);
+  const hit = mesh(new THREE.SphereGeometry(1, 8, 6), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }), 0, 0, 0, chamber, false);
+  hit.visible = false; dropHitMeshes.push(hit);
+}
+
+function makeDroplet() {
+  // Ladung: ganzzahliges Vielfaches der Elementarladung, Vorzeichen zufällig (Reibungsaufladung beim
+  // Zerstäuben lädt Tröpfchen zufällig positiv oder negativ auf - nie 0).
+  const n = (1 + Math.floor(Math.random() * 6)) * (Math.random() < 0.5 ? -1 : 1);
+  return {
+    id: nextDropId++, r: rand(0.70e-6, 1.10e-6), n,
+    y: rand(Y_LIMIT * 0.55, Y_LIMIT * 0.8), x: rand(-0.0022, 0.0022), z: rand(-0.0014, 0.0014),
+    v: 0, stableT: 0, uSchweb: null, polaritySchweb: null, dtFall: null, dsFall: null, s0mm: null, s1mm: null
+  };
+}
+
+function spraySome() {
+  // Ein Sprühstoß aus dem Zerstäuber erzeugt immer eine ganze Tröpfchenwolke - man kann (wie im
+  // echten Versuch) nicht gezielt nur ein einzelnes Tröpfchen einsprühen.
+  const count = SPRAY_MIN + Math.floor(Math.random() * (SPRAY_MAX - SPRAY_MIN + 1));
+  let last = null;
+  for (let i = 0; i < count; i++) {
+    if (S.drops.length >= MAX_DROPS) S.drops.shift();
+    last = makeDroplet();
+    S.drops.push(last);
+  }
+  if (last) selectedId = last.id;
+  return count;
+}
+
+/* Puffpartikel beim Einsprühen */
+const PUFF_N = 90;
+const puffGeo = new THREE.BufferGeometry();
+puffGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(PUFF_N * 3), 3));
+const puffMat = new THREE.PointsMaterial({ color: 0xfff6e2, size: 0.0035, transparent: true, opacity: 0, depthWrite: false });
+const puffPts = new THREE.Points(puffGeo, puffMat); scene.add(puffPts);
+let puffT = -1, puffVel = [];
+function startPuff() {
+  const pos = puffGeo.attributes.position.array;
+  puffVel = [];
+  for (let i = 0; i < PUFF_N; i++) {
+    pos[i * 3] = nozzleTip.x; pos[i * 3 + 1] = nozzleTip.y; pos[i * 3 + 2] = nozzleTip.z;
+    const a = Math.random() * Math.PI * 2, sp = rand(0.008, 0.035);
+    puffVel.push([Math.cos(a) * sp * 0.3, -rand(0.04, 0.09), Math.sin(a) * sp * 0.3]);
+  }
+  puffGeo.attributes.position.needsUpdate = true;
+  puffT = 0;
+}
+function updatePuff(dt) {
+  if (puffT < 0) return;
+  puffT += dt;
+  const dur = 0.5;
+  const pos = puffGeo.attributes.position.array;
+  for (let i = 0; i < PUFF_N; i++) {
+    pos[i * 3] += puffVel[i][0] * dt; pos[i * 3 + 1] += puffVel[i][1] * dt; pos[i * 3 + 2] += puffVel[i][2] * dt;
+  }
+  puffGeo.attributes.position.needsUpdate = true;
+  puffMat.opacity = Math.max(0, 1 - puffT / dur) * 0.75;
+  if (puffT > dur) puffT = -1;
+}
+
+/* =========================================================
+   Physik-Schritt (alle Tröpfchen gleichzeitig)
+   ========================================================= */
+function physicsStep(dt) {
+  for (const d of S.drops) {
+    // Kraft nach oben = -Q*E, mit Q = n*e (vorzeichenbehaftet) und E = Ueff/d (Feld zeigt von + nach -).
+    // Bei "normaler" Polung (oben +) wird so z.B. eine negativ geladene Ladung nach oben gedrückt.
+    const Fe = S.field ? -d.n * E_CHARGE * Ueff() / PHYS_D : 0;
+    const weight = (4 / 3) * Math.PI * d.r ** 3 * DRHO * G;
+    const drag = dragCoeff(d.r);
+    const v = (Fe - weight) / drag;
+    d.y += v * dt;
+    d.v = v;
+    if (S.field && Math.abs(v) < 6e-6) d.stableT += dt; else d.stableT = 0;
+  }
+  const lost = S.drops.filter(d => Math.abs(d.y) >= Y_LIMIT);
+  if (lost.length) {
+    S.drops = S.drops.filter(d => Math.abs(d.y) < Y_LIMIT);
+    if (lost.some(d => d.id === selectedId)) {
+      selectedId = S.drops.length ? S.drops[S.drops.length - 1].id : null;
+      toast('Das ausgewählte Tröpfchen hat eine Platte berührt und ist verloren.');
+    }
+    sfx('warn');
+  }
+}
+
+/* =========================================================
+   Stoppuhr (erfasst Skalenposition des ausgewählten Tröpfchens)
+   ========================================================= */
+function swStart() {
+  if (S.sw.running) return;
+  const d = selectedDrop();
+  if (d) { d.s0mm = d.y * 1000; d.s1mm = null; }
+  if (S.field) toast('Hinweis: Für die Fallgeschwindigkeit sollte das Feld ausgeschaltet sein.');
+  S.sw.running = true; S.sw.t = 0; sfx('click'); syncButtons();
+}
+function swStop() {
+  if (!S.sw.running) return;
+  const d = selectedDrop();
+  if (d) d.s1mm = d.y * 1000;
+  S.sw.running = false; sfx('click'); syncButtons();
+  if (d && d.s0mm != null) toast('Zeit gestoppt: ' + nf(S.sw.t, 2) + ' s, Δs = ' + nf(Math.abs(d.s1mm - d.s0mm), 2) + ' mm. Übernimm sie unten im Panel mit „Fallzeit übernehmen".');
+}
+function swReset() {
+  S.sw.running = false; S.sw.t = 0;
+  const d = selectedDrop(); if (d) { d.s0mm = null; d.s1mm = null; }
+  syncButtons();
+}
+function swTick(dt) { if (S.sw.running) S.sw.t += dt; }
+
+/* =========================================================
+   Auswertung
+   ========================================================= */
+function evalDrop(uSchweb, dtFall, dsFall, polaritySchweb, buoyancy) {
+  // Die Fallgesetze werden immer mit Cunningham-Gleitkorrektur ausgewertet (das ist die tatsächliche
+  // Physik der Simulation). Der Auftrieb (Dichteunterschied Öl/Luft) ist dagegen eine bewusst
+  // wählbare Vereinfachung: "rho" ist entweder die Dichtedifferenz (mit Auftrieb) oder die reine
+  // Öldichte (ohne Auftrieb, wie im Vakuum).
+  const rho = buoyancy ? DRHO : RHO_OIL;
+  const v = dsFall / dtFall;
+  let r = Math.sqrt(9 * ETA * v / (2 * rho * G));
+  for (let i = 0; i < 6; i++) r = Math.sqrt(9 * ETA * v / (2 * rho * G * cunninghamC(r)));
+  const m = (4 / 3) * Math.PI * r ** 3 * RHO_OIL; // Masse bleibt unabhängig vom Auftrieb (reine Öldichte)
+  const weight = (4 / 3) * Math.PI * r ** 3 * rho * G;
+  const qMag = weight * PHYS_D / uSchweb;
+  // Vorzeichen folgt aus der Polung, mit der das Tröpfchen zum Schweben gebracht wurde:
+  // "oben +" hält es nur, wenn es negativ geladen ist, "oben -" nur, wenn es positiv geladen ist.
+  const sign = polaritySchweb < 0 ? 1 : -1;
+  const q = sign * qMag;
+  return { v, r, m, q, nEst: q / E_CHARGE };
+}
+function roundN(nEst) { return nEst >= 0 ? Math.max(1, Math.round(nEst)) : Math.min(-1, Math.round(nEst)); }
+
+function estimateE(qs) {
+  if (qs.length < 2) return null;
+  let e = Math.min(...qs);
+  for (let iter = 0; iter < 6; iter++) {
+    const ns = qs.map(q => Math.max(1, Math.round(q / e)));
+    const num = qs.reduce((s, q, i) => s + q * ns[i], 0);
+    const den = ns.reduce((s, n) => s + n * n, 0);
+    if (den > 0) e = num / den;
+  }
+  return e;
+}
+
+/* =========================================================
+   Sound (minimal)
+   ========================================================= */
+let AC = null;
+function audioInit() { if (AC) { if (AC.state === 'suspended') AC.resume(); return; } try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; } }
+function sfx(type) {
+  if (!AC || !S.sound) return;
+  const t = AC.currentTime;
+  const cfg = { spray: [2400, 0.2, 0.28, 'bandpass'], click: [1600, 0.03, 0.22, 'bandpass'], warn: [260, 0.16, 0.32, 'lowpass'], take: [1200, 0.1, 0.22, 'bandpass'] }[type];
+  if (!cfg) return;
+  const n = Math.max(1, Math.floor(AC.sampleRate * cfg[1])), buf = AC.createBuffer(1, n, AC.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3);
+  const s = AC.createBufferSource(); s.buffer = buf;
+  const f = AC.createBiquadFilter(); f.type = cfg[3]; f.frequency.value = cfg[0]; f.Q.value = 2;
+  const gn = AC.createGain(); gn.gain.value = cfg[2];
+  s.connect(f).connect(gn).connect(AC.destination); s.start(t);
+}
+
+/* =========================================================
+   Kamera-Voreinstellungen
+   ========================================================= */
+const CAMS = {
+  total: { pos: [0.34, CHAMBER_Y + 0.17, 0.42], tgt: [0, CHAMBER_Y - 0.06, 0] },
+  cond: { pos: [0.095, CHAMBER_Y + 0.01, 0.15], tgt: [0, CHAMBER_Y, 0] }
+};
+let camMode = 'total', camTween = null;
+function setCam(name) {
+  camMode = name;
+  document.querySelectorAll('#camBar button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cam === name)));
+  stage.classList.toggle('scopeMode', name === 'scope');
+  hood.visible = name !== 'scope'; // Kamera sitzt im Mikroskopblick direkt an der Haube - sonst Nahfeld-Artefakte
+  rig.visible = name !== 'scope'; // Stativ/Gehäuse/Zerstäuber/Mikroskop-Attrappe im Okularblick ausblenden - nur Kammer+Tröpfchen bleiben sichtbar
+  if (name === 'scope') {
+    activeCam = camOrtho; controls.enabled = false; positionScopeCam();
+  } else {
+    activeCam = camPersp; controls.enabled = true;
+    const c = CAMS[name];
+    camTween = { pos: new THREE.Vector3(...c.pos), tgt: new THREE.Vector3(...c.tgt) };
+  }
+}
+function positionScopeCam() {
+  const worldCenter = new THREE.Vector3(0, CHAMBER_Y, 0);
+  camOrtho.position.set(worldCenter.x, worldCenter.y, worldCenter.z + 0.05);
+  camOrtho.up.set(0, 1, 0);
+  camOrtho.lookAt(worldCenter);
+  const halfH = Y_LIMIT; // echter Massstab: Frustum reicht exakt von Platte zu Platte
+  const aspect = Math.max(0.3, stage.clientWidth / stage.clientHeight);
+  camOrtho.left = -halfH * aspect; camOrtho.right = halfH * aspect;
+  camOrtho.top = halfH; camOrtho.bottom = -halfH;
+  camOrtho.near = 0.001; camOrtho.far = 1;
+  camOrtho.updateProjectionMatrix();
+}
+controls.addEventListener('start', () => { camTween = null; });
+function updateCamera(rdt) {
+  if (camTween) {
+    const k = 1 - Math.exp(-rdt * 4);
+    camPersp.position.lerp(camTween.pos, k); controls.target.lerp(camTween.tgt, k);
+    if (camPersp.position.distanceTo(camTween.pos) < 0.002) camTween = null;
+  }
+  if (camMode !== 'scope') controls.update();
+}
+document.querySelectorAll('#camBar button').forEach(b => b.addEventListener('click', () => setCam(b.dataset.cam)));
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  camPersp.aspect = w / h; camPersp.updateProjectionMatrix();
+  if (camMode === 'scope') positionScopeCam();
+  resizeForceCanvas();
+}
+new ResizeObserver(resize).observe(stage);
+
+/* =========================================================
+   Kräfte-Visualisierung (Gravitation, elektrische Kraft, Auftrieb)
+   ========================================================= */
+const forceCanvas = document.getElementById('forceCanvas');
+const forceCtx = forceCanvas.getContext('2d');
+function resizeForceCanvas() {
+  const dpr = Math.min(devicePixelRatio, 2), w = stage.clientWidth, h = stage.clientHeight;
+  forceCanvas.width = w * dpr; forceCanvas.height = h * dpr;
+  forceCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function drawForceArrow(x, y, dy, color, label) {
+  if (Math.abs(dy) < 1) return;
+  const g = forceCtx, dir = dy < 0 ? -1 : 1, headLen = 7;
+  g.strokeStyle = color; g.fillStyle = color; g.lineWidth = 2.5;
+  g.beginPath(); g.moveTo(x, y); g.lineTo(x, y + dy); g.stroke();
+  g.beginPath();
+  g.moveTo(x, y + dy);
+  g.lineTo(x - 5, y + dy - dir * headLen);
+  g.lineTo(x + 5, y + dy - dir * headLen);
+  g.closePath(); g.fill();
+  g.font = '600 12px system-ui'; g.textAlign = 'center';
+  g.fillText(label, x, y + dy + dir * 13);
+}
+const forceVec = new THREE.Vector3();
+function drawForces() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  forceCtx.clearRect(0, 0, w, h);
+  if (!S.showForces || camMode !== 'scope') return;
+  const d = selectedDrop();
+  if (!d) return;
+  forceVec.set(d.x, d.y, d.z).add(chamber.position);
+  camOrtho.updateMatrixWorld();
+  forceVec.project(camOrtho);
+  const sx = (forceVec.x * 0.5 + 0.5) * w, sy = (1 - (forceVec.y * 0.5 + 0.5)) * h;
+
+  const Fg = (4 / 3) * Math.PI * d.r ** 3 * RHO_OIL * G;              // Gravitation, immer abwärts
+  const Fb = S.buoyancy ? (4 / 3) * Math.PI * d.r ** 3 * RHO_AIR * G : 0; // Auftrieb, immer aufwärts
+  const Fe = S.field ? -d.n * E_CHARGE * Ueff() / PHYS_D : 0;          // elektrisch, Vorzeichen = Richtung
+  const maxF = Math.max(Fg, Fb, Math.abs(Fe), 1e-24);
+  const scale = 56 / maxF;
+
+  drawForceArrow(sx - 16, sy, Fg * scale, '#8a6a48', 'F_G');
+  if (S.buoyancy) drawForceArrow(sx, sy, -Fb * scale, '#2f6db5', 'F_A');
+  if (S.field) drawForceArrow(sx + 16, sy, -Fe * scale, '#cf6d27', 'F_el');
+}
+
+/* =========================================================
+   Klick-Interaktion: Tröpfchen auswählen, Feldschalter, Zerstäuber
+   ========================================================= */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pickAt(clientX, clientY) {
+  const r = canvas.getBoundingClientRect();
+  ndc.set(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, activeCam);
+  const visibleHits = dropHitMeshes.filter(m => m.visible);
+  const dHit = ray.intersectObjects(visibleHits, false)[0];
+  if (dHit) return { type: 'drop', index: dropHitMeshes.indexOf(dHit.object) };
+  if (ray.intersectObject(switchGroup, true)[0]) return { type: 'switch' };
+  if (ray.intersectObject(bulb, true)[0]) return { type: 'atomizer' };
+  return null;
+}
+let downXY = null;
+canvas.addEventListener('pointerdown', e => { downXY = [e.clientX, e.clientY]; });
+canvas.addEventListener('pointerup', e => {
+  if (!downXY || Math.hypot(e.clientX - downXY[0], e.clientY - downXY[1]) > 5) return;
+  const hit = pickAt(e.clientX, e.clientY);
+  if (!hit) return;
+  if (hit.type === 'drop') { selectedId = S.drops[hit.index].id; renderDropSelector(); renderCurTable(); }
+  else if (hit.type === 'switch') toggleField();
+  else if (hit.type === 'atomizer') doSpray();
+});
+canvas.addEventListener('pointermove', e => { if (e.buttons) return; canvas.style.cursor = pickAt(e.clientX, e.clientY) ? 'pointer' : (camMode === 'scope' ? 'default' : 'grab'); });
+
+/* =========================================================
+   Graticule (Okular-Skala) als HTML-Overlay
+   ========================================================= */
+const HALF_MM = PHYS_D / 2 * 1000; // 3,0 mm – entspricht Y_LIMIT
+function mmToPct(mm) { return 50 - (mm / HALF_MM) * 50; }
+function buildGraticule() {
+  const wrap = document.getElementById('graticule');
+  const frag = document.createDocumentFragment();
+  for (let i = -30; i <= 30; i++) {
+    const mm = i * 0.1;
+    const topPct = mmToPct(mm);
+    const major = i % 5 === 0;
+    const t = document.createElement('div');
+    t.className = 'gtick' + (major ? ' major' : '');
+    t.style.top = topPct + '%';
+    if (major) {
+      const lbl = document.createElement('span'); lbl.className = 'glabel';
+      lbl.textContent = (mm > 0 ? '+' : '') + mm.toFixed(1);
+      t.appendChild(lbl);
+    }
+    frag.appendChild(t);
+  }
+  wrap.appendChild(frag);
+}
+buildGraticule();
+function updateGraticuleMarks() {
+  const d = selectedDrop();
+  const live = $('gLive');
+  if (camMode === 'scope' && d) {
+    const mm = d.y * 1000;
+    live.style.top = mmToPct(mm) + '%';
+    $('gLiveLabel').textContent = nf(mm, 2) + ' mm';
+    live.classList.add('show');
+  } else live.classList.remove('show');
+  const gs = $('gStart'), ge = $('gStop');
+  if (d && d.s0mm != null) { gs.style.top = mmToPct(d.s0mm) + '%'; $('gStartLabel').textContent = 's₀ = ' + nf(d.s0mm, 2) + ' mm'; gs.classList.add('show'); } else gs.classList.remove('show');
+  if (d && d.s1mm != null) { ge.style.top = mmToPct(d.s1mm) + '%'; $('gStopLabel').textContent = 's₁ = ' + nf(d.s1mm, 2) + ' mm'; ge.classList.add('show'); } else ge.classList.remove('show');
+}
+
+/* =========================================================
+   Hauptschleife
+   ========================================================= */
+let last = performance.now(), hudT = 0;
+function frame(now) {
+  const rdt = Math.min(0.05, (now - last) / 1000); last = now;
+  physicsStep(rdt);
+  swTick(rdt);
+  updatePuff(rdt);
+  for (let i = 0; i < MAX_DROPS; i++) {
+    const d = S.drops[i];
+    const show = !!d && camMode === 'scope';
+    dropMeshes[i].visible = show; dropHitMeshes[i].visible = show;
+    if (d) {
+      const py = d.y;
+      dropMeshes[i].position.set(d.x, py, d.z);
+      dropHitMeshes[i].position.set(d.x, py, d.z);
+      const visR = VIS_DROP_SCALE * d.r;
+      dropMeshes[i].scale.setScalar(visR);
+      dropHitMeshes[i].scale.setScalar(Math.max(MIN_HIT_R, visR * HIT_FACTOR));
+      const sel = d.id === selectedId;
+      dropMeshes[i].material.emissiveIntensity = sel ? 1.15 : 0.4;
+      dropMeshes[i].material.color.set(sel ? 0xffffff : 0xdfcfa0);
+    }
+  }
+  chamberLight.intensity = camMode === 'scope' ? 0.4 : 0.12;
+  updateCamera(rdt);
+
+  hudT += rdt;
+  if (hudT > 0.07) { hudT = 0; syncHud(); drawPanel(); updateGraticuleMarks(); }
+  drawForces();
+
+  renderer.render(scene, activeCam);
+  requestAnimationFrame(frame);
+}
+
+/* =========================================================
+   Oberfläche
+   ========================================================= */
+const $ = id => document.getElementById(id);
+function nf(x, d = 3) { if (x === null || x === undefined || !isFinite(x)) return '–'; const s = x.toFixed(d).replace('.', ','); return s.startsWith('-') && Number(x.toFixed(d)) !== 0 ? '−' + s.slice(1) : s.replace('-', ''); }
+let toastTimer = null;
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 3600); }
+
+function canTakeSchweb() { const d = selectedDrop(); return !!(d && S.field && d.stableT > 0.4); }
+function canTakeT() { const d = selectedDrop(); return !!(d && !S.sw.running && S.sw.t > 0.3 && d.s0mm != null && d.s1mm != null && Math.abs(d.s1mm - d.s0mm) > 1e-6); }
+function canTakeAll() { const d = selectedDrop(); return !!(d && d.uSchweb != null && d.dtFall != null); }
+
+function syncButtons() {
+  $('btnTakeU').disabled = !canTakeSchweb();
+  $('btnTakeT').disabled = !canTakeT();
+  $('btnTakeAll').disabled = !canTakeAll();
+  $('btnSwStart').disabled = S.sw.running;
+  $('btnSwStop').disabled = !S.sw.running;
+}
+
+function syncHud() {
+  $('chipField').classList.toggle('on', S.field);
+  $('chipField').querySelector('span').textContent = S.field ? 'Feld: ' + nf(Uvalue(), 1) + ' V' : 'Feld aus';
+  const st = $('chipState'), d = selectedDrop();
+  st.classList.remove('good', 'warn');
+  if (!d) st.textContent = S.drops.length ? 'kein Tropfen ausgewählt' : 'kein Tropfen';
+  else if (!S.field) st.textContent = 'fällt frei';
+  else if (d.stableT > 0.4) { st.textContent = 'schwebt'; st.classList.add('good'); }
+  else if (d.v > 0) { st.textContent = 'steigt'; st.classList.add('warn'); }
+  else { st.textContent = 'sinkt'; st.classList.add('warn'); }
+  $('chipSW').textContent = '⏱ ' + nf(S.sw.t, 2) + ' s';
+  $('oUc').textContent = nf(S.Uc, 0) + ' V';
+  $('oUf').textContent = nf(S.Uf, 2) + ' V';
+  const stabPct = d && S.field ? Math.min(1, d.stableT / 0.4) * 100 : 0;
+  $('meterStab').style.width = stabPct + '%';
+  syncButtons();
+  renderCurTable();
+  renderDropSelector();
+}
+
+/* ---- Tröpfchen-Auswahl im Panel ---- */
+function renderDropSelector() {
+  const wrap = $('dropSel');
+  if (!S.drops.length) { wrap.innerHTML = '<span class="sub">Noch keine Tröpfchen.</span>'; return; }
+  wrap.innerHTML = '';
+  S.drops.forEach((d, i) => {
+    const b = document.createElement('button');
+    b.className = 'dropChip' + (d.id === selectedId ? ' sel' : '');
+    b.textContent = 'Tropfen ' + (i + 1);
+    b.addEventListener('click', () => { selectedId = d.id; renderDropSelector(); renderCurTable(); });
+    wrap.appendChild(b);
+  });
+}
+
+/* ---- Zerstäuber ---- */
+function doSpray() {
+  audioInit(); sfx('spray');
+  const count = spraySome();
+  startPuff();
+  toast(count + ' Öltröpfchen wurden eingesprüht (unterschiedliche Ladung und Vorzeichen) - das letzte ist ausgewählt.');
+  renderCurTable(); renderDropSelector();
+}
+$('btnSpray').addEventListener('click', doSpray);
+
+/* ---- Feld & Spannung ---- */
+function toggleField() {
+  audioInit();
+  S.field = !S.field;
+  $('btnField').classList.toggle('on', S.field);
+  $('fieldTxt').textContent = S.field ? 'Feld ausschalten' : 'Feld einschalten';
+  updateSwitchVisual();
+}
+$('btnField').addEventListener('click', toggleField);
+$('segPol').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  S.polarity = Number(b.dataset.v);
+  document.querySelectorAll('#segPol button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+});
+$('rUc').addEventListener('input', e => { S.Uc = Number(e.target.value); });
+$('rUf').addEventListener('input', e => { S.Uf = Number(e.target.value); });
+
+$('btnTakeU').addEventListener('click', () => {
+  const d = selectedDrop();
+  if (!canTakeSchweb()) return;
+  d.uSchweb = Uvalue();
+  d.polaritySchweb = S.polarity;
+  sfx('take');
+  toast('Schwebespannung übernommen: U = ' + nf(d.uSchweb, 1) + ' V (Polung: oben ' + (S.polarity > 0 ? '+' : '−') + ')');
+  renderCurTable();
+});
+
+/* ---- Fallzeit ---- */
+$('btnTakeT').addEventListener('click', () => {
+  const d = selectedDrop();
+  if (!canTakeT()) { toast('Starte und stoppe zuerst die Uhr an zwei unterschiedlichen Skalenstrichen.'); return; }
+  d.dtFall = S.sw.t;
+  d.dsFall = Math.abs(d.s1mm - d.s0mm) / 1000;
+  sfx('take');
+  toast('Fallzeit übernommen: Δs = ' + nf(Math.abs(d.s1mm - d.s0mm), 2) + ' mm, Δt = ' + nf(d.dtFall, 2) + ' s');
+  renderCurTable();
+});
+
+/* ---- Stoppuhr-Bedienung ---- */
+$('btnSwStart').addEventListener('click', () => { audioInit(); swStart(); });
+$('btnSwStop').addEventListener('click', swStop);
+$('btnSwReset').addEventListener('click', swReset);
+
+/* ---- Optionen ---- */
+$('cbSound').addEventListener('change', e => { S.sound = e.target.checked; if (S.sound) audioInit(); });
+$('cbBuoyancy').addEventListener('change', e => { S.buoyancy = e.target.checked; renderCurTable(); renderProto(); });
+$('cbShowEval').addEventListener('change', e => { S.showEval = e.target.checked; renderCurTable(); renderProto(); });
+$('cbShowForces').addEventListener('change', e => { S.showForces = e.target.checked; stage.classList.toggle('showForces', S.showForces); });
+
+/* ---- Aktueller Tropfen ---- */
+function renderCurTable() {
+  const tb = $('curTable'), note = $('curNote');
+  const d = selectedDrop();
+  if (!d) {
+    tb.innerHTML = '';
+    note.innerHTML = S.drops.length ? '<span class="empty">Wähle eines der Tröpfchen im Mikroskopblick oder im Panel aus.</span>' : '<span class="empty">Noch kein Tropfen. Sprüh zuerst eins ein.</span>';
+    return;
+  }
+  const idx = S.drops.indexOf(d) + 1;
+  let rows = `<tr><td class="l">Ausgewähltes Tröpfchen</td><td>#${idx}</td></tr>`;
+  rows += `<tr><td class="l">Schwebespannung U<sub>schweb</sub></td><td>${d.uSchweb != null ? nf(d.uSchweb, 1) + ' V (oben ' + (d.polaritySchweb > 0 ? '+' : '−') + ')' : '–'}</td></tr>`;
+  rows += `<tr><td class="l">Abgelesene Fallstrecke Δs</td><td>${d.dsFall != null ? nf(d.dsFall * 1000, 2) + ' mm' : '–'}</td></tr>`;
+  rows += `<tr><td class="l">Gestoppte Fallzeit Δt</td><td>${d.dtFall != null ? nf(d.dtFall, 2) + ' s' : '–'}</td></tr>`;
+  if (S.showEval && d.uSchweb != null && d.dtFall != null) {
+    const r = evalDrop(d.uSchweb, d.dtFall, d.dsFall, d.polaritySchweb, S.buoyancy);
+    const nRound = roundN(r.nEst);
+    rows += `<tr><td class="l">Fallgeschwindigkeit v<sub>fall</sub></td><td>${nf(r.v * 1000, 3)} mm/s</td></tr>`;
+    rows += `<tr><td class="l">Radius r</td><td>${nf(r.r * 1e6, 3)} µm</td></tr>`;
+    rows += `<tr><td class="l">Masse m</td><td>${nf(r.m * 1e15, 2)} pg</td></tr>`;
+    rows += `<tr><td class="l">Ladung q</td><td>${nf(r.q * 1e19, 2)} · 10⁻¹⁹ C</td></tr>`;
+    rows += `<tr><td class="l">q / e (gerundet n = ${nRound})</td><td>${nf(r.nEst, 2)}</td></tr>`;
+  }
+  tb.innerHTML = '<tbody>' + rows + '</tbody>';
+  note.textContent = S.showEval ? 'Übernimm Schwebespannung und Fallzeit, um die Ladung zu berechnen.' : 'Es werden nur die Rohdaten gespeichert. Aktiviere im Panel die vollständige Auswertung, um Radius, Masse und Ladung zu sehen.';
+}
+$('btnTakeAll').addEventListener('click', () => {
+  const d = selectedDrop();
+  if (!canTakeAll()) return;
+  PROTO.rows.push({ nr: PROTO.nr++, u: d.uSchweb, dt: d.dtFall, ds: d.dsFall, polarity: d.polaritySchweb });
+  saveProto(); renderProto();
+  toast('Ergebnis in das Messprotokoll übernommen.');
+  const idx = S.drops.indexOf(d);
+  if (idx >= 0) S.drops.splice(idx, 1);
+  selectedId = S.drops.length ? S.drops[S.drops.length - 1].id : null;
+  renderCurTable(); renderDropSelector();
+});
+
+/* =========================================================
+   Messprotokoll
+   ========================================================= */
+const STORE = 'millikan3d-protokoll-v3'; // v3: Zeilen tragen jetzt "polarity" (vorzeichenbehaftete Ladung)
+let PROTO = { rows: [], nr: 1 };
+try { const s = JSON.parse(localStorage.getItem(STORE)); if (s && Array.isArray(s.rows)) PROTO = Object.assign(PROTO, s); } catch (e) { }
+function saveProto() { try { localStorage.setItem(STORE, JSON.stringify(PROTO)); } catch (e) { } }
+
+function renderProto() {
+  const tb = $('protoTable'), lg = $('legend');
+  if (!PROTO.rows.length) {
+    tb.innerHTML = '<tbody><tr><td class="empty">Noch keine Einträge. Führe einen Versuch durch und klicke auf „In Messprotokoll übernehmen".</td></tr></tbody>';
+    lg.innerHTML = '';
+  } else if (!S.showEval) {
+    let h = '<thead><tr><th>Nr.</th><th>U<sub>schweb</sub> in V</th><th>Pol.</th><th>Δs in mm</th><th>Δt in s</th><th></th></tr></thead><tbody>';
+    for (const row of PROTO.rows) {
+      h += `<tr><td>${row.nr}</td><td>${nf(row.u, 1)}</td><td>oben ${row.polarity > 0 ? '+' : '−'}</td><td>${nf(row.ds * 1000, 2)}</td><td>${nf(row.dt, 2)}</td><td><button class="del" data-del="${row.nr}" title="Zeile löschen" aria-label="Zeile löschen">×</button></td></tr>`;
+    }
+    tb.innerHTML = h + '</tbody>';
+    lg.innerHTML = '<div>Nur Rohdaten gespeichert - wertet sie selbst aus (z. B. nach dem CSV-Export) oder aktiviert im Panel die vollständige Auswertung zur Kontrolle.</div>';
+  } else {
+    let h = '<thead><tr><th>Nr.</th><th>U<sub>schweb</sub> in V</th><th>Pol.</th><th>Δs in mm</th><th>Δt in s</th><th>v<sub>fall</sub> in mm/s</th><th>r in µm</th><th>m in pg</th><th>q in 10⁻¹⁹ C</th><th>n</th><th>Abw.</th><th></th></tr></thead><tbody>';
+    for (const row of PROTO.rows) {
+      const r = evalDrop(row.u, row.dt, row.ds, row.polarity, S.buoyancy);
+      const nRound = roundN(r.nEst);
+      const dev = (r.nEst - nRound) / Math.abs(nRound) * 100;
+      h += `<tr><td>${row.nr}</td><td>${nf(row.u, 1)}</td><td>oben ${row.polarity > 0 ? '+' : '−'}</td><td>${nf(row.ds * 1000, 2)}</td><td>${nf(row.dt, 2)}</td><td>${nf(r.v * 1000, 3)}</td><td>${nf(r.r * 1e6, 3)}</td><td>${nf(r.m * 1e15, 2)}</td><td>${nf(r.q * 1e19, 2)}</td><td>${nRound}</td><td>${nf(dev, 1)} %</td><td><button class="del" data-del="${row.nr}" title="Zeile löschen" aria-label="Zeile löschen">×</button></td></tr>`;
+    }
+    tb.innerHTML = h + '</tbody>';
+    lg.innerHTML = `<div>${S.buoyancy ? 'Mit' : 'Ohne'} Auftrieb ausgewertet (Fallgesetze stets mit Cunningham-Korrektur). n = q/e, gerundet auf die nächste ganze Zahl (negativ = negative Ladung). Abw. = Abweichung von n·e. "Pol." = Polung, mit der die Schwebespannung erreicht wurde.</div>`;
+  }
+  renderChart();
+}
+$('protoTable').addEventListener('click', e => {
+  const b = e.target.closest('button.del'); if (!b) return;
+  PROTO.rows = PROTO.rows.filter(r => r.nr !== +b.dataset.del);
+  saveProto(); renderProto();
+});
+$('btnClear').addEventListener('click', () => {
+  if (!PROTO.rows.length) return;
+  if (!confirm('Alle Einträge im Messprotokoll löschen?')) return;
+  PROTO.rows = []; PROTO.nr = 1; saveProto(); renderProto();
+});
+$('btnCsv').addEventListener('click', () => {
+  const c = x => (typeof x === 'number' ? String(x).replace('.', ',') : `"${String(x).replace(/"/g, '""')}"`);
+  const rows = S.showEval
+    ? [['Nr', 'U_schweb in V', 'Polung oben', 'Delta s in mm', 'Delta t in s', 'v_fall in mm/s', 'r in µm', 'm in pg', 'q in 1e-19 C', 'n (gerundet)', 'Abweichung in %', 'Auftrieb berücksichtigt']]
+    : [['Nr', 'U_schweb in V', 'Polung oben', 'Delta s in mm', 'Delta t in s']];
+  for (const row of PROTO.rows) {
+    if (!S.showEval) { rows.push([row.nr, +row.u.toFixed(2), row.polarity > 0 ? '+' : '-', +(row.ds * 1000).toFixed(3), +row.dt.toFixed(3)]); continue; }
+    const r = evalDrop(row.u, row.dt, row.ds, row.polarity, S.buoyancy);
+    const nRound = roundN(r.nEst);
+    const dev = (r.nEst - nRound) / Math.abs(nRound) * 100;
+    rows.push([row.nr, +row.u.toFixed(2), row.polarity > 0 ? '+' : '-', +(row.ds * 1000).toFixed(3), +row.dt.toFixed(3), +(r.v * 1000).toFixed(4), +(r.r * 1e6).toFixed(4), +(r.m * 1e15).toFixed(3), +(r.q * 1e19).toFixed(3), nRound, +dev.toFixed(2), S.buoyancy ? 'ja' : 'nein']);
+  }
+  const csv = '﻿' + rows.map(r => r.map(c).join(';')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'millikan-messprotokoll.csv';
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+
+/* ---- Diagramm ---- */
+function niceMax(v) { if (v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v))); for (const m of [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10]) if (m * p >= v) return m * p; return 10 * p; }
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function prepCanvas() {
+  const cv = $('chart'), dpr = Math.min(devicePixelRatio, 2), w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = w * dpr; cv.height = h * dpr;
+  const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  return { g, w, h };
+}
+function axes(g, w, h, xMax, yMax, xLabel, yLabel) {
+  const L0 = 58, R = 16, T = 14, B = 44;
+  const X = x => L0 + x / xMax * (w - L0 - R), Y = y => h - B - y / yMax * (h - T - B);
+  g.font = '12px system-ui'; g.strokeStyle = css('--grid'); g.fillStyle = css('--muted'); g.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const xv = xMax * i / 5, yv = yMax * i / 5;
+    g.beginPath(); g.moveTo(X(xv), T); g.lineTo(X(xv), h - B); g.stroke();
+    g.beginPath(); g.moveTo(L0, Y(yv)); g.lineTo(w - R, Y(yv)); g.stroke();
+    g.textAlign = 'center'; g.fillText(nf(xv, 0), X(xv), h - B + 16);
+    g.textAlign = 'right'; g.fillText(nf(yv, 1), L0 - 6, Y(yv) + 4);
+  }
+  g.strokeStyle = css('--axis'); g.beginPath(); g.moveTo(L0, T); g.lineTo(L0, h - B); g.lineTo(w - R, h - B); g.stroke();
+  g.fillStyle = css('--ink'); g.textAlign = 'center'; g.font = '13px system-ui';
+  g.fillText(xLabel, L0 + (w - L0 - R) / 2, h - 8);
+  g.save(); g.translate(14, T + (h - T - B) / 2); g.rotate(-Math.PI / 2); g.fillText(yLabel, 0, 0); g.restore();
+  return { X, Y };
+}
+function renderChart() {
+  const out = $('fitOut');
+  const { g, w, h } = prepCanvas();
+  const rows = PROTO.rows;
+  if (!rows.length) { g.fillStyle = css('--muted'); g.font = '14px system-ui'; g.textAlign = 'center'; g.fillText('Hier erscheinen die Ladungen aller übernommenen Tröpfchen.', w / 2, h / 2); out.textContent = ''; return; }
+  if (!S.showEval) { g.fillStyle = css('--muted'); g.font = '14px system-ui'; g.textAlign = 'center'; g.fillText('Aktiviere im Panel die vollständige Auswertung, um dieses Diagramm zu sehen.', w / 2, h / 2); out.textContent = ''; return; }
+  const qs = rows.map(r => Math.abs(evalDrop(r.u, r.dt, r.ds, r.polarity, S.buoyancy).q));
+  const qMax19 = Math.max(...qs) * 1e19;
+  const yMax = niceMax(qMax19 * 1.25);
+  const { X, Y } = axes(g, w, h, Math.max(1, rows.length), yMax, 'Tropfen Nr.', '|q| in 10⁻¹⁹ C');
+  const eEst = estimateE(qs);
+  if (eEst) {
+    const e19 = eEst * 1e19;
+    g.strokeStyle = css('--c2'); g.lineWidth = 1; g.setLineDash([5, 4]);
+    for (let n = 1; n * e19 <= yMax; n++) {
+      const y = Y(n * e19);
+      g.beginPath(); g.moveTo(X(0), y); g.lineTo(X(rows.length), y); g.stroke();
+    }
+    g.setLineDash([]);
+  }
+  rows.forEach((r, i) => {
+    const qSigned = evalDrop(r.u, r.dt, r.ds, r.polarity, S.buoyancy).q;
+    g.fillStyle = qSigned < 0 ? css('--c1') : css('--bad');
+    g.beginPath(); g.arc(X(i + 0.5), Y(Math.abs(qSigned) * 1e19), 5, 0, Math.PI * 2); g.fill();
+  });
+  if (eEst) {
+    const dev = (eEst - E_CHARGE) / E_CHARGE * 100;
+    out.innerHTML = `Geschätzte Elementarladung aus ${rows.length} Tröpfchen: e ≈ <b>${nf(eEst * 1e19, 3)} · 10⁻¹⁹ C</b> (Abweichung ${nf(dev, 1)} % vom Literaturwert 1,602 · 10⁻¹⁹ C). Gestrichelte Linien zeigen ganzzahlige Vielfache von e. Blaue Punkte = negativ geladene, rote Punkte = positiv geladene Tröpfchen (Beträge dargestellt).`;
+  } else {
+    out.textContent = 'Übernimm mindestens zwei Tröpfchen, um eine Elementarladung zu schätzen.';
+  }
+}
+new ResizeObserver(() => renderChart()).observe($('chart'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderChart);
+
+/* =========================================================
+   Start
+   ========================================================= */
+setCam('total');
+syncHud();
+renderCurTable();
+renderDropSelector();
+renderProto();
+resize();
+requestAnimationFrame(frame);
+</script>
+</body></html>
