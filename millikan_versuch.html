@@ -617,10 +617,19 @@
             renderTable();
             saveMeasurements();
         });
+        // Für Excel: Radius und Masse als reine Zahlen in getrennten Spalten (ohne Einheit im Zellwert),
+        // abgeleitet aus paramPlain ("0,844 µm" bzw. "3,67e-15 kg") - funktioniert auch für gespeicherte Altdaten.
+        function csvRadiusMasse(mw) {
+            const s = mw.paramPlain || '';
+            if (s.endsWith(' µm')) return [s.slice(0, -3), ''];
+            if (s.endsWith(' kg')) return ['', s.slice(0, -3).toUpperCase()];
+            return ['', ''];
+        }
         document.getElementById('btn-export-csv').addEventListener('click', () => {
-            const lines = ['Nr;Tröpfchen;Größe;U (V);obere Platte;Zustand'];
+            const lines = ['Nr;Tröpfchen;r in µm;m in kg;U in V;obere Platte;Zustand'];
             measurements.forEach((mw, i) => {
-                lines.push([i + 1, '#' + mw.id, mw.paramPlain, fmt(mw.u, 1), mw.polarity, mw.zustand].join(';'));
+                const [r, m] = csvRadiusMasse(mw);
+                lines.push([i + 1, '#' + mw.id, r, m, fmt(mw.u, 1), mw.polarity, mw.zustand].join(';'));
             });
             const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
             const a = document.createElement('a');
