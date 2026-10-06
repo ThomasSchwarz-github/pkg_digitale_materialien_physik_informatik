@@ -190,6 +190,7 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
         <li>Die Tröpfchen fallen in dieser Simulation immer physikalisch korrekt mit Gleitreibung (Cunningham-Effekt), wie es bei echten, sehr kleinen Öltröpfchen der Fall ist – das ist keine Option, sondern feste Grundlage. Der <b>Auftrieb</b> (Dichteunterschied Öl/Luft) ist dagegen bewusst eine wählbare Vereinfachung: Er ist in dieser Simulation nur eine sehr kleine Korrektur (~0,1 %), zeigt aber, dass auch kleine Effekte das Ergebnis systematisch verschieben können.</li>
         <li>Plattenabstand d = 6,00&nbsp;mm, Plattendurchmesser 8&nbsp;cm (wie beim realen Schulgerät). Trifft ein Tropfen eine Platte, ist er für die Messung verloren.</li>
         <li>Mit der <b>Kräfte-Visualisierung</b> (Option im Panel) siehst du im Mikroskopblick Pfeile für die am ausgewählten Tröpfchen wirkenden Kräfte – nützlich, um das Kräftegleichgewicht beim Schweben nachzuvollziehen.</li>
+        <li>Beim Loslassen oder bei einer Spannungsänderung baut sich die Reibungskraft F<sub>R</sub> sichtbar auf, bis sie den anderen Kräften das Gleichgewicht hält (z. B. beim freien Fall: bis sie der Gravitationskraft entspricht). In Wirklichkeit dauert dieser Vorgang bei einem ~1-µm-Tröpfchen nur rund 9 Mikrosekunden – viel zu schnell, um ihn zu sehen. Die Simulation dehnt ihn daher künstlich auf etwa eine halbe Sekunde, damit der Aufbau sichtbar wird; die Endgeschwindigkeit selbst bleibt dabei exakt die physikalisch korrekte.</li>
       </ul>
       <h3>Ideen für Aufträge</h3>
       <ul>
@@ -262,7 +263,7 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
     <div class="grp">
       <h3>Kräfte-Visualisierung</h3>
       <label class="check"><input type="checkbox" id="cbShowForces"> <span>Kräfte am ausgewählten Tröpfchen einzeichnen (im Mikroskopblick)</span></label>
-      <p class="sub">Zeigt Pfeile für Gravitationskraft (braun), elektrische Kraft (orange, nur bei eingeschaltetem Feld) und Auftriebskraft (blau, nur falls unten berücksichtigt). Die Pfeillängen zeigen nur die relativen Größenverhältnisse, keine Zahlenwerte.</p>
+      <p class="sub">Zeigt Pfeile für Gravitationskraft (braun), elektrische Kraft (orange, nur bei eingeschaltetem Feld), Auftriebskraft (blau, nur falls unten berücksichtigt) und Reibungskraft (violett). Die Gravitationspfeillänge ist fest - nur die anderen Pfeile ändern sich, wenn du Spannung, Feld oder Geschwindigkeit änderst. Die Pfeillängen zeigen nur die relativen Größenverhältnisse, keine Zahlenwerte.</p>
     </div>
 
     <div class="grp">
@@ -639,6 +640,12 @@ function updatePuff(dt) {
 /* =========================================================
    Physik-Schritt (alle Tröpfchen gleichzeitig)
    ========================================================= */
+// Echte Relaxationszeit τ = m/Reibungskoeffizient eines ~1-µm-Öltröpfchens liegt bei ca. 9
+// Mikrosekunden - der Übergang in die Endgeschwindigkeit wäre also auch bei exakter Newton-Integration
+// völlig unsichtbar (viel kürzer als ein einzelnes Bild). TAU_VISUAL dehnt diesen Vorgang künstlich auf
+// eine beobachtbare Zeitskala, damit man den Aufbau der Reibungskraft sehen kann; die Endgeschwindigkeit
+// selbst bleibt dabei exakt die physikalisch korrekte.
+const TAU_VISUAL = 0.4; // Sekunden, nur zur Veranschaulichung - keine reale Zeitkonstante
 function physicsStep(dt) {
   for (const d of S.drops) {
     // Kraft nach oben = -Q*E, mit Q = n*e (vorzeichenbehaftet) und E = Ueff/d (Feld zeigt von + nach -).
@@ -646,10 +653,10 @@ function physicsStep(dt) {
     const Fe = S.field ? -d.n * E_CHARGE * Ueff() / PHYS_D : 0;
     const weight = (4 / 3) * Math.PI * d.r ** 3 * DRHO * G;
     const drag = dragCoeff(d.r);
-    const v = (Fe - weight) / drag;
-    d.y += v * dt;
-    d.v = v;
-    if (S.field && Math.abs(v) < 6e-6) d.stableT += dt; else d.stableT = 0;
+    const vTarget = (Fe - weight) / drag; // Endgeschwindigkeit im Kräftegleichgewicht (exakt)
+    d.v += (vTarget - d.v) * (1 - Math.exp(-dt / TAU_VISUAL)); // exponentielle Annäherung (künstlich verlangsamt)
+    d.y += d.v * dt;
+    if (S.field && Math.abs(d.v) < 6e-6) d.stableT += dt; else d.stableT = 0;
   }
   const lost = S.drops.filter(d => Math.abs(d.y) >= Y_LIMIT);
   if (lost.length) {
@@ -831,12 +838,19 @@ function drawForces() {
   const Fg = (4 / 3) * Math.PI * d.r ** 3 * RHO_OIL * G;              // Gravitation, immer abwärts
   const Fb = S.buoyancy ? (4 / 3) * Math.PI * d.r ** 3 * RHO_AIR * G : 0; // Auftrieb, immer aufwärts
   const Fe = S.field ? -d.n * E_CHARGE * Ueff() / PHYS_D : 0;          // elektrisch, Vorzeichen = Richtung
-  const maxF = Math.max(Fg, Fb, Math.abs(Fe), 1e-24);
-  const scale = 56 / maxF;
+  const Fr = -dragCoeff(d.r) * d.v;                                    // Reibung, wirkt der Bewegung entgegen
+  // Maßstab fest an der Gewichtskraft verankert (hängt nur von r ab, nicht von U/Feld): Beim Verändern
+  // der Spannung soll sich didaktisch sichtbar NUR die Länge des elektrischen (bzw. der Reibungs-)Pfeils
+  // ändern, nicht die der anderen - keine gemeinsame Reskalierung auf das jeweilige Maximum.
+  const ARROW_LEN_G = 56;
+  const scale = ARROW_LEN_G / Fg;
+  const ARROW_LEN_MAX = ARROW_LEN_G * 3; // sanfte Begrenzung, falls U weit über die Schwebespannung hinaus erhöht wird
+  const clampLen = len => Math.sign(len) * Math.min(Math.abs(len), ARROW_LEN_MAX);
 
-  drawForceArrow(sx - 16, sy, Fg * scale, '#8a6a48', 'F_G');
-  if (S.buoyancy) drawForceArrow(sx, sy, -Fb * scale, '#2f6db5', 'F_A');
-  if (S.field) drawForceArrow(sx + 16, sy, -Fe * scale, '#cf6d27', 'F_el');
+  drawForceArrow(sx - 24, sy, ARROW_LEN_G, '#8a6a48', 'F_G');
+  if (S.buoyancy) drawForceArrow(sx - 8, sy, clampLen(-Fb * scale), '#2f6db5', 'F_A');
+  if (S.field) drawForceArrow(sx + 8, sy, clampLen(-Fe * scale), '#cf6d27', 'F_el');
+  drawForceArrow(sx + 24, sy, clampLen(-Fr * scale), '#6b3fa0', 'F_R');
 }
 
 /* =========================================================
@@ -1163,15 +1177,20 @@ function prepCanvas() {
   const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
   return { g, w, h };
 }
-function axes(g, w, h, xMax, yMax, xLabel, yLabel) {
+function axes(g, w, h, xMax, yMax, xLabel, yLabel, xInt) {
   const L0 = 58, R = 16, T = 14, B = 44;
   const X = x => L0 + x / xMax * (w - L0 - R), Y = y => h - B - y / yMax * (h - T - B);
   g.font = '12px system-ui'; g.strokeStyle = css('--grid'); g.fillStyle = css('--muted'); g.lineWidth = 1;
-  for (let i = 0; i <= 5; i++) {
-    const xv = xMax * i / 5, yv = yMax * i / 5;
+  // X-Achse: bei "xInt" (z.B. Tropfen-Nr.) einen Gitterstrich pro ganzer Zahl statt 5 gleichmässiger,
+  // eventuell gebrochener Teilstriche - so liegen die Messpunkte sichtbar auf den Gitterlinien.
+  const xTicks = xInt ? Array.from({ length: xMax + 1 }, (_, i) => i) : [0, 1, 2, 3, 4, 5].map(i => xMax * i / 5);
+  for (const xv of xTicks) {
     g.beginPath(); g.moveTo(X(xv), T); g.lineTo(X(xv), h - B); g.stroke();
-    g.beginPath(); g.moveTo(L0, Y(yv)); g.lineTo(w - R, Y(yv)); g.stroke();
     g.textAlign = 'center'; g.fillText(nf(xv, 0), X(xv), h - B + 16);
+  }
+  for (let i = 0; i <= 5; i++) {
+    const yv = yMax * i / 5;
+    g.beginPath(); g.moveTo(L0, Y(yv)); g.lineTo(w - R, Y(yv)); g.stroke();
     g.textAlign = 'right'; g.fillText(nf(yv, 1), L0 - 6, Y(yv) + 4);
   }
   g.strokeStyle = css('--axis'); g.beginPath(); g.moveTo(L0, T); g.lineTo(L0, h - B); g.lineTo(w - R, h - B); g.stroke();
@@ -1189,7 +1208,7 @@ function renderChart() {
   const qs = rows.map(r => Math.abs(evalDrop(r.u, r.dt, r.ds, r.polarity, S.buoyancy).q));
   const qMax19 = Math.max(...qs) * 1e19;
   const yMax = niceMax(qMax19 * 1.25);
-  const { X, Y } = axes(g, w, h, Math.max(1, rows.length), yMax, 'Tropfen Nr.', '|q| in 10⁻¹⁹ C');
+  const { X, Y } = axes(g, w, h, Math.max(1, rows.length), yMax, 'Tropfen Nr.', '|q| in 10⁻¹⁹ C', true);
   const eEst = estimateE(qs);
   if (eEst) {
     const e19 = eEst * 1e19;
@@ -1203,7 +1222,7 @@ function renderChart() {
   rows.forEach((r, i) => {
     const qSigned = evalDrop(r.u, r.dt, r.ds, r.polarity, S.buoyancy).q;
     g.fillStyle = qSigned < 0 ? css('--c1') : css('--bad');
-    g.beginPath(); g.arc(X(i + 0.5), Y(Math.abs(qSigned) * 1e19), 5, 0, Math.PI * 2); g.fill();
+    g.beginPath(); g.arc(X(i + 1), Y(Math.abs(qSigned) * 1e19), 5, 0, Math.PI * 2); g.fill();
   });
   if (eEst) {
     const dev = (eEst - E_CHARGE) / E_CHARGE * 100;
