@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(01) Das erste Auto in BlueJ – Informatik EF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Code+Pro:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C;
+    --blue-mid: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-border: #B5D4F4;
+    --green-mid: #16A34A;
+    --green-light: #F0FDF4;
+    --gray-border: #D3D1C7;
+    --gray-text: #5F5E5A;
+    --text-main: #1a1917;
+    --code-bg: rgb(243,247,252);
+    --code-border: rgb(160,185,215);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); line-height: 1.6; }
+  .page { width: min(900px, 100%); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  .back-link { display: inline-flex; gap: 0.4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+  .header .kurs { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: 0.4rem; }
+  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .header .sub { margin-top: 0.5rem; font-size: 14px; color: var(--gray-text); }
+
+  .intro { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-bottom: 1.25rem; font-size: 15px; }
+  .intro p + p { margin-top: 0.5rem; }
+
+  /* Moduswahl / Anmeldung */
+  .mode-card { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1rem 1.3rem; margin-bottom: 0.75rem; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+  .mode-card:hover { border-color: var(--blue-mid); box-shadow: 0 2px 12px rgba(24,95,165,.12); }
+  .mode-card h3 { font-size: 15px; font-weight: 600; color: var(--blue-dark); margin-bottom: .25rem; }
+  .mode-card p { font-size: 13.5px; color: var(--gray-text); }
+  .auth-card { display: none; background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.2rem 1.3rem; margin-bottom: 1.25rem; }
+  .auth-card h2 { font-size: 15px; margin-bottom: .5rem; }
+  .auth-card p { font-size: 13.5px; color: var(--gray-text); margin-bottom: .8rem; }
+  .input-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: .5rem; }
+  .input-row input { flex: 1; min-width: 200px; border: 1px solid var(--gray-border); border-radius: 8px; padding: 9px 12px; font: inherit; font-size: 14px; }
+  .input-row input:focus, textarea:focus { outline: none; border-color: var(--blue-mid); }
+  #auth-status { font-size: 13px; color: var(--gray-text); min-height: 1.3em; margin-bottom: .5rem; }
+  .btn { padding: 9px 16px; border-radius: 8px; border: none; font: inherit; font-size: 14px; cursor: pointer; }
+  .btn-primary { background: var(--blue-mid); color: white; }
+  .btn-primary:hover { background: var(--blue-dark); }
+  .btn-secondary { background: transparent; border: 1px solid var(--gray-border); color: var(--text-main); }
+  .btn-secondary:hover { background: #f9f8f5; }
+  .user-bar { display: none; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; margin-bottom: 1rem; }
+  .email-tag { background: var(--blue-light); color: var(--blue-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .anon-hint { display: none; background: #fef9c3; border: 1px solid #fde047; border-radius: var(--radius); padding: .7rem 1rem; font-size: 13.5px; color: #713f12; margin-bottom: 1rem; }
+
+  /* Fortschritt */
+  #inhalt { display: none; }
+  .fortschritt { position: sticky; top: 0; z-index: 5; background: #f5f3ef; padding: .6rem 0 .7rem; margin-bottom: .5rem; }
+  .fortschritt-zeile { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray-text); margin-bottom: .3rem; gap: 1rem; flex-wrap: wrap; }
+  .balken { height: 8px; background: #e4e1d8; border-radius: 4px; overflow: hidden; }
+  .balken > div { height: 100%; width: 0; background: var(--green-mid); transition: width .3s; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #c9c6bc; margin-right: 6px; vertical-align: middle; }
+  .dot.saved { background: var(--green-mid); }
+
+  /* Schritte */
+  .schritt { background: white; border: 1px solid var(--gray-border); border-left: 4px solid var(--blue-mid); border-radius: var(--radius); margin-bottom: 1.1rem; overflow: hidden; }
+  .schritt.erledigt { border-left-color: var(--green-mid); }
+  .schritt.zusatz { border-left-color: #b45309; }
+  .schritt-kopf { display: flex; align-items: center; gap: .8rem; padding: .8rem 1.2rem; background: var(--blue-light); }
+  .schritt.erledigt .schritt-kopf { background: var(--green-light); }
+  .schritt.zusatz .schritt-kopf { background: #fef3e2; }
+  .schritt-nr { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-mid); white-space: nowrap; }
+  .schritt.erledigt .schritt-nr { color: var(--green-mid); }
+  .schritt-titel { font-family: 'Source Serif 4', serif; font-size: 1.15rem; font-weight: 600; flex: 1; }
+  .haken { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-text); cursor: pointer; white-space: nowrap; }
+  .haken input { width: 18px; height: 18px; accent-color: var(--green-mid); cursor: pointer; }
+  .schritt-inhalt { padding: 1rem 1.2rem 1.1rem; font-size: 15px; }
+  .schritt-inhalt > * + * { margin-top: .75rem; }
+  .schritt-inhalt ol, .schritt-inhalt ul { padding-left: 1.4rem; }
+  .schritt-inhalt li + li { margin-top: .3rem; }
+  .menue { font-weight: 500; background: #eeece6; border: 1px solid #d8d5cc; border-radius: 4px; padding: 0 5px; font-size: 14px; white-space: nowrap; }
+  code, .ic { font-family: 'Source Code Pro', monospace; font-size: 0.92em; background: var(--code-bg); border: 1px solid #d6e2f0; border-radius: 4px; padding: 0 4px; }
+
+  .warum { background: #f8f7f4; border-left: 3px solid var(--gray-border); border-radius: 0 8px 8px 0; padding: .6rem .9rem; font-size: 14px; color: #3d3c39; }
+  .warum strong { color: var(--text-main); }
+  .tipp { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .6rem .9rem; font-size: 14px; color: #7c2d12; }
+
+  /* Java-Code in BlueJ-Farben */
+  .code { position: relative; background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; }
+  .code pre { font-family: 'Source Code Pro', monospace; font-size: 13.5px; line-height: 1.55; padding: .8rem 1rem; overflow-x: auto; color: #000; tab-size: 4; }
+  .code .titel { font-size: 12px; color: var(--gray-text); padding: .35rem 1rem 0; }
+  .kopieren { position: absolute; top: 6px; right: 6px; font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--code-border); background: white; color: var(--blue-dark); cursor: pointer; }
+  .kopieren:hover { background: var(--blue-light); }
+  .kopieren.ok { background: var(--green-light); color: var(--green-mid); border-color: #86efac; }
+  .j-mod { color: #660033; } .j-dekl { color: #CC0000; } .j-lit { color: #006699; }
+  .j-str { color: #006600; } .j-kom { color: #999999; } .j-doc { color: #000099; }
+  .zn { color: #9aa5b1; user-select: none; display: inline-block; width: 2.2em; text-align: right; margin-right: 1em; }
+  details.gesamt { border: 1px solid var(--gray-border); border-radius: 8px; padding: .5rem .8rem; background: #fcfbf9; }
+  details.gesamt summary { cursor: pointer; font-size: 14px; font-weight: 500; color: var(--blue-dark); }
+  details.gesamt[open] summary { margin-bottom: .6rem; }
+  .markiert { background: #fff3b0; outline: 1px solid #f0d860; border-radius: 3px; }
+
+  /* Fragen */
+  .frage { background: var(--blue-light); border: 1px solid var(--blue-border); border-radius: 8px; padding: .75rem .9rem; }
+  .frage label { display: block; font-weight: 500; font-size: 14.5px; margin-bottom: .45rem; }
+  .frage textarea { width: 100%; min-height: 70px; resize: vertical; border: 1px solid var(--blue-border); border-radius: 6px; padding: 8px 10px; font: inherit; font-size: 14.5px; background: white; }
+
+  /* Vereinfachte BlueJ-Darstellungen */
+  .abb { margin-top: .9rem; }
+  .abb-unterschrift { font-size: 12px; color: var(--gray-text); margin-top: .3rem; font-style: italic; }
+  .fenster { border: 1px solid #9ca3af; border-radius: 6px; overflow: hidden; background: #f3f3f3; font-family: system-ui, sans-serif; font-size: 13px; max-width: 560px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .fenster-titel { background: #e2e2e2; border-bottom: 1px solid #c4c4c4; padding: 4px 10px; font-size: 12px; color: #333; }
+  .bj-haupt { display: grid; grid-template-columns: 112px 1fr; min-height: 190px; }
+  .bj-leiste { border-right: 1px solid #ccc; padding: 10px 8px; display: flex; flex-direction: column; gap: 6px; }
+  .bj-knopf { background: white; border: 1px solid #aaa; border-radius: 4px; padding: 3px 6px; font-size: 12px; text-align: center; }
+  .bj-knopf.hervor { outline: 2px solid #f59e0b; outline-offset: 1px; }
+  .bj-flaeche { background: white; position: relative; padding: 22px; min-height: 150px; }
+  .bj-klasse { display: inline-block; width: 110px; height: 64px; background: #fce4b3; border: 1px solid #a37a2c; box-shadow: 3px 3px 0 #d8c39a; padding: 6px; font-size: 13px; font-weight: 600; }
+  .bj-klasse.unuebersetzt { background: repeating-linear-gradient(135deg, #fce4b3 0 6px, #e9c98a 6px 8px); }
+  .bj-objekte { grid-column: 1 / -1; border-top: 1px solid #ccc; background: #ececec; min-height: 62px; padding: 10px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .bj-objekt { background: #b33434; color: white; border-radius: 10px; padding: 6px 12px; font-size: 12px; line-height: 1.3; text-align: center; box-shadow: 2px 2px 0 #7f1d1d; }
+  .bj-leer { color: #888; font-size: 12px; font-style: italic; }
+  .bj-menue { display: inline-block; background: white; border: 1px solid #aaa; box-shadow: 2px 3px 8px rgba(0,0,0,.15); font-size: 12.5px; padding: 4px 0; min-width: 230px; }
+  .bj-menue div { padding: 3px 14px; }
+  .bj-menue .hervor { background: #2563eb; color: white; }
+  .bj-menue hr { border: none; border-top: 1px solid #ddd; margin: 3px 0; }
+  .bj-dialog { padding: 12px 14px; background: #f7f7f7; }
+  .bj-dialog .zeile { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .bj-feld { background: white; border: 1px solid #999; padding: 2px 8px; font-family: 'Source Code Pro', monospace; min-width: 120px; }
+  .bj-dialog .knoepfe { text-align: right; }
+  .bj-insp table { border-collapse: collapse; width: 100%; background: white; font-family: 'Source Code Pro', monospace; font-size: 12.5px; }
+  .bj-insp td { border-bottom: 1px solid #e5e5e5; padding: 5px 10px; }
+  .bj-insp td.wert { border-left: 1px solid #e5e5e5; }
+  .bj-terminal { background: white; font-family: 'Source Code Pro', monospace; font-size: 12.5px; padding: 10px 12px; min-height: 70px; white-space: pre-wrap; }
+  /* Echte BlueJ-Screenshots */
+  .screenshot { margin-top: .9rem; }
+  .screenshot img { display: block; width: 100%; max-width: 760px; height: auto; border: 1px solid #b9b6ad; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,.10); cursor: zoom-in; }
+  .screenshot figcaption { font-size: 12px; color: var(--gray-text); margin-top: .35rem; font-style: italic; }
+  .lupe { position: fixed; inset: 0; z-index: 50; background: rgba(20,20,20,.85); display: none; align-items: center; justify-content: center; padding: 2vh 2vw; cursor: zoom-out; }
+  .lupe.offen { display: flex; }
+  .lupe img { max-width: 100%; max-height: 100%; border-radius: 4px; box-shadow: 0 4px 30px rgba(0,0,0,.5); }
+  .lupe .zu { position: absolute; top: 12px; right: 18px; color: white; font-size: 28px; line-height: 1; }
+  .nebeneinander { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+
+  .site-footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+
+  @media (max-width: 600px) {
+    .page { padding: 1.5rem 1rem 3rem; }
+    .header h1 { font-size: 1.6rem; }
+    .schritt-kopf { flex-wrap: wrap; }
+    .bj-haupt { grid-template-columns: 1fr; }
+    .bj-leiste { flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../ef_klassen_objekte.html" class="back-link">‹ Klassen, Objekte und erste Programme in Java</a>
+
+  <div class="header">
+    <div class="kurs">Informatik · Jahrgangsstufe EF · Einheit 01</div>
+    <h1>(01) Das erste Auto in BlueJ</h1>
+    <div class="sub">Gehört zum Arbeitsblatt AB1 „Das erste Auto in BlueJ“.</div>
+  </div>
+
+  <div class="intro">
+    <p>Heute schreibst du dein erstes Java-Programm: Autos, die hupen und fahren können. Du arbeitest
+    mit der Entwicklungsumgebung <strong>BlueJ</strong>. Geh die Schritte der Reihe nach durch und hake
+    jeden erledigten Schritt ab. Codeschnipsel kannst du mit dem Knopf <em>Kopieren</em> übernehmen.</p>
+    <p><strong>Wichtig:</strong> Du musst heute noch nicht alles im Detail verstehen. Es geht erst einmal
+    darum, die zentralen Schritte wie nach einem Kochrezept nachzumachen und ein erstes Gefühl für die
+    Arbeit mit BlueJ zu bekommen. Die Einzelheiten schauen wir uns in den nächsten Stunden genauer an.</p>
+    <p>Beantworte die Fragen in den blauen Kästen in ganzen Sätzen. Wir besprechen sie am Ende der Stunde.</p>
+  </div>
+
+  <!-- ══ Moduswahl ══ -->
+  <div id="mode-select">
+    <div class="mode-card" onclick="selectMode('saved')">
+      <h3>🔐 Mit Anmeldung – Zwischenstand speichern</h3>
+      <p>Melde dich mit deiner Schul-E-Mail-Adresse an. Deine Antworten und Haken werden automatisch gespeichert, und du kannst später weiterarbeiten.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('anon')">
+      <h3>👤 Ohne Anmeldung – nicht gespeichert</h3>
+      <p>Bearbeite die Schritte direkt. Deine Antworten gehen beim Schließen der Seite verloren.</p>
+    </div>
+  </div>
+
+  <div class="auth-card" id="auth-card">
+    <h2>Anmelden</h2>
+    <p>Gib deine Schul-E-Mail-Adresse und dein Passwort ein.</p>
+    <div class="input-row">
+      <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de" autocomplete="username">
+      <input type="password" id="password-input" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter') login()">
+      <button class="btn btn-primary" onclick="login()">Anmelden</button>
+    </div>
+    <div id="auth-status"></div>
+    <button class="btn btn-secondary" onclick="location.reload()">‹ Zurück zur Auswahl</button>
+  </div>
+
+  <div class="user-bar" id="user-bar">
+    <span>Angemeldet als</span>
+    <span class="email-tag" id="user-email"></span>
+    <button class="btn btn-secondary" onclick="logout()">Abmelden</button>
+  </div>
+
+  <div class="anon-hint" id="anon-hint">
+    ℹ️ Du arbeitest ohne Anmeldung. Deine Antworten werden <strong>nicht gespeichert</strong>.
+  </div>
+
+  <!-- ══ Inhalt ══ -->
+  <div id="inhalt">
+
+  <div class="fortschritt">
+    <div class="fortschritt-zeile">
+      <span id="fortschritt-text">0 von 9 Schritten erledigt</span>
+      <span><span class="dot" id="dot"></span><span id="save-text">Noch nicht gespeichert.</span></span>
+    </div>
+    <div class="balken"><div id="balken"></div></div>
+  </div>
+
+  <!-- Schritt 1 -->
+  <section class="schritt" id="s1">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 1</span>
+      <span class="schritt-titel">BlueJ starten und ein Projekt anlegen</span>
+      <label class="haken"><input type="checkbox" data-key="s1"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Starte <strong>BlueJ</strong>.</li>
+        <li>Wähle im Menü <span class="menue">Projekt</span> → <span class="menue">Neues Projekt …</span></li>
+        <li>Gib als Namen <code>Autos</code> ein, wähle als Speicherort deinen eigenen Ordner und bestätige.</li>
+      </ol>
+      <div class="warum"><strong>Warum?</strong> Ein Programm besteht meist aus mehreren Dateien. BlueJ
+      sammelt alles, was zu einem Programm gehört, in einem eigenen Ordner, dem <em>Projekt</em>.</div>
+    </div>
+  </section>
+
+  <!-- Schritt 2 -->
+  <section class="schritt" id="s2">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 2</span>
+      <span class="schritt-titel">Eine Klasse „Auto“ anlegen</span>
+      <label class="haken"><input type="checkbox" data-key="s2"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Klicke links auf <span class="menue">Neue Klasse …</span></li>
+        <li>Gib als Namen <code>Auto</code> ein, mit großem <strong>A</strong>. Lass die Klassenart auf
+          <span class="menue">Klasse</span> stehen und klicke auf <span class="menue">OK</span>.</li>
+      </ol>
+      <p>Im großen Feld erscheint nun ein schraffierter Kasten mit der Aufschrift <strong>Auto</strong>.
+      Das Blatt-Symbol links daneben ist eine Notizdatei, die BlueJ zu jedem Projekt anlegt. Du kannst
+      sie ignorieren.</p>
+      <figure class="screenshot">
+        <img src="pics/01_abb01.png" alt="BlueJ-Fenster des Projekts Autos mit der neuen, schraffierten Klasse Auto" loading="lazy">
+        <figcaption>Das BlueJ-Fenster nach dem Anlegen der Klasse (zum Vergrößern anklicken)</figcaption>
+      </figure>
+      <div class="warum"><strong>Warum der Großbuchstabe?</strong> In Java ist es üblich, dass die Namen
+      von Klassen mit einem Großbuchstaben beginnen. Daran erkennt man sie später im Programmcode sofort.</div>
+    </div>
+  </section>
+
+  <!-- Schritt 3 -->
+  <section class="schritt" id="s3">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 3</span>
+      <span class="schritt-titel">Ein Blick in den Quelltext</span>
+      <label class="haken"><input type="checkbox" data-key="s3"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Öffne den Editor mit einem <strong>Doppelklick</strong> auf den Kasten <strong>Auto</strong>. Diesen
+      <em>Quelltext</em> hat BlueJ automatisch als Grundgerüst geschrieben. Du musst noch nicht alles
+      verstehen. Wichtig sind drei Stellen, die hier gelb markiert sind:</p>
+      <div class="code"><pre class="java" data-markiere="public class Auto|private int x;|public Auto()">/**
+ * Beschreiben Sie hier die Klasse Auto.
+ *
+ * @author (Ihr Name)
+ * @version (eine Versionsnummer oder ein Datum)
+ */
+public class Auto
+{
+    // Instanzvariablen - ersetzen Sie das folgende Beispiel mit Ihren Variablen
+    private int x;
+
+    /**
+     * Konstruktor für Objekte der Klasse Auto
+     */
+    public Auto()
+    {
+        // Instanzvariable initialisieren
+        x = 0;
+    }
+
+    /**
+     * Ein Beispiel einer Methode - ersetzen Sie diesen Kommentar mit Ihrem eigenen
+     *
+     * @param  y    ein Beispielparameter für eine Methode
+     * @return        die Summe aus x und y
+     */
+    public int beispielMethode(int y)
+    {
+        // tragen Sie hier den Code ein
+        return x + y;
+    }
+}</pre></div>
+      <ul>
+        <li><code>public class Auto</code>: Hier beginnt der Quelltext für <strong>Auto</strong>. Alles
+          zwischen der folgenden geschweiften Klammer <code>{</code> und der letzten <code>}</code> gehört dazu.</li>
+        <li><code>private int x;</code>: Etwas, das sich jedes Auto merkt, hier eine ganze Zahl namens <code>x</code>.</li>
+        <li><code>public Auto()</code>: Dieser Abschnitt heißt <strong>Konstruktor</strong>. Er wird
+          ausgeführt, wenn ein neues Auto hergestellt wird.</li>
+      </ul>
+      <p>Die grauen und blauen Zeilen sind <em>Kommentare</em>. Sie sind nur für Menschen gedacht; der
+      Computer überliest sie.</p>
+    </div>
+  </section>
+
+  <!-- Schritt 4 -->
+  <section class="schritt" id="s4">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 4</span>
+      <span class="schritt-titel">Das Grundgerüst zu einem Auto ausbauen</span>
+      <label class="haken"><input type="checkbox" data-key="s4"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Jetzt ersetzt du die Beispiele von BlueJ Stück für Stück durch eigenen Code. Markiere dazu im
+      Editor jeweils den alten Teil, kopiere den neuen Teil von hier und füge ihn mit
+      <span class="menue">Strg</span> + <span class="menue">V</span> ein.</p>
+
+      <p><strong>Teil A: Was sich jedes Auto merkt.</strong> Ersetze die beiden Zeilen
+      <code>// Instanzvariablen …</code> und <code>private int x;</code> durch:</p>
+      <div class="code"><button class="kopieren">Kopieren</button><pre class="java">    // Das merkt sich jedes Auto
+    private String name;
+    private int gefahreneStrecke;</pre></div>
+      <div class="warum"><strong>Warum?</strong> Jedes Auto soll einen Namen haben (ein Text, in Java
+      <code>String</code>) und einen Kilometerzähler (eine ganze Zahl, in Java <code>int</code>).</div>
+
+      <p><strong>Teil B: Was beim Herstellen passiert.</strong> Ersetze den ganzen Konstruktor, also alles
+      von <code>public Auto()</code> bis zur dazugehörigen schließenden Klammer <code>}</code>, durch:</p>
+      <div class="code"><button class="kopieren">Kopieren</button><pre class="java">    public Auto(String pName)
+    {
+        this.name = pName;
+        this.gefahreneStrecke = 0;
+    }</pre></div>
+      <div class="warum"><strong>Warum?</strong> Wenn ein neues Auto hergestellt wird, bekommt es den Namen,
+      den du beim Herstellen angibst (<code>pName</code>), und sein Kilometerzähler beginnt bei 0.
+      <code>this.name</code> bedeutet: der Name <em>dieses</em> Autos.</div>
+
+      <p><strong>Teil C: Was jedes Auto kann.</strong> Ersetze die <code>beispielMethode</code> mitsamt dem
+      Kommentar darüber durch:</p>
+      <div class="code"><button class="kopieren">Kopieren</button><pre class="java">    /**
+     * Lässt das Auto hupen.
+     */
+    public void hupe()
+    {
+        System.out.println(this.name + ": Honk, honk!");
+    }
+
+    /**
+     * Lässt das Auto 100 km fahren.
+     */
+    public void fahre100km()
+    {
+        this.gefahreneStrecke = this.gefahreneStrecke + 100;
+    }
+
+    /**
+     * Gibt die insgesamt gefahrene Strecke aus.
+     */
+    public void zeigeGefahreneStreckeAn()
+    {
+        System.out.println("Gefahrene Strecke von " + this.name + ": " + this.gefahreneStrecke + " km");
+    }</pre></div>
+      <div class="warum"><strong>Warum?</strong> Ein Auto soll auch etwas tun können: hupen, fahren und
+      seinen Kilometerstand anzeigen. <code>System.out.println(…)</code> schreibt einen Text in ein
+      Ausgabefenster.</div>
+
+      <details class="gesamt">
+        <summary>So sollte dein Quelltext am Ende aussehen (zum Vergleichen)</summary>
+        <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>/**
+ * Ein Auto, das hupen und fahren kann.
+ *
+ * @author (Ihr Name)
+ * @version (eine Versionsnummer oder ein Datum)
+ */
+public class Auto
+{
+    // Das merkt sich jedes Auto
+    private String name;
+    private int gefahreneStrecke;
+
+    /**
+     * Konstruktor für Objekte der Klasse Auto
+     */
+    public Auto(String pName)
+    {
+        this.name = pName;
+        this.gefahreneStrecke = 0;
+    }
+
+    /**
+     * Lässt das Auto hupen.
+     */
+    public void hupe()
+    {
+        System.out.println(this.name + ": Honk, honk!");
+    }
+
+    /**
+     * Lässt das Auto 100 km fahren.
+     */
+    public void fahre100km()
+    {
+        this.gefahreneStrecke = this.gefahreneStrecke + 100;
+    }
+
+    /**
+     * Gibt die insgesamt gefahrene Strecke aus.
+     */
+    public void zeigeGefahreneStreckeAn()
+    {
+        System.out.println("Gefahrene Strecke von " + this.name + ": " + this.gefahreneStrecke + " km");
+    }
+}</pre></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Schritt 5 -->
+  <section class="schritt" id="s5">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 5</span>
+      <span class="schritt-titel">Übersetzen</span>
+      <label class="haken"><input type="checkbox" data-key="s5"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Klicke im Editor oben links auf <span class="menue">Übersetzen</span>.</li>
+        <li>Unten im Editor sollte stehen: <em>Klasse übersetzt – keine Syntaxfehler</em>. Schließe dann den Editor.</li>
+      </ol>
+      <p>Im BlueJ-Fenster ist die Schraffur des Kastens <strong>Auto</strong> jetzt verschwunden.</p>
+      <div class="tipp">⚠️ <strong>Fehlermeldung?</strong> BlueJ markiert die Zeile, in der es stutzt.
+      Vergleiche deinen Quelltext mit dem Gesamtcode am Ende von Schritt 4. Häufige Ursachen: ein fehlendes
+      Semikolon <code>;</code>, eine fehlende oder doppelte Klammer <code>}</code>.</div>
+      <div class="warum"><strong>Warum?</strong> Der Computer kann Java nicht direkt ausführen. Beim
+      <em>Übersetzen</em> (Kompilieren) wird der Quelltext in eine Form gebracht, die der Computer
+      ausführen kann. Erst danach kann BlueJ mit der Klasse arbeiten.</div>
+    </div>
+  </section>
+
+  <!-- Schritt 6 -->
+  <section class="schritt" id="s6">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 6</span>
+      <span class="schritt-titel">Autos herstellen</span>
+      <label class="haken"><input type="checkbox" data-key="s6"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Klicke mit der <strong>rechten</strong> Maustaste auf den Kasten <strong>Auto</strong> und wähle
+          <span class="menue">new Auto(String pName)</span>.</li>
+        <li>Im Dialog steht oben ein Name, z. B. <code>auto1</code>. Lass ihn so.</li>
+        <li>Gib unten bei <code>pName</code> den Namen deines Autos <strong>in Anführungszeichen</strong> ein,
+          z. B. <code>"Porsche"</code>, und klicke auf <span class="menue">OK</span>.</li>
+        <li>Stelle auf dieselbe Weise zwei weitere Autos her, z. B. <code>"Golf"</code> und <code>"Ente"</code>.</li>
+      </ol>
+      <div class="abb nebeneinander">
+        <div class="bj-menue">
+          <div class="hervor">new Auto(String pName)</div><hr>
+          <div>Bearbeiten</div><div>Übersetzen</div><div>Entfernen</div>
+        </div>
+        <div class="fenster" style="flex:1; min-width: 260px;">
+          <div class="fenster-titel">BlueJ: Objekt erzeugen</div>
+          <div class="bj-dialog">
+            <div class="zeile">Name der Instanz: <span class="bj-feld">auto1</span></div>
+            <div class="zeile"><span class="ic">new Auto(</span><span class="bj-feld">"Porsche"</span><span class="ic">)</span></div>
+            <div class="knoepfe"><span class="bj-knopf">Abbrechen</span> <span class="bj-knopf">OK</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="abb-unterschrift">Vereinfachte Darstellung: Kontextmenü des Kastens „Auto“ und Dialog zum Herstellen</div>
+      <div class="abb">
+        <div class="fenster">
+          <div class="fenster-titel">BlueJ: Autos</div>
+          <div class="bj-haupt">
+            <div class="bj-leiste"><div class="bj-knopf">Neue Klasse …</div><div class="bj-knopf">Übersetzen</div></div>
+            <div class="bj-flaeche"><div class="bj-klasse">Auto</div></div>
+            <div class="bj-objekte"><div class="bj-objekt">auto1:<br>Auto</div><div class="bj-objekt">auto2:<br>Auto</div><div class="bj-objekt">auto3:<br>Auto</div></div>
+          </div>
+        </div>
+        <div class="abb-unterschrift">Vereinfachte Darstellung: Unten erscheint für jedes hergestellte Auto ein rotes Kästchen.</div>
+      </div>
+      <div class="warum"><strong>Warum zwei Namen?</strong> <code>auto1</code> ist der Name, unter dem
+      BlueJ das Auto unten anzeigt. <code>"Porsche"</code> wird dem Konstruktor übergeben und im Auto als
+      sein <code>name</code> gespeichert. Texte stehen in Java immer in Anführungszeichen.</div>
+      <div class="frage">
+        <label for="f1">Frage 1: Wie viele Kästen siehst du jetzt oben im BlueJ-Fenster und wie viele unten? Woher kommen die Kästchen unten?</label>
+        <textarea id="f1" data-key="f1"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schritt 7 -->
+  <section class="schritt" id="s7">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 7</span>
+      <span class="schritt-titel">In ein Auto hineinschauen</span>
+      <label class="haken"><input type="checkbox" data-key="s7"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Klicke mit der rechten Maustaste auf das rote Kästchen <code>auto1</code> und wähle
+          <span class="menue">Inspizieren</span>.</li>
+        <li>Lass das Fenster offen und inspiziere auch <code>auto2</code>.</li>
+      </ol>
+      <div class="abb">
+        <div class="fenster" style="max-width: 420px;">
+          <div class="fenster-titel">BlueJ: Objektinspektor – auto1 : Auto</div>
+          <div class="bj-insp"><table>
+            <tr><td>private String name</td><td class="wert">"Porsche"</td></tr>
+            <tr><td>private int gefahreneStrecke</td><td class="wert">0</td></tr>
+          </table></div>
+        </div>
+        <div class="abb-unterschrift">Vereinfachte Darstellung des Inspektors</div>
+      </div>
+      <div class="frage">
+        <label for="f2">Frage 2: Vergleiche die geöffneten Fenster. Was ist bei allen Autos gleich, was ist verschieden?</label>
+        <textarea id="f2" data-key="f2"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schritt 8 -->
+  <section class="schritt" id="s8">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 8</span>
+      <span class="schritt-titel">Mit den Autos spielen</span>
+      <label class="haken"><input type="checkbox" data-key="s8"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Ein Rechtsklick auf ein rotes Kästchen zeigt auch, was das Auto <em>kann</em>:</p>
+      <div class="abb nebeneinander">
+        <div class="bj-menue">
+          <div>geerbt von Object ▸</div><hr>
+          <div class="hervor">void hupe()</div><div>void fahre100km()</div><div>void zeigeGefahreneStreckeAn()</div><hr>
+          <div>Inspizieren</div><div>Entfernen</div>
+        </div>
+        <div class="fenster" style="flex:1; min-width: 240px;">
+          <div class="fenster-titel">BlueJ: Terminal-Fenster – Autos</div>
+          <div class="bj-terminal">Porsche: Honk, honk!</div>
+        </div>
+      </div>
+      <div class="abb-unterschrift">Vereinfachte Darstellung: Kontextmenü eines Autos und Terminal-Fenster für Ausgaben</div>
+      <ol>
+        <li>Lass <code>auto1</code> hupen (<span class="menue">void hupe()</span>). Die Ausgabe erscheint im Terminal-Fenster.</li>
+        <li>Lass <code>auto1</code> dreimal 100 km fahren und <code>auto2</code> einmal.</li>
+        <li>Lass beide Autos ihre gefahrene Strecke anzeigen und beobachte dabei auch die Inspektor-Fenster.</li>
+      </ol>
+      <div class="warum"><strong>Gut zu wissen:</strong> Das, was ein Auto kann, nennt man in Java
+      <em>Methoden</em>. Damit beschäftigen wir uns in den nächsten Stunden genauer.</div>
+      <div class="frage">
+        <label for="f3">Frage 3: Alle Autos wurden nach demselben Quelltext hergestellt. Warum zeigen sie trotzdem unterschiedliche Kilometerstände?</label>
+        <textarea id="f3" data-key="f3"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schritt 9 -->
+  <section class="schritt" id="s9">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 9</span>
+      <span class="schritt-titel">Den Quelltext ändern</span>
+      <label class="haken"><input type="checkbox" data-key="s9"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Ab jetzt sollen nur noch Gebrauchtwagen hergestellt werden, die schon 50 000 km gefahren sind.</p>
+      <ol>
+        <li>Öffne den Editor der Klasse <strong>Auto</strong> und ändere im Konstruktor die Zeile
+          <code>this.gefahreneStrecke = 0;</code> zu <code>this.gefahreneStrecke = 50000;</code></li>
+        <li>Klicke auf <span class="menue">Übersetzen</span> und beobachte dabei den unteren Bereich des BlueJ-Fensters.</li>
+        <li>Stelle ein neues Auto her und inspiziere es.</li>
+      </ol>
+      <div class="frage">
+        <label for="f4">Frage 4: Was ist mit deinen bisherigen Autos passiert? Welchen Kilometerstand hat das neue Auto? Erkläre beides.</label>
+        <textarea id="f4" data-key="f4"></textarea>
+      </div>
+      <div class="frage">
+        <label for="f5">Frage 5: Erkläre mit eigenen Worten den Unterschied zwischen dem Kasten <strong>Auto</strong> oben und den roten Kästchen unten.</label>
+        <textarea id="f5" data-key="f5"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zusatz -->
+  <section class="schritt zusatz" id="sz">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Zusatz</span>
+      <span class="schritt-titel">Für Schnelle</span>
+      <label class="haken"><input type="checkbox" data-key="sz"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Ergänze in der Klasse <strong>Auto</strong> eine Methode <code>fahre10km()</code>, die das Auto
+          10 km fahren lässt. Orientiere dich an <code>fahre100km()</code>. Teste sie an einem neuen Auto.</li>
+        <li>Lege eine zweite Klasse <code>Fahrrad</code> an, die sich ebenfalls einen Namen und die gefahrene
+          Strecke merkt und klingeln kann (<code>"Kling, kling!"</code>). Stelle zwei Fahrräder her.</li>
+      </ol>
+      <div class="frage">
+        <label for="f6">Notizen: Was hat funktioniert, wo hattest du Schwierigkeiten?</label>
+        <textarea id="f6" data-key="f6"></textarea>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /inhalt -->
+
+  <footer class="site-footer">
+    <span>Informatik · Interaktive Lernmaterialien</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+<script>
+// ════════════════════════════════════════════
+//  KONFIGURATION
+// ════════════════════════════════════════════
+const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
+const ARBEITSBLATT_ID   = 'ef_uv2_01_das_erste_auto_v1';
+// ════════════════════════════════════════════
+
+let sb = null;
+try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { console.warn('Supabase nicht verfügbar', e); }
+
+let modus = null;          // 'saved' | 'anon'
+let speicherTimer = null;
+
+// ── Java-Hervorhebung in BlueJ-Farben ─────────────────────────
+const GRUPPEN = {
+  'j-mod': 'public private protected static final abstract if else while do for switch case break continue return try catch finally throw throws new instanceof default',
+  'j-dekl': 'class interface enum extends implements import package void boolean byte char short int long float double',
+  'j-lit': 'this super true false null'
+};
+const WORT = {};
+for (const [k, liste] of Object.entries(GRUPPEN)) liste.split(' ').forEach(w => WORT[w] = k);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+function hebeHervor(text) {
+  const re = /(\/\*\*[\s\S]*?\*\/)|(\/\*[\s\S]*?\*\/)|(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|\b([A-Za-z_]\w*)\b/g;
+  let aus = '', pos = 0, m;
+  while ((m = re.exec(text))) {
+    aus += esc(text.slice(pos, m.index));
+    let cls = null;
+    if (m[1]) cls = 'j-doc'; else if (m[2] || m[3]) cls = 'j-kom';
+    else if (m[4] || m[5]) cls = 'j-str'; else if (m[6]) cls = WORT[m[6]] || null;
+    aus += cls ? `<span class="${cls}">${esc(m[0])}</span>` : esc(m[0]);
+    pos = re.lastIndex;
+  }
+  return aus + esc(text.slice(pos));
+}
+
+document.querySelectorAll('pre.java').forEach(pre => {
+  const roh = pre.textContent;
+  pre.dataset.roh = roh;
+  let html = hebeHervor(roh);
+  if (pre.dataset.markiere) {
+    // Markierung um ganze Zeilen legen, die einen der Ausdrücke enthalten
+    const muster = pre.dataset.markiere.split('|');
+    html = html.split('\n').map((zeile, i) => {
+      const klar = roh.split('\n')[i] || '';
+      return muster.some(p => klar.includes(p)) ? `<span class="markiert">${zeile}</span>` : zeile;
+    }).join('\n');
+  }
+  if (pre.hasAttribute('data-zeilennummern')) {
+    html = html.split('\n').map((z, i) => `<span class="zn">${i + 1}</span>${z}`).join('\n');
+  }
+  pre.innerHTML = html;
+});
+
+// ── Screenshots vergrößern ────────────────────────────────────
+const lupe = document.createElement('div');
+lupe.className = 'lupe';
+lupe.innerHTML = '<span class="zu" aria-hidden="true">×</span><img alt="">';
+document.body.appendChild(lupe);
+document.querySelectorAll('.screenshot img').forEach(img => {
+  img.addEventListener('click', () => {
+    lupe.querySelector('img').src = img.src;
+    lupe.querySelector('img').alt = img.alt;
+    lupe.classList.add('offen');
+  });
+});
+lupe.addEventListener('click', () => lupe.classList.remove('offen'));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lupe.classList.remove('offen'); });
+
+// ── Kopieren ──────────────────────────────────────────────────
+document.querySelectorAll('.kopieren').forEach(knopf => {
+  knopf.addEventListener('click', async () => {
+    const roh = knopf.parentElement.querySelector('pre').dataset.roh;
+    try {
+      await navigator.clipboard.writeText(roh);
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = roh; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    knopf.textContent = '✓ Kopiert'; knopf.classList.add('ok');
+    setTimeout(() => { knopf.textContent = 'Kopieren'; knopf.classList.remove('ok'); }, 1800);
+  });
+});
+
+// ── Fortschritt ───────────────────────────────────────────────
+const haken = [...document.querySelectorAll('.haken input')];
+const PFLICHT = haken.filter(h => h.dataset.key !== 'sz');
+function aktualisiereFortschritt() {
+  haken.forEach(h => h.closest('.schritt').classList.toggle('erledigt', h.checked));
+  const n = PFLICHT.filter(h => h.checked).length;
+  document.getElementById('fortschritt-text').textContent = `${n} von ${PFLICHT.length} Schritten erledigt`;
+  document.getElementById('balken').style.width = (100 * n / PFLICHT.length) + '%';
+}
+document.querySelectorAll('[data-key]').forEach(el => {
+  el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', () => {
+    aktualisiereFortschritt();
+    planeSpeichern();
+  });
+});
+
+// ── Moduswahl und Anmeldung ───────────────────────────────────
+function selectMode(m) {
+  modus = m;
+  document.getElementById('mode-select').style.display = 'none';
+  if (m === 'saved') {
+    if (!sb) { setStatus('Speichern ist gerade nicht möglich (keine Verbindung).', false); zeigeInhalt(); return; }
+    pruefeSitzung();
+  } else {
+    document.getElementById('anon-hint').style.display = 'block';
+    setStatus('Ohne Anmeldung: nichts wird gespeichert.', false);
+    zeigeInhalt();
+  }
+}
+function zeigeInhalt() { document.getElementById('inhalt').style.display = 'block'; aktualisiereFortschritt(); }
+
+async function pruefeSitzung() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) angemeldet(session);
+  else document.getElementById('auth-card').style.display = 'block';
+}
+async function login() {
+  const email = document.getElementById('email-input').value.trim();
+  const pw = document.getElementById('password-input').value;
+  const st = document.getElementById('auth-status');
+  if (!email || !pw) { st.textContent = 'Bitte E-Mail und Passwort eingeben.'; return; }
+  st.textContent = 'Anmeldung …';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  if (error) { st.textContent = 'Anmeldung fehlgeschlagen: ' + error.message; return; }
+  angemeldet(data.session);
+}
+async function logout() { await sb.auth.signOut(); location.reload(); }
+function angemeldet(session) {
+  document.getElementById('auth-card').style.display = 'none';
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-email').textContent = session.user.email;
+  zeigeInhalt();
+  lade();
+}
+
+// ── Speichern und Laden ───────────────────────────────────────
+function sammle() {
+  const d = {};
+  document.querySelectorAll('[data-key]').forEach(el => d[el.dataset.key] = el.type === 'checkbox' ? el.checked : el.value);
+  return d;
+}
+function planeSpeichern() {
+  if (modus !== 'saved' || !sb) return;
+  setStatus('Ungespeicherte Änderungen …', false);
+  clearTimeout(speicherTimer);
+  speicherTimer = setTimeout(speichere, 1500);
+}
+async function speichere() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { setStatus('Nicht angemeldet – Speichern nicht möglich.', false); return; }
+  const { error } = await sb.from('arbeitsblatt_antworten').upsert({
+    user_id: user.id, arbeitsblatt: ARBEITSBLATT_ID, antworten: sammle(), gespeichert_am: new Date().toISOString()
+  }, { onConflict: 'user_id,arbeitsblatt' });
+  if (error) setStatus('Speichern fehlgeschlagen: ' + error.message, false);
+  else setStatus('Gespeichert um ' + new Date().toLocaleTimeString('de-DE'), true);
+}
+async function lade() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+  const { data, error } = await sb.from('arbeitsblatt_antworten')
+    .select('antworten, gespeichert_am').eq('user_id', user.id).eq('arbeitsblatt', ARBEITSBLATT_ID).maybeSingle();
+  if (error) { setStatus('Laden fehlgeschlagen: ' + error.message, false); return; }
+  if (!data) { setStatus('Noch nichts gespeichert. Deine Eingaben werden automatisch gespeichert.', false); return; }
+  const a = data.antworten || {};
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const w = a[el.dataset.key];
+    if (w === undefined) return;
+    if (el.type === 'checkbox') el.checked = !!w; else el.value = w;
+  });
+  aktualisiereFortschritt();
+  setStatus('Zwischenstand geladen (gespeichert am ' + new Date(data.gespeichert_am).toLocaleString('de-DE') + ')', true);
+}
+function setStatus(text, ok) {
+  document.getElementById('save-text').textContent = text;
+  document.getElementById('dot').className = 'dot' + (ok ? ' saved' : '');
+}
+window.addEventListener('beforeunload', e => {
+  if (speicherTimer && modus === 'saved') { clearTimeout(speicherTimer); speichere(); }
+});
+</script>
+</body>
+</html>
