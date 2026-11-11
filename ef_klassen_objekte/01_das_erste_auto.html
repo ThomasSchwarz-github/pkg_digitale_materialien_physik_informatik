@@ -464,37 +464,23 @@ public class Auto
       <ol>
         <li>Klicke mit der <strong>rechten</strong> Maustaste auf den Kasten <strong>Auto</strong> und wähle
           <span class="menue">new Auto(String pName)</span>.</li>
-        <li>Im Dialog steht oben ein Name, z. B. <code>auto1</code>. Lass ihn so.</li>
-        <li>Gib unten bei <code>pName</code> den Namen deines Autos <strong>in Anführungszeichen</strong> ein,
-          z. B. <code>"Porsche"</code>, und klicke auf <span class="menue">OK</span>.</li>
-        <li>Stelle auf dieselbe Weise zwei weitere Autos her, z. B. <code>"Golf"</code> und <code>"Ente"</code>.</li>
+        <li>Es öffnet sich das Fenster <em>Objekt erzeugen</em>. Im Feld <span class="menue">Instanzname</span>
+          steht bereits <code>auto1</code>. Lass es so.</li>
+        <li>Gib in das Feld hinter <code>new Auto(</code> den Namen deines Autos <strong>in Anführungszeichen</strong>
+          ein, z. B. <code>"Porsche"</code>, und klicke auf <span class="menue">OK</span>.</li>
       </ol>
-      <div class="abb nebeneinander">
-        <div class="bj-menue">
-          <div class="hervor">new Auto(String pName)</div><hr>
-          <div>Bearbeiten</div><div>Übersetzen</div><div>Entfernen</div>
-        </div>
-        <div class="fenster" style="flex:1; min-width: 260px;">
-          <div class="fenster-titel">BlueJ: Objekt erzeugen</div>
-          <div class="bj-dialog">
-            <div class="zeile">Name der Instanz: <span class="bj-feld">auto1</span></div>
-            <div class="zeile"><span class="ic">new Auto(</span><span class="bj-feld">"Porsche"</span><span class="ic">)</span></div>
-            <div class="knoepfe"><span class="bj-knopf">Abbrechen</span> <span class="bj-knopf">OK</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="abb-unterschrift">Vereinfachte Darstellung: Kontextmenü des Kastens „Auto“ und Dialog zum Herstellen</div>
-      <div class="abb">
-        <div class="fenster">
-          <div class="fenster-titel">BlueJ: Autos</div>
-          <div class="bj-haupt">
-            <div class="bj-leiste"><div class="bj-knopf">Neue Klasse …</div><div class="bj-knopf">Übersetzen</div></div>
-            <div class="bj-flaeche"><div class="bj-klasse">Auto</div></div>
-            <div class="bj-objekte"><div class="bj-objekt">auto1:<br>Auto</div><div class="bj-objekt">auto2:<br>Auto</div><div class="bj-objekt">auto3:<br>Auto</div></div>
-          </div>
-        </div>
-        <div class="abb-unterschrift">Vereinfachte Darstellung: Unten erscheint für jedes hergestellte Auto ein rotes Kästchen.</div>
-      </div>
+      <figure class="screenshot">
+        <img src="pics/01_abb02.png" alt="BlueJ-Fenster Objekt erzeugen mit Instanzname auto1 und dem Eingabefeld für pName" loading="lazy">
+        <figcaption>Das Fenster zum Herstellen eines Autos (zum Vergrößern anklicken)</figcaption>
+      </figure>
+      <ol start="4">
+        <li>Stelle auf dieselbe Weise zwei weitere Autos her, z. B. <code>"Golf"</code> und <code>"Ente"</code>.
+          Unten im BlueJ-Fenster erscheint für jedes Auto ein rotes Kästchen.</li>
+      </ol>
+      <figure class="screenshot">
+        <img src="pics/01_abb03.png" alt="BlueJ-Fenster mit der Klasse Auto oben und drei roten Objekten auto1, auto2 und auto3 unten" loading="lazy">
+        <figcaption>Drei hergestellte Autos in der Objektleiste unten (zum Vergrößern anklicken)</figcaption>
+      </figure>
       <div class="warum"><strong>Warum zwei Namen?</strong> <code>auto1</code> ist der Name, unter dem
       BlueJ das Auto unten anzeigt. <code>"Porsche"</code> wird dem Konstruktor übergeben und im Auto als
       sein <code>name</code> gespeichert. Texte stehen in Java immer in Anführungszeichen.</div>
@@ -516,18 +502,17 @@ public class Auto
       <ol>
         <li>Klicke mit der rechten Maustaste auf das rote Kästchen <code>auto1</code> und wähle
           <span class="menue">Inspizieren</span>.</li>
-        <li>Lass das Fenster offen und inspiziere auch <code>auto2</code>.</li>
+        <li>Lass das Fenster offen und inspiziere auch <code>auto2</code> und <code>auto3</code>.</li>
+        <li>Verschiebe die drei roten Inspektor-Fenster so, dass du sie nebeneinander siehst.</li>
       </ol>
-      <div class="abb">
-        <div class="fenster" style="max-width: 420px;">
-          <div class="fenster-titel">BlueJ: Objektinspektor – auto1 : Auto</div>
-          <div class="bj-insp"><table>
-            <tr><td>private String name</td><td class="wert">"Porsche"</td></tr>
-            <tr><td>private int gefahreneStrecke</td><td class="wert">0</td></tr>
-          </table></div>
-        </div>
-        <div class="abb-unterschrift">Vereinfachte Darstellung des Inspektors</div>
-      </div>
+      <figure class="screenshot">
+        <img src="pics/01_abb04.png" alt="Drei geöffnete Inspektor-Fenster für auto1, auto2 und auto3 mit den Werten von name und gefahreneStrecke" loading="lazy">
+        <figcaption>Die drei Autos im Inspektor, nebeneinander angeordnet (zum Vergrößern anklicken)</figcaption>
+      </figure>
+      <div class="tipp">💡 <strong>Fenster verschwunden?</strong> Die Inspektor-Fenster rutschen manchmal hinter
+      das BlueJ-Fenster oder werden von anderen Fenstern verdeckt. Sie sind aber noch offen. Du holst sie
+      wieder nach vorne, indem du in der Taskleiste unten auf das BlueJ-Symbol klickst und das passende
+      Fenster auswählst, oder mit <span class="menue">Alt</span> + <span class="menue">Tab</span>.</div>
       <div class="frage">
         <label for="f2">Frage 2: Vergleiche die geöffneten Fenster. Was ist bei allen Autos gleich, was ist verschieden?</label>
         <textarea id="f2" data-key="f2"></textarea>
