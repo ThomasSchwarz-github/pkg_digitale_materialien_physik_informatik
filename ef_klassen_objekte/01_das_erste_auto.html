@@ -529,23 +529,24 @@ public class Auto
     </div>
     <div class="schritt-inhalt">
       <p>Ein Rechtsklick auf ein rotes Kästchen zeigt auch, was das Auto <em>kann</em>:</p>
-      <div class="abb nebeneinander">
+      <div class="abb">
         <div class="bj-menue">
           <div>geerbt von Object ▸</div><hr>
           <div class="hervor">void hupe()</div><div>void fahre100km()</div><div>void zeigeGefahreneStreckeAn()</div><hr>
           <div>Inspizieren</div><div>Entfernen</div>
         </div>
-        <div class="fenster" style="flex:1; min-width: 240px;">
-          <div class="fenster-titel">BlueJ: Terminal-Fenster – Autos</div>
-          <div class="bj-terminal">Porsche: Honk, honk!</div>
-        </div>
       </div>
-      <div class="abb-unterschrift">Vereinfachte Darstellung: Kontextmenü eines Autos und Terminal-Fenster für Ausgaben</div>
+      <div class="abb-unterschrift">Vereinfachte Darstellung: Kontextmenü eines Autos</div>
       <ol>
-        <li>Lass <code>auto1</code> hupen (<span class="menue">void hupe()</span>). Die Ausgabe erscheint im Terminal-Fenster.</li>
+        <li>Lass <code>auto1</code> hupen (<span class="menue">void hupe()</span>). Es öffnet sich das Fenster
+          <em>BlueJ: Konsole</em>, in dem die Ausgabe erscheint.</li>
         <li>Lass <code>auto1</code> dreimal 100 km fahren und <code>auto2</code> einmal.</li>
         <li>Lass beide Autos ihre gefahrene Strecke anzeigen und beobachte dabei auch die Inspektor-Fenster.</li>
       </ol>
+      <figure class="screenshot">
+        <img src="pics/01_abb06.png" alt="BlueJ-Konsole mit der Ausgabe Porsche: Honk, honk!" loading="lazy">
+        <figcaption>Die Ausgabe von <code>hupe()</code> in der BlueJ-Konsole (zum Vergrößern anklicken)</figcaption>
+      </figure>
       <div class="warum"><strong>Gut zu wissen:</strong> Das, was ein Auto kann, nennt man in Java
       <em>Methoden</em>. Damit beschäftigen wir uns in den nächsten Stunden genauer.</div>
       <div class="frage">
