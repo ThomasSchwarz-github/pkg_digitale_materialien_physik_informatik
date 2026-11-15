@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(02) Klasse, Objekt, Attribut und Methode – Informatik EF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Code+Pro:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C;
+    --blue-mid: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-border: #B5D4F4;
+    --green-mid: #16A34A;
+    --green-light: #F0FDF4;
+    --red-mid: #b91c1c;
+    --red-light: #fef2f2;
+    --gray-border: #D3D1C7;
+    --gray-text: #5F5E5A;
+    --text-main: #1a1917;
+    --code-bg: rgb(243,247,252);
+    --code-border: rgb(160,185,215);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); line-height: 1.6; }
+  .page { width: min(900px, 100%); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  .back-link { display: inline-flex; gap: 0.4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+  .header .kurs { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: 0.4rem; }
+  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .header .sub { margin-top: 0.5rem; font-size: 14px; color: var(--gray-text); }
+
+  .intro { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-bottom: 1.25rem; font-size: 15px; }
+  .intro p + p, .intro ul { margin-top: 0.5rem; }
+  .intro ul { padding-left: 1.3rem; }
+
+  /* Moduswahl / Anmeldung */
+  .mode-card { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1rem 1.3rem; margin-bottom: 0.75rem; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+  .mode-card:hover { border-color: var(--blue-mid); box-shadow: 0 2px 12px rgba(24,95,165,.12); }
+  .mode-card h3 { font-size: 15px; font-weight: 600; color: var(--blue-dark); margin-bottom: .25rem; }
+  .mode-card p { font-size: 13.5px; color: var(--gray-text); }
+  .auth-card { display: none; background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.2rem 1.3rem; margin-bottom: 1.25rem; }
+  .auth-card h2 { font-size: 15px; margin-bottom: .5rem; }
+  .auth-card p { font-size: 13.5px; color: var(--gray-text); margin-bottom: .8rem; }
+  .input-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: .5rem; }
+  .input-row input { flex: 1; min-width: 200px; border: 1px solid var(--gray-border); border-radius: 8px; padding: 9px 12px; font: inherit; font-size: 14px; }
+  .input-row input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue-mid); }
+  #auth-status { font-size: 13px; color: var(--gray-text); min-height: 1.3em; margin-bottom: .5rem; }
+  .btn { padding: 9px 16px; border-radius: 8px; border: none; font: inherit; font-size: 14px; cursor: pointer; }
+  .btn-primary { background: var(--blue-mid); color: white; }
+  .btn-primary:hover { background: var(--blue-dark); }
+  .btn-secondary { background: transparent; border: 1px solid var(--gray-border); color: var(--text-main); }
+  .btn-secondary:hover { background: #f9f8f5; }
+  .user-bar { display: none; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; margin-bottom: 1rem; }
+  .email-tag { background: var(--blue-light); color: var(--blue-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .anon-hint { display: none; background: #fef9c3; border: 1px solid #fde047; border-radius: var(--radius); padding: .7rem 1rem; font-size: 13.5px; color: #713f12; margin-bottom: 1rem; }
+
+  /* Fortschritt */
+  #inhalt { display: none; }
+  .fortschritt { position: sticky; top: 0; z-index: 5; background: #f5f3ef; padding: .6rem 0 .7rem; margin-bottom: .5rem; }
+  .fortschritt-zeile { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray-text); margin-bottom: .3rem; gap: 1rem; flex-wrap: wrap; }
+  .balken { height: 8px; background: #e4e1d8; border-radius: 4px; overflow: hidden; }
+  .balken > div { height: 100%; width: 0; background: var(--green-mid); transition: width .3s; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #c9c6bc; margin-right: 6px; vertical-align: middle; }
+  .dot.saved { background: var(--green-mid); }
+
+  /* Schritte */
+  .schritt { background: white; border: 1px solid var(--gray-border); border-left: 4px solid var(--blue-mid); border-radius: var(--radius); margin-bottom: 1.1rem; overflow: hidden; }
+  .schritt.erledigt { border-left-color: var(--green-mid); }
+  .schritt.zusatz { border-left-color: #b45309; }
+  .schritt-kopf { display: flex; align-items: center; gap: .8rem; padding: .8rem 1.2rem; background: var(--blue-light); }
+  .schritt.erledigt .schritt-kopf { background: var(--green-light); }
+  .schritt.zusatz .schritt-kopf { background: #fef3e2; }
+  .schritt-nr { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-mid); white-space: nowrap; }
+  .schritt.erledigt .schritt-nr { color: var(--green-mid); }
+  .schritt-titel { font-family: 'Source Serif 4', serif; font-size: 1.15rem; font-weight: 600; flex: 1; }
+  .haken { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-text); cursor: pointer; white-space: nowrap; }
+  .haken input { width: 18px; height: 18px; accent-color: var(--green-mid); cursor: pointer; }
+  .schritt-inhalt { padding: 1rem 1.2rem 1.1rem; font-size: 15px; }
+  .schritt-inhalt > * + * { margin-top: .75rem; }
+  .schritt-inhalt ol, .schritt-inhalt ul { padding-left: 1.4rem; }
+  .schritt-inhalt li + li { margin-top: .3rem; }
+  .ab-bezug { display: inline-block; font-size: 12px; font-weight: 600; color: #7c2d12; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 20px; padding: 1px 10px; }
+  .menue { font-weight: 500; background: #eeece6; border: 1px solid #d8d5cc; border-radius: 4px; padding: 0 5px; font-size: 14px; white-space: nowrap; }
+  code, .ic { font-family: 'Source Code Pro', monospace; font-size: 0.92em; background: var(--code-bg); border: 1px solid #d6e2f0; border-radius: 4px; padding: 0 4px; }
+  .t-int { color: #CC0000; } .t-lit { color: #006699; } .t-str { color: #006600; }
+
+  .warum { background: #f8f7f4; border-left: 3px solid var(--gray-border); border-radius: 0 8px 8px 0; padding: .6rem .9rem; font-size: 14px; color: #3d3c39; }
+  .warum strong { color: var(--text-main); }
+  .tipp { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .6rem .9rem; font-size: 14px; color: #7c2d12; }
+  .merke { background: var(--green-light); border: 1px solid #bbf7d0; border-radius: 8px; padding: .7rem 1rem; font-size: 14.5px; }
+  .merke strong:first-child { color: #166534; }
+
+  table.tab { border-collapse: collapse; width: 100%; font-size: 14px; }
+  table.tab th, table.tab td { border: 1px solid var(--gray-border); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  table.tab th { background: #f1efe9; font-weight: 600; }
+  .tab-wrap { overflow-x: auto; }
+
+  /* Java-Code in BlueJ-Farben */
+  .code { position: relative; background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; }
+  .code pre { font-family: 'Source Code Pro', monospace; font-size: 13.5px; line-height: 1.55; padding: .8rem 1rem; overflow-x: auto; color: #000; tab-size: 4; }
+  .code .titel { font-size: 12px; color: var(--gray-text); padding: .4rem 1rem 0; font-weight: 500; }
+  .kopieren { position: absolute; top: 6px; right: 6px; font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--code-border); background: white; color: var(--blue-dark); cursor: pointer; }
+  .kopieren:hover { background: var(--blue-light); }
+  .kopieren.ok { background: var(--green-light); color: var(--green-mid); border-color: #86efac; }
+  .j-mod { color: #660033; } .j-dekl { color: #CC0000; } .j-lit { color: #006699; }
+  .j-str { color: #006600; } .j-kom { color: #999999; } .j-doc { color: #000099; }
+  .zn { color: #9aa5b1; user-select: none; display: inline-block; width: 2.2em; text-align: right; margin-right: 1em; }
+  details.ausklapp { border: 1px solid var(--gray-border); border-radius: 8px; padding: .5rem .8rem; background: #fcfbf9; }
+  details.ausklapp summary { cursor: pointer; font-size: 14px; font-weight: 500; color: var(--blue-dark); }
+  details.ausklapp[open] summary { margin-bottom: .6rem; }
+  details.ausklapp > * + * { margin-top: .6rem; }
+
+  /* Klassendiagramm und Objekte */
+  .uml-reihe { display: flex; gap: 1.2rem; flex-wrap: wrap; align-items: center; }
+  .uml { border: 1.5px solid #222; background: white; font-family: 'Source Code Pro', monospace; font-size: 13.5px; min-width: 210px; }
+  .uml > div { padding: .3rem .7rem; }
+  .uml > div + div { border-top: 1.5px solid #222; }
+  .uml .name { text-align: center; font-weight: 600; }
+  .objekt { border: 1.5px solid #b33434; background: #fdf0f0; border-radius: 12px; font-family: 'Source Code Pro', monospace; font-size: 13px; padding: .4rem .8rem; min-width: 200px; }
+  .objekt .kopf { font-weight: 600; text-decoration: underline; margin-bottom: .2rem; }
+  .pfeil-text { font-size: 13px; color: var(--gray-text); text-align: center; }
+
+  /* Fragen und Zuordnung */
+  .frage { background: var(--blue-light); border: 1px solid var(--blue-border); border-radius: 8px; padding: .75rem .9rem; }
+  .frage label { display: block; font-weight: 500; font-size: 14.5px; margin-bottom: .45rem; }
+  .frage textarea { width: 100%; min-height: 70px; resize: vertical; border: 1px solid var(--blue-border); border-radius: 6px; padding: 8px 10px; font: inherit; font-size: 14.5px; background: white; }
+  .zuordnung { display: grid; grid-template-columns: 1fr auto auto; gap: .45rem .8rem; align-items: center; background: var(--blue-light); border: 1px solid var(--blue-border); border-radius: 8px; padding: .8rem .9rem; font-size: 14.5px; }
+  .zuordnung select { font: inherit; font-family: 'Source Code Pro', monospace; font-size: 14px; padding: 4px 6px; border: 1px solid var(--blue-border); border-radius: 6px; background: white; }
+  .zuordnung .rueck { font-size: 13px; min-width: 1.5em; }
+  .zuordnung .rueck.ok { color: var(--green-mid); } .zuordnung .rueck.falsch { color: var(--red-mid); }
+  .zuordnung-kopf { grid-column: 1 / -1; font-weight: 500; }
+  .zuordnung-fuss { grid-column: 1 / -1; display: flex; gap: .8rem; align-items: center; flex-wrap: wrap; font-size: 13.5px; }
+
+  .site-footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+
+  @media (max-width: 600px) {
+    .page { padding: 1.5rem 1rem 3rem; }
+    .header h1 { font-size: 1.6rem; }
+    .schritt-kopf { flex-wrap: wrap; }
+    .zuordnung { grid-template-columns: 1fr auto; }
+    .zuordnung .rueck { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../ef_klassen_objekte.html" class="back-link">‹ Klassen, Objekte und erste Programme in Java</a>
+
+  <div class="header">
+    <div class="kurs">Informatik · Jahrgangsstufe EF · Einheit 02</div>
+    <h1>(02) Klasse, Objekt, Attribut und Methode</h1>
+    <div class="sub">Gehört zum Arbeitsblatt AB1 „Ein Auto nach eigenem Bauplan“. Hier findest du ausführlichere Erklärungen und Hilfen zu den Aufgaben.</div>
+  </div>
+
+  <div class="intro">
+    <p>In der letzten Einheit hast du eine fertige Klasse <strong>Auto</strong> nachgebaut. Heute entwerft
+    ihr einen eigenen Bauplan für Autos: erst mit Worten, dann als Klassendiagramm und am Ende als
+    Java-Code in BlueJ.</p>
+    <p>Du lernst dabei:</p>
+    <ul>
+      <li>was <strong>Attribute</strong> und <strong>Methoden</strong> einer Klasse sind,</li>
+      <li>die drei Datentypen <code>int</code>, <code>String</code> und <code>boolean</code>,</li>
+      <li>wie ein <strong>Klassendiagramm</strong> aufgebaut ist und wie daraus Java-Code wird.</li>
+    </ul>
+    <p>Die orangen Hinweise wie <span class="ab-bezug">AB Aufgabe 1</span> zeigen, zu welcher Aufgabe auf
+    dem Arbeitsblatt ein Schritt gehört.</p>
+  </div>
+
+  <!-- ══ Moduswahl ══ -->
+  <div id="mode-select">
+    <div class="mode-card" onclick="selectMode('saved')">
+      <h3>🔐 Mit Anmeldung – Zwischenstand speichern</h3>
+      <p>Melde dich mit deiner Schul-E-Mail-Adresse an. Deine Antworten und Haken werden automatisch gespeichert, und du kannst später weiterarbeiten.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('anon')">
+      <h3>👤 Ohne Anmeldung – nicht gespeichert</h3>
+      <p>Bearbeite die Schritte direkt. Deine Antworten gehen beim Schließen der Seite verloren.</p>
+    </div>
+  </div>
+
+  <div class="auth-card" id="auth-card">
+    <h2>Anmelden</h2>
+    <p>Gib deine Schul-E-Mail-Adresse und dein Passwort ein.</p>
+    <div class="input-row">
+      <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de" autocomplete="username">
+      <input type="password" id="password-input" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter') login()">
+      <button class="btn btn-primary" onclick="login()">Anmelden</button>
+    </div>
+    <div id="auth-status"></div>
+    <button class="btn btn-secondary" onclick="location.reload()">‹ Zurück zur Auswahl</button>
+  </div>
+
+  <div class="user-bar" id="user-bar">
+    <span>Angemeldet als</span>
+    <span class="email-tag" id="user-email"></span>
+    <button class="btn btn-secondary" onclick="logout()">Abmelden</button>
+  </div>
+
+  <div class="anon-hint" id="anon-hint">
+    ℹ️ Du arbeitest ohne Anmeldung. Deine Antworten werden <strong>nicht gespeichert</strong>.
+  </div>
+
+  <!-- ══ Inhalt ══ -->
+  <div id="inhalt">
+
+  <div class="fortschritt">
+    <div class="fortschritt-zeile">
+      <span id="fortschritt-text">0 von 7 Schritten erledigt</span>
+      <span><span class="dot" id="dot"></span><span id="save-text">Noch nicht gespeichert.</span></span>
+    </div>
+    <div class="balken"><div id="balken"></div></div>
+  </div>
+
+  <!-- Schritt 1 -->
+  <section class="schritt" id="s1">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 1</span>
+      <span class="schritt-titel">Rückblick: Klasse, Objekt, Attribut und Methode</span>
+      <label class="haken"><input type="checkbox" data-key="s1"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Infokasten oben</span></p>
+      <p>In der letzten Einheit hast du die <strong>Klasse</strong> <code>Auto</code> kennengelernt und drei
+      <strong>Objekte</strong> <code>auto1</code>, <code>auto2</code> und <code>auto3</code> vom Typ
+      <code>Auto</code> erzeugt. Damit hast du die <strong>objektorientierte Programmierung</strong>
+      kennengelernt.</p>
+      <details class="ausklapp" open>
+        <summary>Was ist objektorientierte Programmierung?</summary>
+        <p>Ein Programm verarbeitet <em>Daten</em> (z. B. Kilometerstände oder Namen) mit
+        <em>Funktionen</em>, die etwas mit diesen Daten tun (z. B. „fahre 100 km“). In der
+        objektorientierten Programmierung werden Daten und die Funktionen, die mit ihnen arbeiten,
+        <strong>zu Objekten zusammengefasst</strong>. Ein Objekt ist so etwas wie ein Ding aus der
+        wirklichen Welt im Computer: Ein Auto-Objekt <em>weiß</em> seinen Kilometerstand und <em>kann</em>
+        selbst 100 km fahren.</p>
+        <p>Für jede Sorte von Objekten gibt es einen gemeinsamen Bauplan, die <strong>Klasse</strong>. Sie
+        beschreibt einmal, welche Daten (<strong>Attribute</strong>) und welche Funktionen
+        (<strong>Methoden</strong>) alle Objekte dieser Sorte haben. Danach kann man beliebig viele Objekte
+        nach diesem Bauplan herstellen.</p>
+        <p><strong>Warum macht man das?</strong> Große Programme bestehen aus Tausenden Zeilen Code. Wenn
+        Daten und die passenden Funktionen zusammen in einem Objekt stecken, bleibt das Programm übersichtlich:
+        Alles, was ein Auto betrifft, steht in der Klasse <code>Auto</code>. Außerdem lässt sich ein Bauplan
+        immer wieder verwenden. Java, mit dem wir arbeiten, ist eine objektorientierte Programmiersprache,
+        ebenso wie z. B. Python oder C#.</p>
+      </details>
+      <p>Jetzt schauen wir genauer hin, was im Bauplan Auto stand. Er legt zwei Dinge fest:</p>
+      <ul>
+        <li><strong>Attribute</strong> sind die Eigenschaften, die sich jedes Objekt merkt. Deine Autos hatten
+          die Attribute <code>name</code> und <code>gefahreneStrecke</code>.</li>
+        <li><strong>Methoden</strong> sind die Dinge, die jedes Objekt tun kann. Deine Autos konnten
+          <code>hupe()</code>, <code>fahre100km()</code> und <code>zeigeGefahreneStreckeAn()</code>.</li>
+      </ul>
+      <div class="uml-reihe">
+        <div class="uml">
+          <div class="name">Auto</div>
+          <div>name<br>gefahreneStrecke</div>
+          <div>hupe()<br>fahre100km()<br>zeigeGefahreneStreckeAn()</div>
+        </div>
+        <div class="pfeil-text">wurde hergestellt als<br>→</div>
+        <div style="display:flex; flex-direction:column; gap:.6rem;">
+          <div class="objekt"><div class="kopf">auto1 : Auto</div>name = "Porsche"<br>gefahreneStrecke = 300</div>
+          <div class="objekt"><div class="kopf">auto2 : Auto</div>name = "Golf"<br>gefahreneStrecke = 100</div>
+        </div>
+      </div>
+      <div class="merke"><strong>Merke:</strong> Die Klasse legt fest, <em>welche</em> Attribute und Methoden
+      es gibt. Jedes Objekt hat für die Attribute seine <em>eigenen</em> Werte, die
+      <strong>Attributwerte</strong>. Beide Autos haben eine gefahrene Strecke, aber jedes eine andere.</div>
+      <div class="tipp">💡 <strong>Gute Namen für Attribute.</strong> In der letzten Einheit hast du im
+      Attribut <code>name</code> Texte wie <code class="t-str">"Porsche"</code> gespeichert. Für einen ersten
+      Einstieg war das in Ordnung, genau genommen passt der Name aber nicht zum Inhalt:
+      <ul>
+        <li>„Name“ klingt nach dem Namen, den eine Person ihrem Auto gibt (z. B. „Flitzer“), oder nach dem
+          Namen, unter dem ein Auto im Programm angesprochen wird (z. B. <code>auto1</code>).</li>
+        <li><code class="t-str">"Porsche"</code> ist aber die <strong>Marke</strong> des Autos. Passender wäre
+          deshalb ein Attribut <code>marke</code> mit dem Wert <code class="t-str">"Porsche"</code>. Soll auch das
+          Modell gespeichert werden, kommt ein zweites Attribut dazu, z. B. <code>modell</code> mit dem Wert
+          <code class="t-str">"911 Carrera"</code>.</li>
+      </ul>
+      Benenne Attribute immer so, dass man am Namen sofort erkennt, <em>was</em> darin gespeichert ist. Das
+      hilft dir und allen, die dein Programm später lesen.</div>
+      <div class="warum"><strong>Erinnerst du dich?</strong> Im Inspektor stand <code class="t-int">private</code>
+      <code>String name</code> und <code class="t-int">private int</code> <code>gefahreneStrecke</code>. Die Wörter
+      <code>String</code> und <code class="t-int">int</code> sind <em>Datentypen</em>. Was das bedeutet, erfährst du in Schritt 3.</div>
+    </div>
+  </section>
+
+  <!-- Schritt 2 -->
+  <section class="schritt" id="s2">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 2</span>
+      <span class="schritt-titel">Euer eigenes Auto</span>
+      <label class="haken"><input type="checkbox" data-key="s2"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 1</span></p>
+      <p>Jetzt entwerft ihr selbst einen Bauplan. Stellt euch vor, ihr programmiert den <strong>Bordcomputer</strong>
+      eines Autos. Er soll Informationen über das Auto speichern und Funktionen des Autos steuern. Überlegt
+      zuerst nur mit Worten, was euer Auto <em>haben</em> und was es <em>tun können</em> soll, und notiert es
+      auf dem Arbeitsblatt. Es gibt dabei kein Richtig oder Falsch.</p>
+      <details class="ausklapp">
+        <summary>Ihr kommt nicht weiter? Hier sind Denkanstöße.</summary>
+        <ul>
+          <li>Was zeigt das Display im Auto an? Denkt an Tacho, Tankanzeige und Warnleuchten.</li>
+          <li>Was steht in den Fahrzeugpapieren über ein Auto?</li>
+          <li>Was kann man im Auto ein- und ausschalten oder einstellen?</li>
+          <li>Was passiert, wenn das Auto fährt? Was verändert sich dabei?</li>
+        </ul>
+      </details>
+      <div class="warum"><strong>Warum erst mit Worten?</strong> Programmierer planen zuerst, was ein
+      Programm können soll, und schreiben erst danach Code. So vermeidet man, dass man sich im Code verliert.</div>
+    </div>
+  </section>
+
+  <!-- Schritt 3 -->
+  <section class="schritt" id="s3">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 3</span>
+      <span class="schritt-titel">Datentypen: int, String und boolean</span>
+      <label class="haken"><input type="checkbox" data-key="s3"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 2</span></p>
+      <p>Ein Computer muss wissen, <em>welche Art</em> von Wert ein Attribut speichert. Das legt der
+      <strong>Datentyp</strong> fest. Wir benutzen zunächst drei Datentypen:</p>
+      <div class="tab-wrap"><table class="tab">
+        <tr><th>Datentyp</th><th>speichert</th><th>Beispielwerte</th><th>passt für</th></tr>
+        <tr><td><code class="t-int">int</code></td><td>eine ganze Zahl, mit der man rechnen kann</td><td><code>2019</code>, <code>45000</code>, <code>-3</code></td><td>Baujahr, Kilometerstand, Anzahl der Türen</td></tr>
+        <tr><td><code>String</code></td><td>eine Zeichenkette, also einen Text. Im Code steht er in Anführungszeichen.</td><td><code class="t-str">"rot"</code>, <code class="t-str">"VW"</code>, <code class="t-str">"GL-AB 123"</code></td><td>Farbe, Marke, Kennzeichen</td></tr>
+        <tr><td><code class="t-int">boolean</code></td><td>einen Wahrheitswert: wahr oder falsch</td><td>nur <code class="t-lit">true</code> oder <code class="t-lit">false</code></td><td>Läuft der Motor? Ist das Licht an?</td></tr>
+      </table></div>
+      <div class="warum"><strong>So entscheidest du:</strong> Lässt sich die Eigenschaft mit <em>Ja</em> oder
+      <em>Nein</em> beantworten, nimm <code class="t-int">boolean</code>. Ist sie eine ganze Zahl, mit der man
+      sinnvoll rechnet, nimm <code class="t-int">int</code>. Sonst nimm <code>String</code>.</div>
+      <div class="tipp">⚠️ <strong>Aufgepasst:</strong>
+        <ul>
+          <li>Ein Kennzeichen enthält Ziffern, ist aber trotzdem Text: <code>String</code>.</li>
+          <li><code class="t-int">int</code> kann keine Kommazahlen speichern. Rechne für heute mit ganzen Litern oder Euro.</li>
+          <li>Eine Frage wie „Läuft der Motor?“ wird zum Attributnamen <code>motorLaeuft</code>, nicht zu <code class="t-str">"ja"</code> oder <code class="t-str">"nein"</code>.</li>
+        </ul>
+      </div>
+      <p><strong>Regeln für Attributnamen:</strong> Sie beginnen mit einem Kleinbuchstaben und enthalten
+      keine Leerzeichen und keine Umlaute. Bei mehreren Wörtern beginnt jedes weitere Wort groß:
+      <code>kilometerstand</code>, <code>motorLaeuft</code>, <code>anzahlTueren</code>.</p>
+      <div class="zuordnung" id="zuordnung">
+        <div class="zuordnung-kopf">Übung: Welcher Datentyp passt? Wähle aus und klicke auf „Prüfen“.</div>
+        <span>das Baujahr</span><select data-key="z1" data-loesung="int"></select><span class="rueck"></span>
+        <span>die Farbe</span><select data-key="z2" data-loesung="String"></select><span class="rueck"></span>
+        <span>Ist das Licht eingeschaltet?</span><select data-key="z3" data-loesung="boolean"></select><span class="rueck"></span>
+        <span>das Kennzeichen</span><select data-key="z4" data-loesung="String"></select><span class="rueck"></span>
+        <span>die Anzahl der Sitzplätze</span><select data-key="z5" data-loesung="int"></select><span class="rueck"></span>
+        <span>Sind die Türen verriegelt?</span><select data-key="z6" data-loesung="boolean"></select><span class="rueck"></span>
+        <span>der Modellname</span><select data-key="z7" data-loesung="String"></select><span class="rueck"></span>
+        <span>die gefahrenen Kilometer</span><select data-key="z8" data-loesung="int"></select><span class="rueck"></span>
+        <div class="zuordnung-fuss"><button class="btn btn-primary" type="button" onclick="pruefeZuordnung()">Prüfen</button><span id="zuordnung-ergebnis"></span></div>
+      </div>
+      <div class="frage">
+        <label for="f1">Frage 1: Wähle eines deiner Attribute aus AB Aufgabe 2 und begründe, warum du diesen Datentyp gewählt hast.</label>
+        <textarea id="f1" data-key="f1"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schritt 4 -->
+  <section class="schritt" id="s4">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 4</span>
+      <span class="schritt-titel">Methoden für den Anfang</span>
+      <label class="haken"><input type="checkbox" data-key="s4"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 3</span></p>
+      <p>Methoden beschreiben, was ein Objekt tun kann. Unsere ersten Methoden tun bei jedem Aufruf
+      <strong>immer genau dasselbe</strong>. Du kannst ihnen beim Aufruf nichts mitgeben. (Erinnerst du dich?
+      Beim Herstellen der Autos in der letzten Einheit musstest du einen Namen eingeben. So etwas gibt es bei
+      unseren Methoden noch nicht.) Eine solche Methode tut eines von zwei Dingen:</p>
+      <ol>
+        <li><strong>Einen Attributwert immer auf dieselbe Weise ändern.</strong> Beispiele:
+          <code>starteMotor()</code> setzt <code>motorLaeuft</code> auf <code class="t-lit">true</code>,
+          <code>stoppeMotor()</code> setzt es auf <code class="t-lit">false</code>, <code>fahre100km()</code>
+          erhöht den Kilometerstand bei jedem Aufruf um genau 100.</li>
+        <li><strong>Immer denselben Text auf der Konsole ausgeben.</strong> Beispiel: <code>hupe()</code> gibt
+          „Hup, hup!“ aus.</li>
+      </ol>
+      <p>Methodennamen beginnen klein, meist mit einem Verb, und enden mit runden Klammern <code>()</code>.</p>
+      <details class="ausklapp">
+        <summary>Was geht heute noch nicht? (kommt später)</summary>
+        <p>Eine Methode „fahre so weit, wie ich eingebe“ oder „tanke so viel, wie ich sage“ müsste beim Aufruf
+        eine Zahl von dir bekommen. Eine Methode „Wie hoch ist der Kilometerstand?“ müsste dir eine Antwort
+        zurückgeben. Beides lernst du in den nächsten Einheiten. Wähle heute Methoden, die immer dasselbe tun,
+        z. B. <code>fahre100km()</code> statt „fahre x km“.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Schritt 5 -->
+  <section class="schritt" id="s5">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 5</span>
+      <span class="schritt-titel">Das Klassendiagramm</span>
+      <label class="haken"><input type="checkbox" data-key="s5"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 3</span></p>
+      <p>Ein Klassendiagramm zeigt den Bauplan einer Klasse auf einen Blick. Informatikerinnen und Informatiker
+      auf der ganzen Welt verwenden dafür dieselbe Darstellung. Es hat drei Teile:</p>
+      <div class="uml-reihe">
+        <div class="uml">
+          <div class="name">Lampe</div>
+          <div>- farbe : String<br>- helligkeit : int<br>- istAn : boolean</div>
+          <div>+ schalteEin()<br>+ werdeHeller()<br>+ zeigeZustand()</div>
+        </div>
+        <ul style="flex:1; min-width: 240px;">
+          <li><strong>oben</strong> der Name der Klasse (groß geschrieben),</li>
+          <li><strong>in der Mitte</strong> die Attribute: <code>- name : Datentyp</code>,</li>
+          <li><strong>unten</strong> die Methoden: <code>+ name()</code>.</li>
+        </ul>
+      </div>
+      <div class="warum"><strong>Was bedeuten − und +?</strong> Das Minus steht für <code class="j-mod">private</code>:
+      Nur das Objekt selbst darf seine Attribute verändern, niemand von außen. Das Plus steht für
+      <code class="j-mod">public</code>: Die Methode darf von außen aufgerufen werden, z. B. von dir per
+      Rechtsklick in BlueJ.</div>
+      <div class="tipp">⚠️ <strong>Häufige Fehler im Diagramm:</strong> Datentyp vergessen, Attribut groß
+      geschrieben, Klammern <code>()</code> bei Methoden vergessen, Leerzeichen im Namen.</div>
+    </div>
+  </section>
+
+  <!-- Schritt 6 -->
+  <section class="schritt" id="s6">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 6</span>
+      <span class="schritt-titel">Die Klasse Auto in BlueJ umsetzen</span>
+      <label class="haken"><input type="checkbox" data-key="s6"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 4</span></p>
+      <p>Jetzt wird aus deinem Klassendiagramm Java-Code. Gehe Zeile für Zeile durch dein Diagramm. Das
+      Beispiel zeigt jeweils die Klasse <strong>Lampe</strong>, du schreibst den Code für <strong>deine</strong>
+      Klasse Auto.</p>
+
+      <p><strong>a) Projekt und Klasse anlegen.</strong> Lege ein neues Projekt <code>Bordcomputer</code> an
+      und darin eine Klasse <code>Auto</code> (wie in Einheit 01). Öffne den Editor und lösche alles bis auf
+      den Klassenrahmen. Übrig bleibt:</p>
+      <div class="code"><button class="kopieren">Kopieren</button><pre class="java">public class Auto
+{
+
+}</pre></div>
+      <p>Alles Weitere schreibst du zwischen die beiden geschweiften Klammern.</p>
+
+      <p><strong>b) Attribute.</strong> Aus jeder Attributzeile im Diagramm wird eine Zeile Code.
+      Das <code>-</code> wird zu <code class="j-mod">private</code>, danach folgen erst der Datentyp, dann der Name
+      und ein Semikolon.</p>
+      <div class="code"><div class="titel">Muster: aus „- name : Datentyp“ wird …</div><pre class="java">    private Datentyp name;</pre></div>
+      <div class="code"><div class="titel">Beispiel Lampe</div><pre class="java">    private String farbe;
+    private int helligkeit;
+    private boolean istAn;</pre></div>
+
+      <p><strong>c) Konstruktor mit Startwerten.</strong> Der Konstruktor heißt genau wie die Klasse. Er legt
+      fest, welche Werte ein neues Objekt am Anfang hat. Gib jedem Attribut einen Startwert, der zu seinem
+      Datentyp passt.</p>
+      <div class="code"><div class="titel">Beispiel Lampe</div><pre class="java">    public Lampe()
+    {
+        this.farbe = "gelb";
+        this.helligkeit = 0;
+        this.istAn = false;
+    }</pre></div>
+      <div class="warum"><strong>Warum Startwerte?</strong> Ohne Startwert hätte eine Zahl den Wert 0, ein
+      Wahrheitswert <code class="t-lit">false</code> und ein Text den Wert <code class="t-lit">null</code> („nichts“). Mit
+      eigenen Startwerten bestimmst du selbst, wie ein neues Auto aussieht. <code class="t-lit">this</code>.farbe
+      bedeutet: die Farbe <em>dieses</em> Objekts.</div>
+
+      <p><strong>d) Methoden.</strong> Aus <code>+ name()</code> wird <code class="j-mod">public</code>
+      <code class="j-dekl">void</code> <code>name()</code>, gefolgt von geschweiften Klammern mit dem, was die Methode tut.</p>
+      <div class="code"><div class="titel">Beispiel Lampe: Art (1), einen Attributwert ändern</div><pre class="java">    public void schalteEin()
+    {
+        this.istAn = true;
+    }
+
+    public void werdeHeller()
+    {
+        this.helligkeit = this.helligkeit + 10;
+    }</pre></div>
+      <div class="code"><div class="titel">Beispiel Lampe: Art (2), etwas auf der Konsole ausgeben</div><pre class="java">    public void zeigeZustand()
+    {
+        System.out.println("Die Lampe ist " + this.farbe + ", Helligkeit: " + this.helligkeit);
+    }</pre></div>
+      <div class="warum"><strong>Was bedeutet das?</strong> <code class="j-dekl">void</code> heißt „leer“: Die Methode liefert
+      kein Ergebnis zurück. Die leeren Klammern <code>()</code> zeigen, dass sie keine Eingabe braucht.
+      <code>this.helligkeit = this.helligkeit + 10;</code> bedeutet: Nimm den bisherigen Wert, rechne 10 dazu
+      und speichere das Ergebnis wieder im Attribut. Mit <code>+</code> kann man auch Texte und Werte zu einer
+      Ausgabe zusammensetzen.</div>
+
+      <details class="ausklapp">
+        <summary>Die ganze Beispielklasse Lampe zum Ausprobieren</summary>
+        <p>Du kannst die Klasse Lampe auch selbst in BlueJ anlegen und testen, um zu sehen, wie alles
+        zusammenspielt.</p>
+        <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>/**
+ * Eine Lampe, die man einschalten und heller machen kann.
+ */
+public class Lampe
+{
+    private String farbe;
+    private int helligkeit;
+    private boolean istAn;
+
+    public Lampe()
+    {
+        this.farbe = "gelb";
+        this.helligkeit = 0;
+        this.istAn = false;
+    }
+
+    public void schalteEin()
+    {
+        this.istAn = true;
+    }
+
+    public void werdeHeller()
+    {
+        this.helligkeit = this.helligkeit + 10;
+    }
+
+    public void zeigeZustand()
+    {
+        System.out.println("Die Lampe ist " + this.farbe + ", Helligkeit: " + this.helligkeit);
+    }
+}</pre></div>
+      </details>
+
+      <p><strong>e) Übersetzen.</strong> Klicke auf <span class="menue">Übersetzen</span>. Erscheint eine
+      Fehlermeldung, hilft dir diese Tabelle:</p>
+      <div class="tab-wrap"><table class="tab">
+        <tr><th>Meldung von BlueJ</th><th>häufige Ursache</th></tr>
+        <tr><td><code>';' erwartet</code><br><small>(<code>';' expected</code>)</small></td><td>Am Ende einer Anweisung fehlt das Semikolon.</td></tr>
+        <tr><td><code>Symbol nicht gefunden</code><br><small>(<code>cannot find symbol</code>)</small></td><td>Ein Name ist anders geschrieben als bei der Deklaration (auf Groß- und Kleinschreibung achten!) oder das Attribut wurde nicht deklariert.</td></tr>
+        <tr><td><code>Inkompatible Typen: String kann nicht in int konvertiert werden</code><br><small>(<code>incompatible types …</code>)</small></td><td>Der Wert passt nicht zum Datentyp, z. B. eine Zahl in Anführungszeichen.</td></tr>
+        <tr><td><code>Ungültige Methodendeklaration. Rückgabetyp erforderlich</code><br><small>(<code>invalid method declaration …</code>)</small></td><td><code>void</code> fehlt, oder der Konstruktor heißt nicht genau wie die Klasse.</td></tr>
+        <tr><td><code>Dateiende beim Parsen erreicht</code><br><small>(<code>reached end of file while parsing</code>)</small></td><td>Eine schließende Klammer <code>}</code> fehlt.</td></tr>
+        <tr><td><code>class, interface, enum oder record erwartet</code><br><small>(<code>… expected</code>)</small></td><td>Eine Klammer <code>}</code> zu viel, oder Code steht außerhalb der Klasse.</td></tr>
+      </table></div>
+
+      <p><strong>f) Testen.</strong> Erzeuge zwei Autos (<code>auto1</code> und <code>auto2</code>). Rufe bei
+      <code>auto1</code> deine Methoden mehrmals auf, bei <code>auto2</code> nicht. Inspiziere beide Autos.</p>
+
+      <details class="ausklapp">
+        <summary>Lösungsvorschlag ansehen (erst öffnen, wenn deine Klasse übersetzt ist)</summary>
+        <p>So könnte eine Klasse Auto aussehen. Deine darf andere Attribute und Methoden haben.</p>
+        <div class="uml-reihe">
+          <div class="uml">
+            <div class="name">Auto</div>
+            <div>- marke : String<br>- kilometerstand : int<br>- motorLaeuft : boolean</div>
+            <div>+ starteMotor()<br>+ fahre100km()<br>+ hupe()</div>
+          </div>
+        </div>
+        <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>public class Auto
+{
+    private String marke;
+    private int kilometerstand;
+    private boolean motorLaeuft;
+
+    public Auto()
+    {
+        this.marke = "VW";
+        this.kilometerstand = 0;
+        this.motorLaeuft = false;
+    }
+
+    public void starteMotor()
+    {
+        this.motorLaeuft = true;
+    }
+
+    public void fahre100km()
+    {
+        this.kilometerstand = this.kilometerstand + 100;
+    }
+
+    public void hupe()
+    {
+        System.out.println(this.marke + ": Hup, hup!");
+    }
+}</pre></div>
+      </details>
+
+      <div class="frage">
+        <label for="f2">Frage 2: Du hast nur bei <code>auto1</code> Methoden aufgerufen. Was zeigt der Inspektor bei <code>auto1</code> und bei <code>auto2</code>? Erkläre den Unterschied mit den Begriffen Attribut und Attributwert.</label>
+        <textarea id="f2" data-key="f2"></textarea>
+      </div>
+      <div class="frage">
+        <label for="f3">Frage 3: Welche deiner Methoden ändert einen Attributwert, welche gibt etwas auf der Konsole aus?</label>
+        <textarea id="f3" data-key="f3"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schritt 7 -->
+  <section class="schritt" id="s7">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 7</span>
+      <span class="schritt-titel">Zusammenfassen</span>
+      <label class="haken"><input type="checkbox" data-key="s7"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Erkläre mit eigenen Worten, was die Begriffe dieser Einheit bedeuten. Überprüfe dich danach mit der
+      Zusammenfassung.</p>
+      <div class="frage">
+        <label for="f4">Frage 4: Erkläre an deinen beiden Autos den Unterschied zwischen einem Attribut und einem Attributwert.</label>
+        <textarea id="f4" data-key="f4"></textarea>
+      </div>
+      <details class="ausklapp">
+        <summary>Zusammenfassung anzeigen</summary>
+        <div class="merke">
+          <p><strong>Klasse:</strong> Bauplan für Objekte. Sie legt die Attribute und Methoden fest.</p>
+          <p><strong>Objekt (Instanz):</strong> ein nach dem Bauplan hergestelltes Exemplar mit eigenen Attributwerten.</p>
+          <p><strong>Attribut:</strong> eine Eigenschaft, die sich jedes Objekt merkt, mit Namen und Datentyp
+          (<code class="t-int">int</code>, <code>String</code> oder <code class="t-int">boolean</code>).</p>
+          <p><strong>Attributwert:</strong> der Wert, den ein bestimmtes Objekt gerade für ein Attribut gespeichert hat.</p>
+          <p><strong>Methode:</strong> etwas, das jedes Objekt tun kann. Heute: einen Attributwert ändern oder etwas ausgeben.</p>
+          <p><strong>Klassendiagramm:</strong> Name, Attribute (<code>- name : Datentyp</code>), Methoden (<code>+ name()</code>).</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Zusatz -->
+  <section class="schritt zusatz" id="sz">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Zusatz</span>
+      <span class="schritt-titel">Für Schnelle</span>
+      <label class="haken"><input type="checkbox" data-key="sz"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Ergänze ein viertes Attribut, z. B. <code>tankinhalt : int</code> (in Litern), mit einem passenden Startwert.</li>
+        <li>Schreibe eine Methode <code>tanke10Liter()</code>, die den Tankinhalt um 10 erhöht, und eine Methode
+          <code>stoppeMotor()</code>, die <code>motorLaeuft</code> wieder auf <code class="t-lit">false</code> setzt.</li>
+        <li>Schreibe eine Methode <code>zeigeKilometerstand()</code>, die zum Beispiel
+          „Kilometerstand: 300 km“ auf der Konsole ausgibt. Orientiere dich an <code>zeigeZustand()</code> der Lampe.</li>
+        <li>Ergänze dein Klassendiagramm auf dem Arbeitsblatt um die neuen Attribute und Methoden.</li>
+      </ol>
+    </div>
+  </section>
+
+  </div><!-- /inhalt -->
+
+  <footer class="site-footer">
+    <span>Informatik · Interaktive Lernmaterialien</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+<script>
+// ════════════════════════════════════════════
+//  KONFIGURATION
+// ════════════════════════════════════════════
+const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
+const ARBEITSBLATT_ID   = 'ef_uv2_02_klasse_objekt_attribut_methode_v1';
+// ════════════════════════════════════════════
+
+let sb = null;
+try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { console.warn('Supabase nicht verfügbar', e); }
+
+let modus = null;          // 'saved' | 'anon'
+let speicherTimer = null;
+
+// ── Java-Hervorhebung in BlueJ-Farben ─────────────────────────
+const GRUPPEN = {
+  'j-mod': 'public private protected static final abstract if else while do for switch case break continue return try catch finally throw throws new instanceof default',
+  'j-dekl': 'class interface enum extends implements import package void boolean byte char short int long float double',
+  'j-lit': 'this super true false null'
+};
+const WORT = {};
+for (const [k, liste] of Object.entries(GRUPPEN)) liste.split(' ').forEach(w => WORT[w] = k);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+function hebeHervor(text) {
+  const re = /(\/\*\*[\s\S]*?\*\/)|(\/\*[\s\S]*?\*\/)|(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|\b([A-Za-z_]\w*)\b/g;
+  let aus = '', pos = 0, m;
+  while ((m = re.exec(text))) {
+    aus += esc(text.slice(pos, m.index));
+    let cls = null;
+    if (m[1]) cls = 'j-doc'; else if (m[2] || m[3]) cls = 'j-kom';
+    else if (m[4] || m[5]) cls = 'j-str'; else if (m[6]) cls = WORT[m[6]] || null;
+    aus += cls ? `<span class="${cls}">${esc(m[0])}</span>` : esc(m[0]);
+    pos = re.lastIndex;
+  }
+  return aus + esc(text.slice(pos));
+}
+
+document.querySelectorAll('pre.java').forEach(pre => {
+  const roh = pre.textContent;
+  pre.dataset.roh = roh;
+  let html = hebeHervor(roh);
+  if (pre.hasAttribute('data-zeilennummern')) {
+    html = html.split('\n').map((z, i) => `<span class="zn">${i + 1}</span>${z}`).join('\n');
+  }
+  pre.innerHTML = html;
+});
+
+// ── Kopieren ──────────────────────────────────────────────────
+document.querySelectorAll('.kopieren').forEach(knopf => {
+  knopf.addEventListener('click', async () => {
+    const roh = knopf.parentElement.querySelector('pre').dataset.roh;
+    try {
+      await navigator.clipboard.writeText(roh);
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = roh; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    knopf.textContent = '✓ Kopiert'; knopf.classList.add('ok');
+    setTimeout(() => { knopf.textContent = 'Kopieren'; knopf.classList.remove('ok'); }, 1800);
+  });
+});
+
+// ── Zuordnungsübung Datentypen ────────────────────────────────
+document.querySelectorAll('#zuordnung select').forEach(sel => {
+  sel.innerHTML = '<option value="">– wählen –</option><option>int</option><option>String</option><option>boolean</option>';
+  sel.addEventListener('change', () => { sel.nextElementSibling.textContent = ''; sel.nextElementSibling.className = 'rueck'; });
+});
+function pruefeZuordnung() {
+  let richtig = 0, gesamt = 0;
+  document.querySelectorAll('#zuordnung select').forEach(sel => {
+    gesamt++;
+    const r = sel.nextElementSibling;
+    if (!sel.value) { r.textContent = ''; r.className = 'rueck'; return; }
+    const ok = sel.value === sel.dataset.loesung;
+    if (ok) richtig++;
+    r.textContent = ok ? '✓' : '✗';
+    r.className = 'rueck ' + (ok ? 'ok' : 'falsch');
+  });
+  document.getElementById('zuordnung-ergebnis').textContent =
+    richtig === gesamt ? '✓ Alles richtig!' : `${richtig} von ${gesamt} richtig. Schau dir die mit ✗ markierten noch einmal an.`;
+}
+
+// ── Fortschritt ───────────────────────────────────────────────
+const haken = [...document.querySelectorAll('.haken input')];
+const PFLICHT = haken.filter(h => h.dataset.key !== 'sz');
+function aktualisiereFortschritt() {
+  haken.forEach(h => h.closest('.schritt').classList.toggle('erledigt', h.checked));
+  const n = PFLICHT.filter(h => h.checked).length;
+  document.getElementById('fortschritt-text').textContent = `${n} von ${PFLICHT.length} Schritten erledigt`;
+  document.getElementById('balken').style.width = (100 * n / PFLICHT.length) + '%';
+}
+document.querySelectorAll('[data-key]').forEach(el => {
+  const ereignis = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+  el.addEventListener(ereignis, () => { aktualisiereFortschritt(); planeSpeichern(); });
+});
+
+// ── Moduswahl und Anmeldung ───────────────────────────────────
+function selectMode(m) {
+  modus = m;
+  document.getElementById('mode-select').style.display = 'none';
+  if (m === 'saved') {
+    if (!sb) { setStatus('Speichern ist gerade nicht möglich (keine Verbindung).', false); zeigeInhalt(); return; }
+    pruefeSitzung();
+  } else {
+    document.getElementById('anon-hint').style.display = 'block';
+    setStatus('Ohne Anmeldung: nichts wird gespeichert.', false);
+    zeigeInhalt();
+  }
+}
+function zeigeInhalt() { document.getElementById('inhalt').style.display = 'block'; aktualisiereFortschritt(); }
+
+async function pruefeSitzung() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) angemeldet(session);
+  else document.getElementById('auth-card').style.display = 'block';
+}
+async function login() {
+  const email = document.getElementById('email-input').value.trim();
+  const pw = document.getElementById('password-input').value;
+  const st = document.getElementById('auth-status');
+  if (!email || !pw) { st.textContent = 'Bitte E-Mail und Passwort eingeben.'; return; }
+  st.textContent = 'Anmeldung …';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  if (error) { st.textContent = 'Anmeldung fehlgeschlagen: ' + error.message; return; }
+  angemeldet(data.session);
+}
+async function logout() { await sb.auth.signOut(); location.reload(); }
+function angemeldet(session) {
+  document.getElementById('auth-card').style.display = 'none';
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-email').textContent = session.user.email;
+  zeigeInhalt();
+  lade();
+}
+
+// ── Speichern und Laden ───────────────────────────────────────
+function sammle() {
+  const d = {};
+  document.querySelectorAll('[data-key]').forEach(el => d[el.dataset.key] = el.type === 'checkbox' ? el.checked : el.value);
+  return d;
+}
+function planeSpeichern() {
+  if (modus !== 'saved' || !sb) return;
+  setStatus('Ungespeicherte Änderungen …', false);
+  clearTimeout(speicherTimer);
+  speicherTimer = setTimeout(speichere, 1500);
+}
+async function speichere() {
+  speicherTimer = null;
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { setStatus('Nicht angemeldet – Speichern nicht möglich.', false); return; }
+  const { error } = await sb.from('arbeitsblatt_antworten').upsert({
+    user_id: user.id, arbeitsblatt: ARBEITSBLATT_ID, antworten: sammle(), gespeichert_am: new Date().toISOString()
+  }, { onConflict: 'user_id,arbeitsblatt' });
+  if (error) setStatus('Speichern fehlgeschlagen: ' + error.message, false);
+  else setStatus('Gespeichert um ' + new Date().toLocaleTimeString('de-DE'), true);
+}
+async function lade() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+  const { data, error } = await sb.from('arbeitsblatt_antworten')
+    .select('antworten, gespeichert_am').eq('user_id', user.id).eq('arbeitsblatt', ARBEITSBLATT_ID).maybeSingle();
+  if (error) { setStatus('Laden fehlgeschlagen: ' + error.message, false); return; }
+  if (!data) { setStatus('Noch nichts gespeichert. Deine Eingaben werden automatisch gespeichert.', false); return; }
+  const a = data.antworten || {};
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const w = a[el.dataset.key];
+    if (w === undefined) return;
+    if (el.type === 'checkbox') el.checked = !!w; else el.value = w;
+  });
+  aktualisiereFortschritt();
+  setStatus('Zwischenstand geladen (gespeichert am ' + new Date(data.gespeichert_am).toLocaleString('de-DE') + ')', true);
+}
+function setStatus(text, ok) {
+  document.getElementById('save-text').textContent = text;
+  document.getElementById('dot').className = 'dot' + (ok ? ' saved' : '');
+}
+window.addEventListener('beforeunload', () => {
+  if (speicherTimer && modus === 'saved') { clearTimeout(speicherTimer); speichere(); }
+});
+</script>
+</body>
+</html>
