@@ -232,19 +232,26 @@
       kennengelernt.</p>
       <details class="ausklapp" open>
         <summary>Was ist objektorientierte Programmierung?</summary>
-        <p>Ein Programm verarbeitet <em>Daten</em> (z. B. Kilometerstände oder Namen) mit
-        <em>Funktionen</em>, die etwas mit diesen Daten tun (z. B. „fahre 100 km“). In der
-        objektorientierten Programmierung werden Daten und die Funktionen, die mit ihnen arbeiten,
-        <strong>zu Objekten zusammengefasst</strong>. Ein Objekt ist so etwas wie ein Ding aus der
-        wirklichen Welt im Computer: Ein Auto-Objekt <em>weiß</em> seinen Kilometerstand und <em>kann</em>
-        selbst 100 km fahren.</p>
-        <p>Für jede Sorte von Objekten gibt es einen gemeinsamen Bauplan, die <strong>Klasse</strong>. Sie
-        beschreibt einmal, welche Daten (<strong>Attribute</strong>) und welche Funktionen
-        (<strong>Methoden</strong>) alle Objekte dieser Sorte haben. Danach kann man beliebig viele Objekte
-        nach diesem Bauplan herstellen.</p>
+        <p>Fast überall um dich herum arbeiten Programme mit <em>Daten</em>. Das Programm deiner Bank
+        speichert zum Beispiel für jedes Konto den Namen der Kundin oder des Kunden, die Kontonummer und den
+        Kontostand. Mit diesen Daten tut es etwas: Es bucht eine Einzahlung, eine Abhebung oder eine
+        Überweisung und zeigt den neuen Kontostand an. Ähnlich speichert ein Onlineshop für jede Bestellung
+        die Artikel und die Lieferadresse und kann die Bestellung verschicken oder stornieren.</p>
+        <p>In der objektorientierten Programmierung werden die Daten und die <em>Funktionen</em>, die mit
+        ihnen arbeiten, <strong>zu Objekten zusammengefasst</strong>. Jedes Bankkonto ist dann ein eigenes
+        Objekt: Es <em>kennt</em> seinen eigenen Kontostand und <em>kann</em> selbst Geld einzahlen oder
+        auszahlen. So bildet das Programm Dinge aus der wirklichen Welt nach.</p>
+        <p>Für jede Sorte von Objekten gibt es einen gemeinsamen Bauplan, die <strong>Klasse</strong>, zum
+        Beispiel eine Klasse <code>Konto</code>. Sie beschreibt einmal, welche Daten (<strong>Attribute</strong>)
+        und welche Funktionen (<strong>Methoden</strong>) alle Objekte dieser Sorte haben. Danach kann man
+        beliebig viele Objekte nach diesem Bauplan herstellen, also ein Konto-Objekt für jede Kundin und
+        jeden Kunden.</p>
+        <p>Genau so war es bei deinem <strong>Auto</strong>: Die Klasse <code>Auto</code> bildet ein Ding der
+        wirklichen Welt nach. Jedes Auto-Objekt speichert Daten über sich, zum Beispiel seine gefahrene
+        Strecke, und kann diese Daten mit seinen Methoden verändern, zum Beispiel indem es 100 km fährt.</p>
         <p><strong>Warum macht man das?</strong> Große Programme bestehen aus Tausenden Zeilen Code. Wenn
         Daten und die passenden Funktionen zusammen in einem Objekt stecken, bleibt das Programm übersichtlich:
-        Alles, was ein Auto betrifft, steht in der Klasse <code>Auto</code>. Außerdem lässt sich ein Bauplan
+        Alles, was ein Konto betrifft, steht in der Klasse <code>Konto</code>. Außerdem lässt sich ein Bauplan
         immer wieder verwenden. Java, mit dem wir arbeiten, ist eine objektorientierte Programmiersprache,
         ebenso wie z. B. Python oder C#.</p>
       </details>
@@ -410,9 +417,9 @@
       auf der ganzen Welt verwenden dafür dieselbe Darstellung. Es hat drei Teile:</p>
       <div class="uml-reihe">
         <div class="uml">
-          <div class="name">Lampe</div>
-          <div>- farbe : String<br>- helligkeit : int<br>- istAn : boolean</div>
-          <div>+ schalteEin()<br>+ werdeHeller()<br>+ zeigeZustand()</div>
+          <div class="name">Auto</div>
+          <div>- kilometerstand : int<br>…</div>
+          <div>+ fahre100km()<br>…</div>
         </div>
         <ul style="flex:1; min-width: 240px;">
           <li><strong>oben</strong> der Name der Klasse (groß geschrieben),</li>
@@ -420,10 +427,14 @@
           <li><strong>unten</strong> die Methoden: <code>+ name()</code>.</li>
         </ul>
       </div>
-      <div class="warum"><strong>Was bedeuten − und +?</strong> Das Minus steht für <code class="j-mod">private</code>:
-      Nur das Objekt selbst darf seine Attribute verändern, niemand von außen. Das Plus steht für
-      <code class="j-mod">public</code>: Die Methode darf von außen aufgerufen werden, z. B. von dir per
-      Rechtsklick in BlueJ.</div>
+      <p>Das Beispiel zeigt nur ein Attribut und eine Methode. In dein Diagramm schreibst du alle Attribute
+      aus AB Aufgabe 2 und deine Methoden.</p>
+      <div class="warum"><strong>Was bedeuten − und +?</strong> Das Minus (im Java-Code
+      <code class="j-mod">private</code>) und das Plus (im Java-Code <code class="j-mod">public</code>) haben eine
+      wichtige Bedeutung, die du später noch kennenlernst. Bis dahin vereinbaren wir: Vor alle Attribute
+      schreiben wir <code>-</code> bzw. <code class="j-mod">private</code>, vor alle Methoden <code>+</code> bzw.
+      <code class="j-mod">public</code>. Später wirst du sehen, dass es manchmal sinnvoll ist, von dieser Regel
+      abzuweichen.</div>
       <div class="tipp">⚠️ <strong>Häufige Fehler im Diagramm:</strong> Datentyp vergessen, Attribut groß
       geschrieben, Klammern <code>()</code> bei Methoden vergessen, Leerzeichen im Namen.</div>
     </div>
@@ -438,112 +449,69 @@
     </div>
     <div class="schritt-inhalt">
       <p><span class="ab-bezug">AB Aufgabe 4</span></p>
-      <p>Jetzt wird aus deinem Klassendiagramm Java-Code. Gehe Zeile für Zeile durch dein Diagramm. Das
-      Beispiel zeigt jeweils die Klasse <strong>Lampe</strong>, du schreibst den Code für <strong>deine</strong>
-      Klasse Auto.</p>
+      <p>Jetzt wird aus deinem Klassendiagramm Java-Code.</p>
 
-      <p><strong>a) Projekt und Klasse anlegen.</strong> Lege ein neues Projekt <code>Bordcomputer</code> an
-      und darin eine Klasse <code>Auto</code> (wie in Einheit 01). Öffne den Editor und lösche alles bis auf
-      den Klassenrahmen. Übrig bleibt:</p>
-      <div class="code"><button class="kopieren">Kopieren</button><pre class="java">public class Auto
+      <p><strong>a) Projekt und Klasse anlegen.</strong> Lege ein neues Projekt <code>MeinEigenesAuto</code>
+      an und darin eine Klasse <code>Auto</code> (wie in Einheit 01). Öffne den Editor und lösche den
+      vorgegebenen Inhalt.</p>
+
+      <p><strong>b) So ist eine Klasse aufgebaut.</strong> Jede Klasse in Java folgt denselben Regeln. Das
+      Beispiel zeigt sie an einem Auto mit nur einem Attribut und einer Methode:</p>
+      <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>public class Auto
 {
+    private int kilometerstand;
 
-}</pre></div>
-      <p>Alles Weitere schreibst du zwischen die beiden geschweiften Klammern.</p>
-
-      <p><strong>b) Attribute.</strong> Aus jeder Attributzeile im Diagramm wird eine Zeile Code.
-      Das <code>-</code> wird zu <code class="j-mod">private</code>, danach folgen erst der Datentyp, dann der Name
-      und ein Semikolon.</p>
-      <div class="code"><div class="titel">Muster: aus „- name : Datentyp“ wird …</div><pre class="java">    private Datentyp name;</pre></div>
-      <div class="code"><div class="titel">Beispiel Lampe</div><pre class="java">    private String farbe;
-    private int helligkeit;
-    private boolean istAn;</pre></div>
-
-      <p><strong>c) Konstruktor mit Startwerten.</strong> Der Konstruktor heißt genau wie die Klasse. Er legt
-      fest, welche Werte ein neues Objekt am Anfang hat. Gib jedem Attribut einen Startwert, der zu seinem
-      Datentyp passt.</p>
-      <div class="code"><div class="titel">Beispiel Lampe</div><pre class="java">    public Lampe()
+    public Auto()
     {
-        this.farbe = "gelb";
-        this.helligkeit = 0;
-        this.istAn = false;
-    }</pre></div>
-      <div class="warum"><strong>Warum Startwerte?</strong> Ohne Startwert hätte eine Zahl den Wert 0, ein
-      Wahrheitswert <code class="t-lit">false</code> und ein Text den Wert <code class="t-lit">null</code> („nichts“). Mit
-      eigenen Startwerten bestimmst du selbst, wie ein neues Auto aussieht. <code class="t-lit">this</code>.farbe
-      bedeutet: die Farbe <em>dieses</em> Objekts.</div>
-
-      <p><strong>d) Methoden.</strong> Aus <code>+ name()</code> wird <code class="j-mod">public</code>
-      <code class="j-dekl">void</code> <code>name()</code>, gefolgt von geschweiften Klammern mit dem, was die Methode tut.</p>
-      <div class="code"><div class="titel">Beispiel Lampe: Art (1), einen Attributwert ändern</div><pre class="java">    public void schalteEin()
-    {
-        this.istAn = true;
+        this.kilometerstand = 0;
     }
 
-    public void werdeHeller()
+    public void fahre100km()
     {
-        this.helligkeit = this.helligkeit + 10;
-    }</pre></div>
-      <div class="code"><div class="titel">Beispiel Lampe: Art (2), etwas auf der Konsole ausgeben</div><pre class="java">    public void zeigeZustand()
-    {
-        System.out.println("Die Lampe ist " + this.farbe + ", Helligkeit: " + this.helligkeit);
-    }</pre></div>
-      <div class="warum"><strong>Was bedeutet das?</strong> <code class="j-dekl">void</code> heißt „leer“: Die Methode liefert
-      kein Ergebnis zurück. Die leeren Klammern <code>()</code> zeigen, dass sie keine Eingabe braucht.
-      <code>this.helligkeit = this.helligkeit + 10;</code> bedeutet: Nimm den bisherigen Wert, rechne 10 dazu
-      und speichere das Ergebnis wieder im Attribut. Mit <code>+</code> kann man auch Texte und Werte zu einer
-      Ausgabe zusammensetzen.</div>
-
-      <details class="ausklapp">
-        <summary>Die ganze Beispielklasse Lampe zum Ausprobieren</summary>
-        <p>Du kannst die Klasse Lampe auch selbst in BlueJ anlegen und testen, um zu sehen, wie alles
-        zusammenspielt.</p>
-        <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>/**
- * Eine Lampe, die man einschalten und heller machen kann.
- */
-public class Lampe
-{
-    private String farbe;
-    private int helligkeit;
-    private boolean istAn;
-
-    public Lampe()
-    {
-        this.farbe = "gelb";
-        this.helligkeit = 0;
-        this.istAn = false;
-    }
-
-    public void schalteEin()
-    {
-        this.istAn = true;
-    }
-
-    public void werdeHeller()
-    {
-        this.helligkeit = this.helligkeit + 10;
-    }
-
-    public void zeigeZustand()
-    {
-        System.out.println("Die Lampe ist " + this.farbe + ", Helligkeit: " + this.helligkeit);
+        this.kilometerstand = this.kilometerstand + 100;
     }
 }</pre></div>
-      </details>
+      <ol>
+        <li><strong>Kopf der Klasse</strong> (Zeile 1): das Schlüsselwort <code class="j-mod">public</code>
+          <code class="j-dekl">class</code>, danach der Name der Klasse mit großem Anfangsbuchstaben.</li>
+        <li><strong>Geschweifte Klammern</strong> (Zeilen 2 und 14): Alles, was zur Klasse gehört, steht zwischen
+          <code>{</code> und <code>}</code>. Auch Konstruktor und Methoden haben jeweils eigene Klammern.</li>
+        <li><strong>Zuerst die Attribute</strong> (Zeile 3): je Attribut eine Zeile nach dem Muster
+          <code><span class="j-mod">private</span> Datentyp name;</code></li>
+        <li><strong>Dann der Konstruktor</strong> (Zeilen 5–8): Er heißt <em>genau</em> wie die Klasse und hat
+          keinen Datentyp davor. Darin bekommt jedes Attribut seinen Startwert.
+          <code class="j-lit">this</code>.kilometerstand bedeutet: der Kilometerstand <em>dieses</em> Objekts.</li>
+        <li><strong>Zum Schluss die Methoden</strong> (Zeilen 10–13): nach dem Muster
+          <code><span class="j-mod">public</span> <span class="j-dekl">void</span> name()</code>, darunter in
+          geschweiften Klammern, was die Methode tut.</li>
+        <li><strong>Jede Anweisung endet mit einem Semikolon</strong> <code>;</code>. Groß- und Kleinschreibung
+          muss überall genau stimmen.</li>
+      </ol>
+      <div class="warum"><strong>Was bedeutet <code>this.kilometerstand = this.kilometerstand + 100;</code>?</strong>
+      Nimm den bisherigen Kilometerstand, rechne 100 dazu und speichere das Ergebnis wieder im Attribut.
+      <code class="j-dekl">void</code> heißt „leer“: Die Methode liefert kein Ergebnis zurück. Die leeren Klammern
+      <code>()</code> zeigen, dass man ihr beim Aufruf nichts mitgibt.</div>
 
-      <p><strong>e) Übersetzen.</strong> Klicke auf <span class="menue">Übersetzen</span>. Erscheint eine
-      Fehlermeldung, hilft dir diese Tabelle:</p>
+      <p><strong>c) Übertrage die Regeln auf deine Klasse.</strong> Schreibe nun deine eigenen Attribute und
+      Methoden. Für die anderen Datentypen und für Ausgaben brauchst du noch diese Bausteine:</p>
       <div class="tab-wrap"><table class="tab">
-        <tr><th>Meldung von BlueJ</th><th>häufige Ursache</th></tr>
-        <tr><td><code>';' erwartet</code><br><small>(<code>';' expected</code>)</small></td><td>Am Ende einer Anweisung fehlt das Semikolon.</td></tr>
-        <tr><td><code>Symbol nicht gefunden</code><br><small>(<code>cannot find symbol</code>)</small></td><td>Ein Name ist anders geschrieben als bei der Deklaration (auf Groß- und Kleinschreibung achten!) oder das Attribut wurde nicht deklariert.</td></tr>
-        <tr><td><code>Inkompatible Typen: String kann nicht in int konvertiert werden</code><br><small>(<code>incompatible types …</code>)</small></td><td>Der Wert passt nicht zum Datentyp, z. B. eine Zahl in Anführungszeichen.</td></tr>
-        <tr><td><code>Ungültige Methodendeklaration. Rückgabetyp erforderlich</code><br><small>(<code>invalid method declaration …</code>)</small></td><td><code>void</code> fehlt, oder der Konstruktor heißt nicht genau wie die Klasse.</td></tr>
-        <tr><td><code>Dateiende beim Parsen erreicht</code><br><small>(<code>reached end of file while parsing</code>)</small></td><td>Eine schließende Klammer <code>}</code> fehlt.</td></tr>
-        <tr><td><code>class, interface, enum oder record erwartet</code><br><small>(<code>… expected</code>)</small></td><td>Eine Klammer <code>}</code> zu viel, oder Code steht außerhalb der Klasse.</td></tr>
+        <tr><th>Baustein</th><th>So sieht er aus</th></tr>
+        <tr><td>Attribut vom Typ <code>String</code></td><td><code><span class="j-mod">private</span> String marke;</code></td></tr>
+        <tr><td>Attribut vom Typ <code class="t-int">boolean</code></td><td><code><span class="j-mod">private</span> <span class="j-dekl">boolean</span> motorLaeuft;</code></td></tr>
+        <tr><td>Startwert für einen Text</td><td><code><span class="j-lit">this</span>.marke = <span class="j-str">"VW"</span>;</code></td></tr>
+        <tr><td>Startwert für einen Wahrheitswert</td><td><code><span class="j-lit">this</span>.motorLaeuft = <span class="j-lit">false</span>;</code></td></tr>
+        <tr><td>Attributwert in einer Methode fest setzen</td><td><code><span class="j-lit">this</span>.motorLaeuft = <span class="j-lit">true</span>;</code></td></tr>
+        <tr><td>Text auf der Konsole ausgeben</td><td><code>System.out.println(<span class="j-str">"Hup, hup!"</span>);</code></td></tr>
       </table></div>
 
-      <p><strong>f) Testen.</strong> Erzeuge zwei Autos (<code>auto1</code> und <code>auto2</code>). Rufe bei
+      <p><strong>d) Übersetzen.</strong> Klicke auf <span class="menue">Übersetzen</span>.</p>
+      <div class="tipp">⚠️ <strong>Fehlermeldung?</strong> BlueJ markiert die Zeile, an der es nicht
+      weiterkommt. Prüfe deinen Code dort und in den Zeilen davor ganz genau: Stimmen alle geschweiften und
+      runden Klammern, und hat jede öffnende Klammer eine schließende? Endet jede Anweisung mit einem
+      Semikolon? Sind alle Namen genau gleich geschrieben, auch bei Groß- und Kleinschreibung? Stehen Texte in
+      Anführungszeichen?</div>
+
+      <p><strong>e) Testen.</strong> Erzeuge zwei Autos (<code>auto1</code> und <code>auto2</code>). Rufe bei
       <code>auto1</code> deine Methoden mehrmals auf, bei <code>auto2</code> nicht. Inspiziere beide Autos.</p>
 
       <details class="ausklapp">
@@ -639,7 +607,8 @@ public class Lampe
         <li>Schreibe eine Methode <code>tanke10Liter()</code>, die den Tankinhalt um 10 erhöht, und eine Methode
           <code>stoppeMotor()</code>, die <code>motorLaeuft</code> wieder auf <code class="t-lit">false</code> setzt.</li>
         <li>Schreibe eine Methode <code>zeigeKilometerstand()</code>, die zum Beispiel
-          „Kilometerstand: 300 km“ auf der Konsole ausgibt. Orientiere dich an <code>zeigeZustand()</code> der Lampe.</li>
+          „Kilometerstand: 300 km“ auf der Konsole ausgibt. Tipp: Einen Text und den Wert eines Attributs
+          verbindest du in der Ausgabe mit <code>+</code>.</li>
         <li>Ergänze dein Klassendiagramm auf dem Arbeitsblatt um die neuen Attribute und Methoden.</li>
       </ol>
     </div>
