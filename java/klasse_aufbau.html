@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aufbau einer Klasse – Java-Tutorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Code+Pro:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C; --blue-mid: #185FA5; --blue-light: #E6F1FB; --blue-border: #B5D4F4;
+    --green-mid: #16A34A; --green-light: #F0FDF4;
+    --gray-border: #D3D1C7; --gray-text: #5F5E5A; --text-main: #1a1917;
+    --code-bg: rgb(243,247,252); --code-border: rgb(160,185,215); --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); line-height: 1.6; }
+  .page { width: min(860px, 100%); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .back-link { display: inline-flex; gap: .4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+  .header .kurs { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: .4rem; }
+  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .header .sub { margin-top: .5rem; font-size: 14.5px; color: var(--gray-text); }
+  .karte { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-bottom: 1.1rem; font-size: 15px; }
+  .karte > * + * { margin-top: .7rem; }
+  .karte h2 { font-family: 'Source Serif 4', serif; font-size: 1.25rem; font-weight: 600; }
+  .karte ul, .karte ol { padding-left: 1.4rem; }
+  .karte li + li { margin-top: .3rem; }
+  code { font-family: 'Source Code Pro', monospace; font-size: .92em; background: var(--code-bg); border: 1px solid #d6e2f0; border-radius: 4px; padding: 0 4px; }
+  .merke { background: var(--green-light); border: 1px solid #bbf7d0; border-radius: 8px; padding: .7rem 1rem; }
+  .merke strong:first-child { color: #166534; }
+  .tipp { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .6rem .9rem; font-size: 14.5px; color: #7c2d12; }
+  .tipp ul { margin-top: .3rem; }
+  table.tab { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  table.tab th, table.tab td { border: 1px solid var(--gray-border); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  table.tab th { background: #f1efe9; font-weight: 600; }
+  .tab-wrap { overflow-x: auto; }
+  .code { position: relative; background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; }
+  .code pre { font-family: 'Source Code Pro', monospace; font-size: 13.5px; line-height: 1.55; padding: .8rem 1rem; overflow-x: auto; color: #000; }
+  .kopieren { position: absolute; top: 6px; right: 6px; font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--code-border); background: white; color: var(--blue-dark); cursor: pointer; }
+  .kopieren.ok { background: var(--green-light); color: var(--green-mid); }
+  .j-mod { color: #660033; } .j-dekl { color: #CC0000; } .j-lit { color: #006699; }
+  .j-str { color: #006600; } .j-kom { color: #999999; } .j-doc { color: #000099; }
+  .zn { color: #9aa5b1; user-select: none; display: inline-block; width: 2.2em; text-align: right; margin-right: 1em; }
+  .navi { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .navi a { flex: 1; min-width: 200px; background: white; border: 1px solid var(--gray-border); border-radius: 8px; padding: .7rem 1rem; text-decoration: none; color: inherit; font-size: 14px; }
+  .navi a:hover { border-color: var(--blue-mid); }
+  .navi .richtung { font-size: 12px; color: var(--gray-text); display: block; }
+  .navi .weiter { text-align: right; }
+  .site-footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  @media (max-width: 600px) { .page { padding: 1.5rem 1rem 3rem; } .header h1 { font-size: 1.6rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="index_java.html" class="back-link">‹ Java-Tutorial</a>
+
+  <div class="header">
+    <div class="kurs">Java-Tutorial · Grundlagen: Klassen in Java · 01</div>
+    <h1>Aufbau einer Klasse</h1>
+    <div class="sub">Schlüsselwort <code>class</code>, Klassenkopf, geschweifte Klammern und die feste Reihenfolge: Attribute, Konstruktor, Methoden.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Worum geht es?</h2>
+    <p>Ein Java-Programm besteht aus <strong>Klassen</strong>. Eine Klasse ist der Bauplan für
+    <strong>Objekte</strong>: Sie legt fest, welche Eigenschaften (<strong>Attribute</strong>) jedes Objekt
+    hat und was jedes Objekt tun kann (<strong>Methoden</strong>). Jede Klasse steht in einer eigenen Datei,
+    die genauso heißt wie die Klasse, z. B. <code>Auto.java</code>. In BlueJ legst du eine Klasse mit dem
+    Knopf „Neue Klasse …“ an.</p>
+  </div>
+
+  <div class="karte">
+    <h2>Der Kopf der Klasse</h2>
+    <div class="code"><pre class="java">public class Auto</pre></div>
+    <ul>
+      <li><code class="j-mod">public</code> schreiben wir vorerst immer davor.</li>
+      <li><code class="j-dekl">class</code> ist das <strong>Schlüsselwort</strong>, das eine Klasse einleitet.</li>
+      <li>Danach folgt der <strong>Name der Klasse</strong>. Er beginnt mit einem Großbuchstaben und enthält keine
+        Leerzeichen und keine Umlaute. Meist ist er ein Nomen im Singular: <code>Auto</code>, nicht
+        <code>Autos</code>, denn die Klasse beschreibt, wie <em>ein</em> Auto aussieht.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h2>Das Grundgerüst</h2>
+    <p>Nach dem Kopf folgen geschweifte Klammern <code>{ }</code>. Alles, was zur Klasse gehört, steht
+    dazwischen, und zwar immer in derselben Reihenfolge:</p>
+    <div class="code"><button class="kopieren">Kopieren</button><pre class="java">public class Auto
+{
+    // 1. Attribute
+
+    // 2. Konstruktor
+
+    // 3. Methoden
+}</pre></div>
+    <ol>
+      <li><strong>Attribute</strong>: die Eigenschaften, die sich jedes Objekt merkt.
+        → <a href="attribute_datentypen.html">Attribute und Datentypen</a></li>
+      <li><strong>Konstruktor</strong>: legt fest, mit welchen Startwerten ein neues Objekt beginnt (siehe unten).</li>
+      <li><strong>Methoden</strong>: das, was jedes Objekt tun kann.
+        → <a href="methoden_einfach.html">Einfache Methoden</a></li>
+    </ol>
+    <p>Die Zeilen mit <code class="j-kom">//</code> sind <strong>Kommentare</strong>. Sie sind nur für Menschen
+    gedacht; der Computer überliest sie.</p>
+  </div>
+
+  <div class="karte">
+    <h2>Ein vollständiges Beispiel</h2>
+    <p>So sieht eine kleine, aber vollständige Klasse aus, mit einem Attribut, dem Konstruktor und einer Methode:</p>
+    <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>public class Auto
+{
+    private int kilometerstand;
+
+    public Auto()
+    {
+        this.kilometerstand = 0;
+    }
+
+    public void fahre100km()
+    {
+        this.kilometerstand = this.kilometerstand + 100;
+    }
+}</pre></div>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>Zeilen</th><th>Bedeutung</th></tr>
+      <tr><td>1–2, 14</td><td>Kopf der Klasse und die geschweiften Klammern, die alles umschließen</td></tr>
+      <tr><td>3</td><td>ein Attribut: <code>kilometerstand</code> vom Datentyp <code class="j-dekl">int</code></td></tr>
+      <tr><td>5–8</td><td>der Konstruktor: Ein neues Auto beginnt mit dem Kilometerstand 0.</td></tr>
+      <tr><td>10–13</td><td>eine Methode: Das Auto fährt 100 km, der Kilometerstand steigt um 100.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="karte">
+    <h2>Der Konstruktor</h2>
+    <div class="code"><pre class="java">    public Auto()
+    {
+        this.kilometerstand = 0;
+    }</pre></div>
+    <ul>
+      <li>Der Konstruktor heißt <strong>genau wie die Klasse</strong>, mit großem Anfangsbuchstaben.</li>
+      <li>Vor dem Namen steht nur <code class="j-mod">public</code>, <strong>kein Datentyp</strong> und kein
+        <code class="j-dekl">void</code>.</li>
+      <li>Er wird automatisch ausgeführt, wenn ein neues Objekt hergestellt wird, in BlueJ also beim Rechtsklick
+        auf die Klasse und <code><span class="j-mod">new</span> Auto()</code>.</li>
+      <li>Darin bekommt <strong>jedes Attribut seinen Startwert</strong>. <code class="j-lit">this</code>.kilometerstand
+        bedeutet: der Kilometerstand <em>dieses</em> Objekts.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h2>Regeln auf einen Blick</h2>
+    <div class="merke">
+      <ul>
+        <li>Kopf: <code><span class="j-mod">public</span> <span class="j-dekl">class</span> Name</code>, der Name beginnt groß.</li>
+        <li>Zu jeder öffnenden Klammer <code>{</code> gehört eine schließende <code>}</code>.</li>
+        <li>Reihenfolge im Rumpf: erst die Attribute, dann der Konstruktor, dann die Methoden.</li>
+        <li>Jede <strong>Anweisung</strong> endet mit einem Semikolon <code>;</code>. Nach Kopfzeilen, auf die eine
+          <code>{</code> folgt, steht kein Semikolon.</li>
+        <li>Java unterscheidet Groß- und Kleinschreibung: <code>Auto</code> und <code>auto</code> sind verschiedene Namen.</li>
+        <li>Was zwischen <code>{</code> und <code>}</code> steht, wird um vier Leerzeichen eingerückt. Das macht den
+          Code lesbar, auch wenn der Computer es nicht braucht.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="navi">
+    <a href="index_java.html"><span class="richtung">‹ Übersicht</span>Java-Tutorial</a>
+    <a href="attribute_datentypen.html" class="weiter"><span class="richtung">Weiter ›</span>02 Attribute und Datentypen</a>
+  </div>
+
+  <footer class="site-footer">
+    <span>Java-Tutorial · Informatik</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+
+<script>
+// Java-Hervorhebung in BlueJ-Farben und Kopieren-Knopf
+const GRUPPEN = {
+  'j-mod': 'public private protected static final abstract if else while do for switch case break continue return try catch finally throw throws new instanceof default',
+  'j-dekl': 'class interface enum extends implements import package void boolean byte char short int long float double',
+  'j-lit': 'this super true false null'
+};
+const WORT = {};
+for (const [k, liste] of Object.entries(GRUPPEN)) liste.split(' ').forEach(w => WORT[w] = k);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function hebeHervor(text) {
+  const re = /(\/\*\*[\s\S]*?\*\/)|(\/\*[\s\S]*?\*\/)|(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|\b([A-Za-z_]\w*)\b/g;
+  let aus = '', pos = 0, m;
+  while ((m = re.exec(text))) {
+    aus += esc(text.slice(pos, m.index));
+    let cls = null;
+    if (m[1]) cls = 'j-doc'; else if (m[2] || m[3]) cls = 'j-kom';
+    else if (m[4] || m[5]) cls = 'j-str'; else if (m[6]) cls = WORT[m[6]] || null;
+    aus += cls ? `<span class="${cls}">${esc(m[0])}</span>` : esc(m[0]);
+    pos = re.lastIndex;
+  }
+  return aus + esc(text.slice(pos));
+}
+document.querySelectorAll('pre.java').forEach(pre => {
+  const roh = pre.textContent;
+  pre.dataset.roh = roh;
+  let html = hebeHervor(roh);
+  if (pre.hasAttribute('data-zeilennummern')) html = html.split('\n').map((z, i) => `<span class="zn">${i + 1}</span>${z}`).join('\n');
+  pre.innerHTML = html;
+});
+document.querySelectorAll('.kopieren').forEach(knopf => {
+  knopf.addEventListener('click', async () => {
+    const roh = knopf.parentElement.querySelector('pre').dataset.roh;
+    try { await navigator.clipboard.writeText(roh); }
+    catch (e) { const ta = document.createElement('textarea'); ta.value = roh; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    knopf.textContent = '✓ Kopiert'; knopf.classList.add('ok');
+    setTimeout(() => { knopf.textContent = 'Kopieren'; knopf.classList.remove('ok'); }, 1800);
+  });
+});
+</script>
+</body>
+</html>

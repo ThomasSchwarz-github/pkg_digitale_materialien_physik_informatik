@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attribute und Datentypen – Java-Tutorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Code+Pro:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C; --blue-mid: #185FA5; --blue-light: #E6F1FB; --blue-border: #B5D4F4;
+    --green-mid: #16A34A; --green-light: #F0FDF4;
+    --gray-border: #D3D1C7; --gray-text: #5F5E5A; --text-main: #1a1917;
+    --code-bg: rgb(243,247,252); --code-border: rgb(160,185,215); --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); line-height: 1.6; }
+  .page { width: min(860px, 100%); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .back-link { display: inline-flex; gap: .4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+  .header .kurs { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: .4rem; }
+  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .header .sub { margin-top: .5rem; font-size: 14.5px; color: var(--gray-text); }
+  .karte { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-bottom: 1.1rem; font-size: 15px; }
+  .karte > * + * { margin-top: .7rem; }
+  .karte h2 { font-family: 'Source Serif 4', serif; font-size: 1.25rem; font-weight: 600; }
+  .karte ul, .karte ol { padding-left: 1.4rem; }
+  .karte li + li { margin-top: .3rem; }
+  code { font-family: 'Source Code Pro', monospace; font-size: .92em; background: var(--code-bg); border: 1px solid #d6e2f0; border-radius: 4px; padding: 0 4px; }
+  .merke { background: var(--green-light); border: 1px solid #bbf7d0; border-radius: 8px; padding: .7rem 1rem; }
+  .merke strong:first-child { color: #166534; }
+  .tipp { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .6rem .9rem; font-size: 14.5px; color: #7c2d12; }
+  .tipp ul { margin-top: .3rem; }
+  table.tab { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  table.tab th, table.tab td { border: 1px solid var(--gray-border); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  table.tab th { background: #f1efe9; font-weight: 600; }
+  .tab-wrap { overflow-x: auto; }
+  .code { position: relative; background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; }
+  .code pre { font-family: 'Source Code Pro', monospace; font-size: 13.5px; line-height: 1.55; padding: .8rem 1rem; overflow-x: auto; color: #000; }
+  .kopieren { position: absolute; top: 6px; right: 6px; font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--code-border); background: white; color: var(--blue-dark); cursor: pointer; }
+  .kopieren.ok { background: var(--green-light); color: var(--green-mid); }
+  .j-mod { color: #660033; } .j-dekl { color: #CC0000; } .j-lit { color: #006699; }
+  .j-str { color: #006600; } .j-kom { color: #999999; } .j-doc { color: #000099; }
+  .zn { color: #9aa5b1; user-select: none; display: inline-block; width: 2.2em; text-align: right; margin-right: 1em; }
+  .navi { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .navi a { flex: 1; min-width: 200px; background: white; border: 1px solid var(--gray-border); border-radius: 8px; padding: .7rem 1rem; text-decoration: none; color: inherit; font-size: 14px; }
+  .navi a:hover { border-color: var(--blue-mid); }
+  .navi .richtung { font-size: 12px; color: var(--gray-text); display: block; }
+  .navi .weiter { text-align: right; }
+  .site-footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  @media (max-width: 600px) { .page { padding: 1.5rem 1rem 3rem; } .header h1 { font-size: 1.6rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="index_java.html" class="back-link">‹ Java-Tutorial</a>
+
+  <div class="header">
+    <div class="kurs">Java-Tutorial · Grundlagen: Klassen in Java · 02</div>
+    <h1>Attribute und Datentypen</h1>
+    <div class="sub">Wie ein Attribut deklariert wird, welche Datentypen es zunächst gibt und wie Attribute ihre Startwerte bekommen.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Was ist ein Attribut?</h2>
+    <p>Ein <strong>Attribut</strong> ist eine Eigenschaft, die sich jedes Objekt einer Klasse merkt, zum Beispiel
+    der Kilometerstand eines Autos. Die Klasse legt fest, <em>welche</em> Attribute es gibt. Jedes Objekt hat
+    dafür seine <em>eigenen</em> Werte, die <strong>Attributwerte</strong>.</p>
+  </div>
+
+  <div class="karte">
+    <h2>Ein Attribut deklarieren</h2>
+    <p>Attribute stehen ganz oben in der Klasse, vor dem Konstruktor. Jedes Attribut bekommt eine eigene Zeile
+    nach diesem Muster:</p>
+    <div class="code"><pre class="java">    private int kilometerstand;</pre></div>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>Teil</th><th>Bedeutung</th></tr>
+      <tr><td><code class="j-mod">private</code></td><td>der <strong>Zugriffsmodifikator</strong>. Was er genau bedeutet,
+        lernst du später. Vorerst gilt: Vor jedes Attribut schreiben wir <code class="j-mod">private</code>.</td></tr>
+      <tr><td><code class="j-dekl">int</code></td><td>der <strong>Datentyp</strong>: welche Art von Wert das Attribut speichert (siehe unten)</td></tr>
+      <tr><td><code>kilometerstand</code></td><td>der <strong>Name</strong> des Attributs</td></tr>
+      <tr><td><code>;</code></td><td>das Semikolon beendet die Deklaration</td></tr>
+    </table></div>
+    <p>Das Deklarieren heißt: Man kündigt an, dass es dieses Attribut gibt. Einen Wert bekommt es erst im
+    Konstruktor (siehe unten).</p>
+  </div>
+
+  <div class="karte">
+    <h2>Die ersten Datentypen</h2>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>Datentyp</th><th>speichert</th><th>Werte im Code</th><th>Beispiel</th></tr>
+      <tr><td><code class="j-dekl">int</code></td><td>ganze Zahlen (positiv und negativ), mit denen man rechnen kann</td>
+        <td><code>0</code>, <code>2019</code>, <code>-3</code></td><td><code><span class="j-mod">private</span> <span class="j-dekl">int</span> baujahr;</code></td></tr>
+      <tr><td><code>String</code></td><td>Zeichenketten, also Texte</td>
+        <td>in Anführungszeichen: <code class="j-str">"VW"</code>, <code class="j-str">"GL-AB 123"</code></td><td><code><span class="j-mod">private</span> String marke;</code></td></tr>
+      <tr><td><code class="j-dekl">boolean</code></td><td>Wahrheitswerte: wahr oder falsch</td>
+        <td>nur <code class="j-lit">true</code> oder <code class="j-lit">false</code></td><td><code><span class="j-mod">private</span> <span class="j-dekl">boolean</span> motorLaeuft;</code></td></tr>
+    </table></div>
+    <p><code class="j-dekl">int</code> und <code class="j-dekl">boolean</code> sind <strong>elementare Datentypen</strong>
+    und werden kleingeschrieben. <code>String</code> wird großgeschrieben, weil es genau genommen eine Klasse ist.
+    Du benutzt es aber genauso wie die anderen Datentypen.</p>
+    <div class="tipp"><strong>So entscheidest du:</strong> Lässt sich die Eigenschaft mit Ja oder Nein beantworten?
+    → <code class="j-dekl">boolean</code>. Ist sie eine ganze Zahl, mit der man rechnen will? → <code class="j-dekl">int</code>.
+    Sonst → <code>String</code>. Ein Kennzeichen enthält zwar Ziffern, ist aber ein Text.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Namen für Attribute</h2>
+    <ul>
+      <li>Der Name beginnt mit einem <strong>Kleinbuchstaben</strong> und enthält keine Leerzeichen und keine Umlaute.</li>
+      <li>Bei mehreren Wörtern beginnt jedes weitere Wort groß: <code>motorLaeuft</code>, <code>anzahlTueren</code>.</li>
+      <li>Der Name sagt genau, <strong>was</strong> gespeichert wird: <code>marke</code> für <code class="j-str">"Porsche"</code>
+        ist besser als ein unklares <code>name</code>.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h2>Startwerte im Konstruktor</h2>
+    <p>Im Konstruktor bekommt jedes Attribut seinen Startwert. Das geschieht mit einer <strong>Zuweisung</strong>:</p>
+    <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>public class Auto
+{
+    private String marke;
+    private int kilometerstand;
+    private boolean motorLaeuft;
+
+    public Auto()
+    {
+        this.marke = "VW";
+        this.kilometerstand = 0;
+        this.motorLaeuft = false;
+    }
+}</pre></div>
+    <ul>
+      <li>Das Gleichheitszeichen <code>=</code> heißt in Java „<strong>bekommt den Wert</strong>“:
+        <code><span class="j-lit">this</span>.kilometerstand = 0;</code> bedeutet „der Kilometerstand dieses Objekts bekommt den Wert 0“.</li>
+      <li>Der Wert muss zum Datentyp passen: Text in Anführungszeichen, Zahlen ohne, Wahrheitswerte als
+        <code class="j-lit">true</code> oder <code class="j-lit">false</code>.</li>
+      <li>Bekommt ein Attribut keinen Startwert, hat es automatisch einen Standardwert: <code>0</code> bei
+        <code class="j-dekl">int</code>, <code class="j-lit">false</code> bei <code class="j-dekl">boolean</code> und
+        <code class="j-lit">null</code> („nichts“) bei <code>String</code>. Besser ist es, jeden Startwert selbst festzulegen.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h2>Häufige Fehler</h2>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>falsch</th><th>richtig</th><th>Warum?</th></tr>
+      <tr><td><code><span class="j-lit">this</span>.kilometerstand = <span class="j-str">"45000"</span>;</code></td><td><code><span class="j-lit">this</span>.kilometerstand = 45000;</code></td><td>Eine Zahl vom Typ <code class="j-dekl">int</code> steht nicht in Anführungszeichen.</td></tr>
+      <tr><td><code><span class="j-lit">this</span>.marke = VW;</code></td><td><code><span class="j-lit">this</span>.marke = <span class="j-str">"VW"</span>;</code></td><td>Ein Text steht immer in Anführungszeichen.</td></tr>
+      <tr><td><code><span class="j-lit">this</span>.motorLaeuft = <span class="j-str">"false"</span>;</code></td><td><code><span class="j-lit">this</span>.motorLaeuft = <span class="j-lit">false</span>;</code></td><td><code class="j-lit">true</code> und <code class="j-lit">false</code> sind keine Texte.</td></tr>
+      <tr><td><code><span class="j-mod">private</span> string marke;</code></td><td><code><span class="j-mod">private</span> String marke;</code></td><td><code>String</code> wird großgeschrieben, <code class="j-dekl">int</code> und <code class="j-dekl">boolean</code> klein.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="navi">
+    <a href="klasse_aufbau.html"><span class="richtung">‹ Zurück</span>01 Aufbau einer Klasse</a>
+    <a href="methoden_einfach.html" class="weiter"><span class="richtung">Weiter ›</span>03 Einfache Methoden</a>
+  </div>
+
+  <footer class="site-footer">
+    <span>Java-Tutorial · Informatik</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+
+<script>
+// Java-Hervorhebung in BlueJ-Farben und Kopieren-Knopf
+const GRUPPEN = {
+  'j-mod': 'public private protected static final abstract if else while do for switch case break continue return try catch finally throw throws new instanceof default',
+  'j-dekl': 'class interface enum extends implements import package void boolean byte char short int long float double',
+  'j-lit': 'this super true false null'
+};
+const WORT = {};
+for (const [k, liste] of Object.entries(GRUPPEN)) liste.split(' ').forEach(w => WORT[w] = k);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function hebeHervor(text) {
+  const re = /(\/\*\*[\s\S]*?\*\/)|(\/\*[\s\S]*?\*\/)|(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|\b([A-Za-z_]\w*)\b/g;
+  let aus = '', pos = 0, m;
+  while ((m = re.exec(text))) {
+    aus += esc(text.slice(pos, m.index));
+    let cls = null;
+    if (m[1]) cls = 'j-doc'; else if (m[2] || m[3]) cls = 'j-kom';
+    else if (m[4] || m[5]) cls = 'j-str'; else if (m[6]) cls = WORT[m[6]] || null;
+    aus += cls ? `<span class="${cls}">${esc(m[0])}</span>` : esc(m[0]);
+    pos = re.lastIndex;
+  }
+  return aus + esc(text.slice(pos));
+}
+document.querySelectorAll('pre.java').forEach(pre => {
+  const roh = pre.textContent;
+  pre.dataset.roh = roh;
+  let html = hebeHervor(roh);
+  if (pre.hasAttribute('data-zeilennummern')) html = html.split('\n').map((z, i) => `<span class="zn">${i + 1}</span>${z}`).join('\n');
+  pre.innerHTML = html;
+});
+document.querySelectorAll('.kopieren').forEach(knopf => {
+  knopf.addEventListener('click', async () => {
+    const roh = knopf.parentElement.querySelector('pre').dataset.roh;
+    try { await navigator.clipboard.writeText(roh); }
+    catch (e) { const ta = document.createElement('textarea'); ta.value = roh; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    knopf.textContent = '✓ Kopiert'; knopf.classList.add('ok');
+    setTimeout(() => { knopf.textContent = 'Kopieren'; knopf.classList.remove('ok'); }, 1800);
+  });
+});
+</script>
+</body>
+</html>

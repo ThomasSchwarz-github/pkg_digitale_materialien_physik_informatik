@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Einfache Methoden – Java-Tutorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Code+Pro:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C; --blue-mid: #185FA5; --blue-light: #E6F1FB; --blue-border: #B5D4F4;
+    --green-mid: #16A34A; --green-light: #F0FDF4;
+    --gray-border: #D3D1C7; --gray-text: #5F5E5A; --text-main: #1a1917;
+    --code-bg: rgb(243,247,252); --code-border: rgb(160,185,215); --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); line-height: 1.6; }
+  .page { width: min(860px, 100%); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .back-link { display: inline-flex; gap: .4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+  .header .kurs { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: .4rem; }
+  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .header .sub { margin-top: .5rem; font-size: 14.5px; color: var(--gray-text); }
+  .karte { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-bottom: 1.1rem; font-size: 15px; }
+  .karte > * + * { margin-top: .7rem; }
+  .karte h2 { font-family: 'Source Serif 4', serif; font-size: 1.25rem; font-weight: 600; }
+  .karte ul, .karte ol { padding-left: 1.4rem; }
+  .karte li + li { margin-top: .3rem; }
+  code { font-family: 'Source Code Pro', monospace; font-size: .92em; background: var(--code-bg); border: 1px solid #d6e2f0; border-radius: 4px; padding: 0 4px; }
+  .merke { background: var(--green-light); border: 1px solid #bbf7d0; border-radius: 8px; padding: .7rem 1rem; }
+  .merke strong:first-child { color: #166534; }
+  .tipp { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .6rem .9rem; font-size: 14.5px; color: #7c2d12; }
+  .tipp ul { margin-top: .3rem; }
+  table.tab { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  table.tab th, table.tab td { border: 1px solid var(--gray-border); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  table.tab th { background: #f1efe9; font-weight: 600; }
+  .tab-wrap { overflow-x: auto; }
+  .code { position: relative; background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; }
+  .code pre { font-family: 'Source Code Pro', monospace; font-size: 13.5px; line-height: 1.55; padding: .8rem 1rem; overflow-x: auto; color: #000; }
+  .kopieren { position: absolute; top: 6px; right: 6px; font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--code-border); background: white; color: var(--blue-dark); cursor: pointer; }
+  .kopieren.ok { background: var(--green-light); color: var(--green-mid); }
+  .j-mod { color: #660033; } .j-dekl { color: #CC0000; } .j-lit { color: #006699; }
+  .j-str { color: #006600; } .j-kom { color: #999999; } .j-doc { color: #000099; }
+  .zn { color: #9aa5b1; user-select: none; display: inline-block; width: 2.2em; text-align: right; margin-right: 1em; }
+  .navi { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .navi a { flex: 1; min-width: 200px; background: white; border: 1px solid var(--gray-border); border-radius: 8px; padding: .7rem 1rem; text-decoration: none; color: inherit; font-size: 14px; }
+  .navi a:hover { border-color: var(--blue-mid); }
+  .navi .richtung { font-size: 12px; color: var(--gray-text); display: block; }
+  .navi .weiter { text-align: right; }
+  .site-footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  @media (max-width: 600px) { .page { padding: 1.5rem 1rem 3rem; } .header h1 { font-size: 1.6rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="index_java.html" class="back-link">‹ Java-Tutorial</a>
+
+  <div class="header">
+    <div class="kurs">Java-Tutorial · Grundlagen: Klassen in Java · 03</div>
+    <h1>Einfache Methoden</h1>
+    <div class="sub">Methoden ohne Eingabe und ohne Rückgabe: Aufbau, Attributwerte ändern und Texte auf der Konsole ausgeben.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Was ist eine Methode?</h2>
+    <p>Eine <strong>Methode</strong> beschreibt etwas, das jedes Objekt einer Klasse tun kann, zum Beispiel
+    hupen oder 100 km fahren. Methoden stehen in der Klasse nach dem Konstruktor. Auf dieser Seite geht es um die
+    einfachste Sorte: Methoden, die bei jedem Aufruf <strong>immer genau dasselbe</strong> tun. Man kann ihnen beim
+    Aufruf nichts mitgeben, und sie liefern kein Ergebnis zurück.</p>
+  </div>
+
+  <div class="karte">
+    <h2>Aufbau einer Methode</h2>
+    <div class="code"><pre class="java">    public void fahre100km()
+    {
+        this.kilometerstand = this.kilometerstand + 100;
+    }</pre></div>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>Teil</th><th>Bedeutung</th></tr>
+      <tr><td><code class="j-mod">public</code></td><td>der <strong>Zugriffsmodifikator</strong>. Vorerst schreiben wir
+        <code class="j-mod">public</code> vor jede Methode. Die Bedeutung lernst du später.</td></tr>
+      <tr><td><code class="j-dekl">void</code></td><td>heißt „leer“: Die Methode liefert <strong>kein Ergebnis zurück</strong>.</td></tr>
+      <tr><td><code>fahre100km</code></td><td>der <strong>Name</strong>: beginnt klein, meist mit einem Verb</td></tr>
+      <tr><td><code>()</code></td><td>runde Klammern; leer, weil man der Methode beim Aufruf <strong>nichts mitgibt</strong></td></tr>
+      <tr><td><code>{ … }</code></td><td>der <strong>Rumpf</strong>: die Anweisungen, die beim Aufruf ausgeführt werden.
+        Jede Anweisung endet mit einem Semikolon.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="karte">
+    <h2>Was eine einfache Methode tun kann</h2>
+    <p><strong>1. Einen Attributwert fest setzen.</strong> Das Attribut bekommt immer denselben neuen Wert:</p>
+    <div class="code"><pre class="java">    public void starteMotor()
+    {
+        this.motorLaeuft = true;
+    }</pre></div>
+    <p><strong>2. Einen Attributwert verändern.</strong> Der neue Wert wird aus dem alten berechnet:</p>
+    <div class="code"><pre class="java">    public void fahre100km()
+    {
+        this.kilometerstand = this.kilometerstand + 100;
+    }</pre></div>
+    <p>Das liest man von rechts nach links: Nimm den bisherigen Kilometerstand, rechne 100 dazu und speichere das
+    Ergebnis wieder im Attribut. Mit <code class="j-dekl">int</code>-Werten kannst du auch <code>-</code> (minus) und
+    <code>*</code> (mal) rechnen.</p>
+    <p><strong>3. Einen Text auf der Konsole ausgeben.</strong></p>
+    <div class="code"><pre class="java">    public void hupe()
+    {
+        System.out.println("Hup, hup!");
+    }</pre></div>
+    <p><code>System.out.println(…)</code> schreibt, was in den Klammern steht, als eigene Zeile in das
+    Konsolenfenster von BlueJ. Mit <code>+</code> verbindest du Texte und Attributwerte zu einer Ausgabe:</p>
+    <div class="code"><pre class="java">        System.out.println("Kilometerstand: " + this.kilometerstand + " km");</pre></div>
+    <p>Bei einem Kilometerstand von 300 erscheint: <code>Kilometerstand: 300 km</code>.</p>
+  </div>
+
+  <div class="karte">
+    <h2>Methoden aufrufen</h2>
+    <p>In BlueJ rufst du eine Methode auf, indem du mit der rechten Maustaste auf ein Objekt in der Objektleiste
+    klickst und die Methode auswählst. Sie wirkt nur auf <em>dieses</em> Objekt: Fährt <code>auto1</code> 100 km,
+    ändert sich der Kilometerstand von <code>auto2</code> nicht. Mit „Inspizieren“ siehst du die neuen
+    Attributwerte.</p>
+  </div>
+
+  <div class="karte">
+    <h2>Häufige Fehler</h2>
+    <ul>
+      <li><code class="j-dekl">void</code> vergessen: <code><span class="j-mod">public</span> hupe()</code> ist falsch. Nur
+        der Konstruktor hat kein <code class="j-dekl">void</code>.</li>
+      <li>Klammern vergessen: Auch ohne Eingabe braucht der Name die runden Klammern <code>()</code>.</li>
+      <li>Semikolon nach der Kopfzeile: <code><span class="j-mod">public</span> <span class="j-dekl">void</span> hupe();</code>
+        gefolgt von <code>{</code> ist falsch.</li>
+      <li>Methode außerhalb der Klasse: Alle Methoden stehen <em>innerhalb</em> der äußeren geschweiften Klammern.</li>
+    </ul>
+    <div class="tipp"><strong>Ausblick:</strong> Später lernst du Methoden kennen, denen man beim Aufruf einen Wert
+    mitgeben kann (z. B. „fahre 250 km“), und Methoden, die ein Ergebnis zurückliefern (z. B. den Kilometerstand).</div>
+  </div>
+
+  <div class="navi">
+    <a href="attribute_datentypen.html"><span class="richtung">‹ Zurück</span>02 Attribute und Datentypen</a>
+    <a href="index_java.html" class="weiter"><span class="richtung">Übersicht ›</span>Java-Tutorial</a>
+  </div>
+
+  <footer class="site-footer">
+    <span>Java-Tutorial · Informatik</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+
+<script>
+// Java-Hervorhebung in BlueJ-Farben und Kopieren-Knopf
+const GRUPPEN = {
+  'j-mod': 'public private protected static final abstract if else while do for switch case break continue return try catch finally throw throws new instanceof default',
+  'j-dekl': 'class interface enum extends implements import package void boolean byte char short int long float double',
+  'j-lit': 'this super true false null'
+};
+const WORT = {};
+for (const [k, liste] of Object.entries(GRUPPEN)) liste.split(' ').forEach(w => WORT[w] = k);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function hebeHervor(text) {
+  const re = /(\/\*\*[\s\S]*?\*\/)|(\/\*[\s\S]*?\*\/)|(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|\b([A-Za-z_]\w*)\b/g;
+  let aus = '', pos = 0, m;
+  while ((m = re.exec(text))) {
+    aus += esc(text.slice(pos, m.index));
+    let cls = null;
+    if (m[1]) cls = 'j-doc'; else if (m[2] || m[3]) cls = 'j-kom';
+    else if (m[4] || m[5]) cls = 'j-str'; else if (m[6]) cls = WORT[m[6]] || null;
+    aus += cls ? `<span class="${cls}">${esc(m[0])}</span>` : esc(m[0]);
+    pos = re.lastIndex;
+  }
+  return aus + esc(text.slice(pos));
+}
+document.querySelectorAll('pre.java').forEach(pre => {
+  const roh = pre.textContent;
+  pre.dataset.roh = roh;
+  let html = hebeHervor(roh);
+  if (pre.hasAttribute('data-zeilennummern')) html = html.split('\n').map((z, i) => `<span class="zn">${i + 1}</span>${z}`).join('\n');
+  pre.innerHTML = html;
+});
+document.querySelectorAll('.kopieren').forEach(knopf => {
+  knopf.addEventListener('click', async () => {
+    const roh = knopf.parentElement.querySelector('pre').dataset.roh;
+    try { await navigator.clipboard.writeText(roh); }
+    catch (e) { const ta = document.createElement('textarea'); ta.value = roh; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    knopf.textContent = '✓ Kopiert'; knopf.classList.add('ok');
+    setTimeout(() => { knopf.textContent = 'Kopieren'; knopf.classList.remove('ok'); }, 1800);
+  });
+});
+</script>
+</body>
+</html>

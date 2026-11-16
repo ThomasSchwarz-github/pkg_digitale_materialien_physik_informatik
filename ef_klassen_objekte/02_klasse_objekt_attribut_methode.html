@@ -94,6 +94,8 @@
   .tipp { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .6rem .9rem; font-size: 14px; color: #7c2d12; }
   .merke { background: var(--green-light); border: 1px solid #bbf7d0; border-radius: 8px; padding: .7rem 1rem; font-size: 14.5px; }
   .merke strong:first-child { color: #166534; }
+  .tutorial { background: var(--blue-light); border: 1px solid var(--blue-border); border-radius: 8px; padding: .55rem .9rem; font-size: 14px; }
+  .tutorial a { color: var(--blue-dark); font-weight: 500; }
 
   table.tab { border-collapse: collapse; width: 100%; font-size: 14px; }
   table.tab th, table.tab td { border: 1px solid var(--gray-border); padding: .4rem .6rem; text-align: left; vertical-align: top; }
@@ -353,6 +355,8 @@
       <p><strong>Regeln für Attributnamen:</strong> Sie beginnen mit einem Kleinbuchstaben und enthalten
       keine Leerzeichen und keine Umlaute. Bei mehreren Wörtern beginnt jedes weitere Wort groß:
       <code>kilometerstand</code>, <code>motorLaeuft</code>, <code>anzahlTueren</code>.</p>
+      <div class="tutorial">📘 Zum Nachschlagen im Java-Tutorial:
+      <a href="../java/attribute_datentypen.html" target="_blank">02 Attribute und Datentypen</a></div>
       <div class="zuordnung" id="zuordnung">
         <div class="zuordnung-kopf">Übung: Welcher Datentyp passt? Wähle aus und klicke auf „Prüfen“.</div>
         <span>das Baujahr</span><select data-key="z1" data-loesung="int"></select><span class="rueck"></span>
@@ -394,6 +398,8 @@
           „Hup, hup!“ aus.</li>
       </ol>
       <p>Methodennamen beginnen klein, meist mit einem Verb, und enden mit runden Klammern <code>()</code>.</p>
+      <div class="tutorial">📘 Zum Nachschlagen im Java-Tutorial:
+      <a href="../java/methoden_einfach.html" target="_blank">03 Einfache Methoden</a></div>
       <details class="ausklapp">
         <summary>Was geht heute noch nicht? (kommt später)</summary>
         <p>Eine Methode „fahre so weit, wie ich eingebe“ oder „tanke so viel, wie ich sage“ müsste beim Aufruf
@@ -503,6 +509,10 @@
         <tr><td>Attributwert in einer Methode fest setzen</td><td><code><span class="j-lit">this</span>.motorLaeuft = <span class="j-lit">true</span>;</code></td></tr>
         <tr><td>Text auf der Konsole ausgeben</td><td><code>System.out.println(<span class="j-str">"Hup, hup!"</span>);</code></td></tr>
       </table></div>
+      <div class="tutorial">📘 Alle Regeln zum Nachschlagen im Java-Tutorial:
+      <a href="../java/klasse_aufbau.html" target="_blank">01 Aufbau einer Klasse</a> ·
+      <a href="../java/attribute_datentypen.html" target="_blank">02 Attribute und Datentypen</a> ·
+      <a href="../java/methoden_einfach.html" target="_blank">03 Einfache Methoden</a></div>
 
       <p><strong>d) Übersetzen.</strong> Klicke auf <span class="menue">Übersetzen</span>.</p>
       <div class="tipp">⚠️ <strong>Fehlermeldung?</strong> BlueJ markiert die Zeile, an der es nicht
