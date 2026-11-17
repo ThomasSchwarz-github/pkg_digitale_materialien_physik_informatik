@@ -91,9 +91,9 @@
     color: var(--text); border-style: solid; border-color: #9aa0ab; padding: 2px 6px; }
   .luecke.ok { border-color: var(--ok); background: var(--ok-soft); }
   .luecke.nein { border-color: var(--bad); background: var(--bad-soft); }
-  .wurzel { display: inline-flex; align-items: stretch; vertical-align: middle; }
-  .wurzel .wz { font-size: 1.5em; line-height: 1; align-self: center; margin-right: -1px; }
-  .wurzel .rad { border-top: 1px solid currentColor; padding: 2px 2px 0; }
+  .wurzel { display: inline-flex; align-items: stretch; vertical-align: middle; margin: 0 2px; }
+  .wurzel .wz { display: block; width: 0.62em; height: auto; flex: none; overflow: visible; }
+  .wurzel .rad { border-top: 1.2px solid currentColor; padding: 3px 3px 0 2px; }
   /* Auswahlfenster fuer die Formel-Luecken */
   .auswahl { position: fixed; z-index: 1100; background: #fff; border: 1px solid var(--line);
     border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.2); padding: 8px; display: grid;
@@ -130,15 +130,27 @@
     .feld.richtig, .feld.falsch { background: #fff; }
     .teil .griff { display: none; } .teil { padding-left: 10px; border-color: #bbb; }
   }
-  .zurueck { display: inline-block; margin: 0 0 10px; color: var(--accent); text-decoration: none;
-    font-size: 15px; }
+  .zurueck { display: inline-block; margin: 0 0 10px; color: var(--accent); text-decoration: none; font-size: 15px; }
   .zurueck:hover { text-decoration: underline; }
-  @media print { .zurueck { display: none; } }
+  .konto { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 14px; font-size: 15px; }
+  .konto-zeile { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  .konto input { font: inherit; font-size: 15px; padding: 6px 10px; border: 1px solid var(--line);
+    border-radius: 8px; min-width: 220px; flex: 1 1 220px; }
+  .email-tag { background: var(--accent-soft); color: var(--accent); padding: 3px 10px;
+    border-radius: 20px; font-weight: 600; }
+  .speicherstatus { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 14px; }
+  .speicherstatus .punkt { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+  .speicherstatus .punkt.ok { background: var(--ok); }
+  #konto-status { color: var(--muted); font-size: 14px; }
+  .konto [hidden] { display: none !important; }
+  @media print { .zurueck, .konto { display: none !important; } }
 </style>
 </head>
 <body>
 <div class="seite">
   <a href="index_physik.html" class="zurueck">‹ Physik-Übersicht</a>
+
   <div class="kopf">
     <div>Q1 LK</div><div>Physik</div>
     <div class="thema">IF1: Ladungen, Felder und Induktion</div>
@@ -147,6 +159,25 @@
 
   <h1>Puzzle: Wie bestimmt man die Masse des Elektrons?</h1>
 
+    <div class="konto" id="konto">
+    <div id="konto-abgemeldet">
+      <strong>🔐 Zuordnung speichern (freiwillig):</strong> Melde dich mit deiner Schul-E-Mail-Adresse
+      an, dann wird deine Zuordnung gespeichert und beim nächsten Besuch wieder geladen. Ohne
+      Anmeldung bleibt dein Stand nur in diesem Browser.
+      <div class="konto-zeile">
+        <input type="email" id="konto-email-feld" placeholder="vorname.nachname@pkg-online.de" autocomplete="username">
+        <input type="password" id="konto-passwort" placeholder="Passwort" autocomplete="current-password">
+        <button class="primaer" id="konto-anmelden">Anmelden</button>
+      </div>
+      <div id="konto-status"></div>
+    </div>
+    <div id="konto-angemeldet" class="konto-zeile" hidden style="margin-top:0">
+      <span>Angemeldet als</span> <span class="email-tag" id="konto-email"></span>
+      <button class="primaer" id="konto-speichern">Jetzt speichern</button>
+      <span class="speicherstatus"><span class="punkt" id="konto-punkt"></span><span id="konto-text"></span></span>
+      <button id="konto-abmelden">Abmelden</button>
+    </div>
+  </div>
   <div class="auftrag">
     <strong>Aufgaben</strong>
     <ol>
@@ -189,7 +220,10 @@
   const v = "<i>v</i>", e = "<i>e</i>", mE = "<i>m</i><sub>e</sub>", UB = "<i>U</i><sub>B</sub>",
         B = "<i>B</i>", r = "<i>r</i>";
   const frac = (z, n) => `<span class="frac"><span>${z}</span><span>${n}</span></span>`;
-  const wurzel = x => `<span class="wurzel"><span class="wz">√</span><span class="rad">${x}</span></span>`;
+  // Wurzelzeichen als SVG, das sich der Hoehe des Radikanden anpasst
+  const wurzel = x => `<span class="wurzel"><svg class="wz" viewBox="0 0 10 30" preserveAspectRatio="none" aria-hidden="true">` +
+    `<path d="M0.5 18 L2.8 16 L6 28.5 L9.6 0.7 L10 0.7" fill="none" stroke="currentColor" stroke-width="1.2" ` +
+    `vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><span class="rad">${x}</span></span>`;
   const luecke = key => `<button type="button" class="luecke" data-luecke="${key}">? auswählen</button>`;
 
   // Auswahlmoeglichkeiten fuer die drei Luecken; Index 0 ist jeweils richtig
@@ -521,26 +555,134 @@
   });
 
   // ---- Zwischenstand im Browser merken (nur auf diesem Geraet) ----
-  function speichern() {
+  function aktuellerStand() {
     const felder = {};
     document.querySelectorAll(".feld").forEach((f, i) => { const t = f.querySelector(".teil"); if (t) felder[i] = t.dataset.id; });
-    try { localStorage.setItem(SPEICHER, JSON.stringify({ felder, wahl })); } catch (_) { /* privat/gesperrt: egal */ }
+    return { felder, wahl: Object.assign({}, wahl) };
   }
-  function laden() {
-    let stand = null;
-    try { stand = JSON.parse(localStorage.getItem(SPEICHER) || "null"); } catch (_) { stand = null; }
-    if (!stand) return;
+  function speichern() {
+    try { localStorage.setItem(SPEICHER, JSON.stringify(aktuellerStand())); } catch (_) { /* privat/gesperrt: egal */ }
+    if (typeof window.PuzzleGeaendert === "function") window.PuzzleGeaendert();   // z. B. Speichern in Datenbank
+  }
+  // Stand anwenden (ersetzt die aktuelle Zuordnung vollstaendig)
+  function anwenden(stand) {
+    Object.values(teile).forEach(t => t.remove());
+    Object.keys(wahl).forEach(k => delete wahl[k]);
     const felder = document.querySelectorAll(".feld");
-    Object.entries(stand.felder || {}).forEach(([i, id]) => {
+    felder.forEach(f => f.classList.add("leer"));
+    Object.entries((stand && stand.felder) || {}).forEach(([i, id]) => {
       const f = felder[i], t = teile[id];
       if (f && t && f.dataset.typ === t.dataset.typ) { f.appendChild(t); f.classList.remove("leer"); }
     });
-    Object.entries(stand.wahl || {}).forEach(([k, i]) => {
-      if (LUECKEN[k] && Number.isInteger(i) && i >= 0 && i < LUECKEN[k].length) { wahl[k] = i; zeigeWahl(k); }
+    Object.entries((stand && stand.wahl) || {}).forEach(([k, i]) => {
+      if (LUECKEN[k] && Number.isInteger(i) && i >= 0 && i < LUECKEN[k].length) wahl[k] = i;
     });
+    Object.keys(LUECKEN).forEach(zeigeWahl);
+    markierungenLoeschen(); waehle(null); zeigeVorrat();
+  }
+  // Lesbare Auswertung (fuer die Lehrkraft, z. B. in der Datenbank)
+  function auswertung() {
+    const zuordnung = ABSCHNITTE.map((a, i) => ({ abschnitt: `${i + 1}. ${a.titel}` }));
+    let teileRichtig = 0, teileBelegt = 0;
+    document.querySelectorAll(".feld").forEach(f => {
+      const t = f.querySelector(".teil"), z = zuordnung[+f.dataset.abschnitt];
+      if (!t) { z[f.dataset.typ] = null; return; }
+      teileBelegt++;
+      const ok = t.dataset.abschnitt === f.dataset.abschnitt; if (ok) teileRichtig++;
+      z[f.dataset.typ] = ok ? "richtig" : `falsch (Teil aus Abschnitt ${+t.dataset.abschnitt + 1})`;
+    });
+    const formeln = {};
+    let formelnRichtig = 0;
+    Object.keys(LUECKEN).forEach(k => {
+      formeln[LUECKEN_TITEL[k]] = wahl[k] === undefined ? null : (wahl[k] === 0 ? "richtig" : "falsch");
+      if (wahl[k] === 0) formelnRichtig++;
+    });
+    return { teileRichtig, teileBelegt, teileGesamt: 18, formelnRichtig, formelnGesamt: 3, zuordnung, formeln };
+  }
+  window.Puzzle = { stand: aktuellerStand, anwenden: st => { anwenden(st); try { localStorage.setItem(SPEICHER, JSON.stringify(aktuellerStand())); } catch (_) {} }, auswertung };
+
+  function laden() {
+    let stand = null;
+    try { stand = JSON.parse(localStorage.getItem(SPEICHER) || "null"); } catch (_) { stand = null; }
+    if (stand) anwenden(stand);
   }
 
   laden(); zeigeVorrat();
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script>
+(function () {
+  "use strict";
+  const SUPABASE_URL      = "https://ljcvameuyosoppzfmryo.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG";
+  const ARBEITSBLATT_ID   = "fadenstrahlrohr_theorie_v1";
+
+  const $ = id => document.getElementById(id);
+  if (!window.supabase || !window.Puzzle) {     // offline o. Ae.: Puzzle funktioniert trotzdem
+    $("konto").innerHTML = "Speichern ist gerade nicht möglich (keine Verbindung). Das Puzzle funktioniert trotzdem.";
+    return;
+  }
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let benutzer = null, timer = null, laedt = false;
+
+  function status(text, ok) { $("konto-text").textContent = text; $("konto-punkt").className = "punkt" + (ok ? " ok" : ""); }
+
+  async function anmelden() {
+    const email = $("konto-email-feld").value.trim(), passwort = $("konto-passwort").value;
+    if (!email || !passwort) { $("konto-status").textContent = "Bitte E-Mail und Passwort eingeben."; return; }
+    $("konto-status").textContent = "Anmeldung …";
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: passwort });
+    if (error) { $("konto-status").textContent = "Anmeldung fehlgeschlagen: " + error.message; return; }
+    angemeldet(data.session);
+  }
+
+  async function angemeldet(session) {
+    benutzer = session.user;
+    $("konto-abgemeldet").hidden = true; $("konto-angemeldet").hidden = false;
+    $("konto-email").textContent = benutzer.email;
+    status("Lade gespeicherten Stand …", false);
+    const { data, error } = await sb.from("arbeitsblatt_antworten")
+      .select("antworten, gespeichert_am").eq("user_id", benutzer.id).eq("arbeitsblatt", ARBEITSBLATT_ID)
+      .maybeSingle();
+    if (error) { status("Laden fehlgeschlagen: " + error.message, false); return; }
+    if (data && data.antworten && data.antworten.stand) {
+      laedt = true; window.Puzzle.anwenden(data.antworten.stand); laedt = false;
+      status("Geladen · gespeichert am " + new Date(data.gespeichert_am).toLocaleString("de-DE"), true);
+    } else {
+      // noch nichts in der Datenbank: bisherigen Stand aus diesem Browser gleich sichern
+      status("Noch nichts gespeichert.", false);
+      speichern();
+    }
+  }
+
+  async function speichern() {
+    if (!benutzer) return;
+    clearTimeout(timer); timer = null;
+    status("Speichere …", false);
+    const { error } = await sb.from("arbeitsblatt_antworten").upsert({
+      user_id: benutzer.id,
+      arbeitsblatt: ARBEITSBLATT_ID,
+      antworten: { stand: window.Puzzle.stand(), auswertung: window.Puzzle.auswertung() },
+      gespeichert_am: new Date().toISOString()
+    }, { onConflict: "user_id,arbeitsblatt" });
+    if (error) status("Speichern fehlgeschlagen: " + error.message, false);
+    else status("Gespeichert um " + new Date().toLocaleTimeString("de-DE"), true);
+  }
+
+  // Jede Aenderung im Puzzle: nach kurzer Pause automatisch speichern
+  window.PuzzleGeaendert = function () {
+    if (!benutzer || laedt) return;
+    status("Ungespeicherte Änderungen …", false);
+    clearTimeout(timer); timer = setTimeout(speichern, 1500);
+  };
+
+  $("konto-anmelden").addEventListener("click", anmelden);
+  $("konto-passwort").addEventListener("keydown", ev => { if (ev.key === "Enter") anmelden(); });
+  $("konto-speichern").addEventListener("click", speichern);
+  $("konto-abmelden").addEventListener("click", async () => { if (timer) await speichern(); await sb.auth.signOut(); location.reload(); });
+
+  sb.auth.getSession().then(({ data }) => { if (data && data.session) angemeldet(data.session); });
 })();
 </script>
 </body>
