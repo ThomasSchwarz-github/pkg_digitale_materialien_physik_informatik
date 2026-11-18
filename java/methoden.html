@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Methoden mit Parametern und Rückgabewerten – Java-Tutorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Code+Pro:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #0C447C; --blue-mid: #185FA5; --blue-light: #E6F1FB; --blue-border: #B5D4F4;
+    --green-mid: #16A34A; --green-light: #F0FDF4;
+    --gray-border: #D3D1C7; --gray-text: #5F5E5A; --text-main: #1a1917;
+    --code-bg: rgb(243,247,252); --code-border: rgb(160,185,215); --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); line-height: 1.6; }
+  .page { width: min(1280px, 100%); margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+  .back-link { display: inline-flex; gap: .4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+  .header .kurs { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: .4rem; }
+  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .header .sub { margin-top: .5rem; font-size: 14.5px; color: var(--gray-text); }
+  .karte { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-bottom: 1.1rem; font-size: 15px; }
+  .karte > * + * { margin-top: .7rem; }
+  .karte h2 { font-family: 'Source Serif 4', serif; font-size: 1.25rem; font-weight: 600; }
+  .karte ul, .karte ol { padding-left: 1.4rem; }
+  .karte li + li { margin-top: .3rem; }
+  code { font-family: 'Source Code Pro', monospace; font-size: .92em; background: var(--code-bg); border: 1px solid #d6e2f0; border-radius: 4px; padding: 0 4px; }
+  .merke { background: var(--green-light); border: 1px solid #bbf7d0; border-radius: 8px; padding: .7rem 1rem; }
+  .merke strong:first-child { color: #166534; }
+  .tipp { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .6rem .9rem; font-size: 14.5px; color: #7c2d12; }
+  .tipp ul { margin-top: .3rem; }
+  table.tab { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  table.tab th, table.tab td { border: 1px solid var(--gray-border); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  table.tab th { background: #f1efe9; font-weight: 600; }
+  .tab-wrap { overflow-x: auto; }
+  table.tab code { white-space: nowrap; }
+  .code { position: relative; background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; }
+  .code pre { font-family: 'Source Code Pro', monospace; font-size: 13.5px; line-height: 1.55; padding: .8rem 1rem; overflow-x: auto; color: #000; }
+  .kopieren { position: absolute; top: 6px; right: 6px; font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--code-border); background: white; color: var(--blue-dark); cursor: pointer; }
+  .kopieren.ok { background: var(--green-light); color: var(--green-mid); }
+  .j-mod { color: #660033; } .j-dekl { color: #CC0000; } .j-lit { color: #006699; }
+  .j-str { color: #006600; } .j-kom { color: #999999; } .j-doc { color: #000099; }
+  .zn { color: #9aa5b1; user-select: none; display: inline-block; width: 2.2em; text-align: right; margin-right: 1em; }
+  .navi { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .navi a { flex: 1; min-width: 200px; background: white; border: 1px solid var(--gray-border); border-radius: 8px; padding: .7rem 1rem; text-decoration: none; color: inherit; font-size: 14px; }
+  .navi a:hover { border-color: var(--blue-mid); }
+  .navi .richtung { font-size: 12px; color: var(--gray-text); display: block; }
+  .navi .weiter { text-align: right; }
+  .site-footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  @media (max-width: 600px) { .page { padding: 1.5rem 1rem 3rem; } .header h1 { font-size: 1.6rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="index_java.html" class="back-link">‹ Java-Tutorial</a>
+
+  <div class="header">
+    <div class="kurs">Java-Tutorial · Weitere Grundlagen · 04</div>
+    <h1>Methoden mit Parametern und Rückgabewerten</h1>
+    <div class="sub">Methoden, die eine Antwort zurückgeben, Methoden, denen man Werte mitgibt, Getter, Setter und Konstruktoren mit Parametern.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Worum geht es?</h2>
+    <p>In <a href="methoden_einfach.html">03 Einfache Methoden</a> hast du Methoden kennengelernt, die bei jedem
+    Aufruf immer genau dasselbe tun und nichts zurückgeben. Methoden können aber noch mehr:</p>
+    <ul>
+      <li>Sie können eine <strong>Antwort zurückgeben</strong>, den <strong>Rückgabewert</strong>.</li>
+      <li>Sie können beim Aufruf einen oder mehrere Werte <strong>mitbekommen</strong>, die <strong>Parameter</strong>.</li>
+    </ul>
+    <p>Die Beispiele auf dieser Seite stammen aus einer Klasse <code>Auto</code> mit den Attributen
+    <code>farbe</code>, <code>tempo</code>, <code>maxTempo</code> und <code>motorAn</code>.</p>
+  </div>
+
+  <div class="karte">
+    <h2>Methoden mit Rückgabewert</h2>
+    <div class="code"><pre class="java">    public int gibTempo()
+    {
+        return this.tempo;
+    }</pre></div>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>Teil</th><th>Bedeutung</th></tr>
+      <tr><td><code class="j-dekl">int</code></td><td>Statt <code class="j-dekl">void</code> steht vor dem Namen der <strong>Datentyp der Antwort</strong>.</td></tr>
+      <tr><td><code class="j-mod">return</code> <code><span class="j-lit">this</span>.tempo;</code></td><td>gibt den Wert zurück. Danach ist die Methode sofort beendet.</td></tr>
+    </table></div>
+    <ul>
+      <li>Im Klassendiagramm steht der Datentyp der Antwort hinter der Methode: <code>+ gibTempo() : int</code>.</li>
+      <li>In BlueJ erscheint die Antwort in einem kleinen Fenster, wenn du die Methode aufrufst.</li>
+      <li>Der zurückgegebene Wert muss zum Datentyp passen: Eine Methode mit <code class="j-dekl">boolean</code>
+        gibt <code class="j-lit">true</code> oder <code class="j-lit">false</code> zurück.</li>
+    </ul>
+    <div class="merke"><strong>Getter:</strong> Methoden, die nur den Wert eines Attributs zurückgeben, heißen
+    Getter. Ihr Name beginnt mit <code>gib</code>, bei Wahrheitswerten mit <code>ist</code>:
+    <code>gibFarbe()</code>, <code>gibTempo()</code>, <code>istMotorAn()</code>.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Methoden mit Parametern</h2>
+    <div class="code"><pre class="java">    public void setzeMaxTempo(int pMaxTempo)
+    {
+        this.maxTempo = pMaxTempo;
+    }</pre></div>
+    <ul>
+      <li>Der <strong>Parameter</strong> steht in den runden Klammern: erst sein Datentyp, dann sein Name. Wir
+        beginnen Parameternamen mit <code>p</code>.</li>
+      <li>Beim Aufruf gibst du in BlueJ den Wert in ein Fenster ein. Dieser Wert steht dann während der Methode
+        im Parameter.</li>
+      <li>Im Klassendiagramm steht der Parameter in der Form <code>name : Datentyp</code>:
+        <code>+ setzeMaxTempo(pMaxTempo : int)</code>.</li>
+      <li>Mehrere Parameter werden durch Kommas getrennt: <code>(String pFarbe, <span class="j-dekl">int</span> pMaxTempo)</code>.</li>
+    </ul>
+    <div class="merke"><strong>Setter:</strong> Methoden, die ein Attribut auf den übergebenen Wert setzen,
+    heißen Setter. Ihr Name beginnt mit <code>setze</code>: <code>setzeFarbe(String pFarbe)</code>.</div>
+    <div class="tipp"><strong>Parameter oder Attribut?</strong> Der Parameter <code>pMaxTempo</code> existiert nur,
+    solange die Methode läuft. Das Attribut <code>maxTempo</code> gehört zum Objekt und behält seinen Wert. Die
+    Zeile <code><span class="j-lit">this</span>.maxTempo = pMaxTempo;</code> speichert den Wert des Parameters dauerhaft im Attribut.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Beides zusammen</h2>
+    <p>Eine Methode kann Parameter haben <em>und</em> einen Wert zurückgeben. Im Klassendiagramm steht dann beides:</p>
+    <div class="code"><pre class="java">    // + tempoNach(pSekunden : int) : int
+    public int tempoNach(int pSekunden)
+    {
+        return this.tempo + 2 * pSekunden;
+    }</pre></div>
+  </div>
+
+  <div class="karte">
+    <h2>Konstruktoren mit Parametern</h2>
+    <p>Auch ein Konstruktor kann Parameter haben. So lassen sich Eigenschaften schon beim Herstellen eines
+    Objekts festlegen:</p>
+    <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>    public Auto()
+    {
+        this.farbe = "rot";
+        this.tempo = 0;
+        this.maxTempo = 200;
+        this.motorAn = false;
+    }
+
+    public Auto(String pFarbe, int pMaxTempo)
+    {
+        this.farbe = pFarbe;
+        this.tempo = 0;
+        this.maxTempo = pMaxTempo;
+        this.motorAn = false;
+    }</pre></div>
+    <ul>
+      <li>Eine Klasse darf <strong>mehrere Konstruktoren</strong> haben. Alle heißen wie die Klasse und
+        unterscheiden sich nur in ihren Parametern.</li>
+      <li>Jeder Konstruktor gibt <em>allen</em> Attributen einen Startwert.</li>
+      <li>In BlueJ bietet der Rechtsklick auf die Klasse dann beide Konstruktoren an: <code><span class="j-mod">new</span> Auto()</code>
+        und <code><span class="j-mod">new</span> Auto(String pFarbe, <span class="j-dekl">int</span> pMaxTempo)</code>.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h2>Häufige Fehler</h2>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>Fehler</th><th>Was passiert?</th></tr>
+      <tr><td><code class="j-mod">return</code> fehlt in einer Methode mit Rückgabewert</td><td>Fehlermeldung „Rückgabeanweisung fehlt“ (<code>missing return statement</code>)</td></tr>
+      <tr><td><code class="j-mod">return</code> in einer <code class="j-dekl">void</code>-Methode mit Wert</td><td>Fehlermeldung, denn eine <code class="j-dekl">void</code>-Methode gibt nichts zurück</td></tr>
+      <tr><td>Datentyp beim Parameter vergessen: <code>setzeMaxTempo(pMaxTempo)</code></td><td>Fehlermeldung, denn im Kopf der Methode braucht jeder Parameter einen Datentyp</td></tr>
+      <tr><td>vertauscht: <code>pMaxTempo = <span class="j-lit">this</span>.maxTempo;</code></td><td>kein Fehler, aber das Attribut ändert sich nicht. Links vom <code>=</code> steht, was den neuen Wert bekommt.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="navi">
+    <a href="methoden_einfach.html"><span class="richtung">‹ Zurück</span>03 Einfache Methoden</a>
+    <a href="kontrollstrukturen.html" class="weiter"><span class="richtung">Weiter ›</span>05 Kontrollstrukturen</a>
+  </div>
+
+  <footer class="site-footer">
+    <span>Java-Tutorial · Informatik</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+
+<script>
+// Java-Hervorhebung in BlueJ-Farben und Kopieren-Knopf
+const GRUPPEN = {
+  'j-mod': 'public private protected static final abstract if else while do for switch case break continue return try catch finally throw throws new instanceof default',
+  'j-dekl': 'class interface enum extends implements import package void boolean byte char short int long float double',
+  'j-lit': 'this super true false null'
+};
+const WORT = {};
+for (const [k, liste] of Object.entries(GRUPPEN)) liste.split(' ').forEach(w => WORT[w] = k);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function hebeHervor(text) {
+  const re = /(\/\*\*[\s\S]*?\*\/)|(\/\*[\s\S]*?\*\/)|(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|\b([A-Za-z_]\w*)\b/g;
+  let aus = '', pos = 0, m;
+  while ((m = re.exec(text))) {
+    aus += esc(text.slice(pos, m.index));
+    let cls = null;
+    if (m[1]) cls = 'j-doc'; else if (m[2] || m[3]) cls = 'j-kom';
+    else if (m[4] || m[5]) cls = 'j-str'; else if (m[6]) cls = WORT[m[6]] || null;
+    aus += cls ? `<span class="${cls}">${esc(m[0])}</span>` : esc(m[0]);
+    pos = re.lastIndex;
+  }
+  return aus + esc(text.slice(pos));
+}
+document.querySelectorAll('pre.java').forEach(pre => {
+  const roh = pre.textContent;
+  pre.dataset.roh = roh;
+  let html = hebeHervor(roh);
+  if (pre.hasAttribute('data-zeilennummern')) html = html.split('\n').map((z, i) => `<span class="zn">${i + 1}</span>${z}`).join('\n');
+  pre.innerHTML = html;
+});
+document.querySelectorAll('.kopieren').forEach(knopf => {
+  knopf.addEventListener('click', async () => {
+    const roh = knopf.parentElement.querySelector('pre').dataset.roh;
+    try { await navigator.clipboard.writeText(roh); }
+    catch (e) { const ta = document.createElement('textarea'); ta.value = roh; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    knopf.textContent = '✓ Kopiert'; knopf.classList.add('ok');
+    setTimeout(() => { knopf.textContent = 'Kopieren'; knopf.classList.remove('ok'); }, 1800);
+  });
+});
+</script>
+</body>
+</html>
