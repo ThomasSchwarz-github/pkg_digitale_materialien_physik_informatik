@@ -241,7 +241,8 @@
           <li>Getter wie <code>gibTempo()</code> geben eine Antwort zurück.</li>
           <li>Setter wie <code>setzeMaxTempo(…)</code> und <code>beschleunigeUm(…)</code> bekommen beim Aufruf
             einen Wert mitgegeben.</li>
-          <li>Heute verändert ihr nur <code>beschleunigeUm</code> (und im Zusatz weitere Methoden).</li>
+          <li>Heute verändert ihr nur <code>bremseUm</code> und <code>beschleunigeUm</code> (und im Zusatz weitere
+            Methoden).</li>
         </ul>
       </div>
       <ol>
@@ -363,18 +364,11 @@ public class Auto
     }
 
     /**
-     * Verringert das Tempo um den übergebenen Wert, aber höchstens bis 0.
+     * Verringert das Tempo um den übergebenen Wert.
      */
     public void bremseUm(int pTempo)
     {
-        if (this.tempo - pTempo >= 0)
-        {
-            this.tempo = this.tempo - pTempo;
-        }
-        else
-        {
-            this.tempo = 0;
-        }
+        this.tempo = this.tempo - pTempo;
     }
 }</pre></div>
       </details>
@@ -391,8 +385,8 @@ public class Auto
     <div class="schritt-inhalt">
       <p><span class="ab-bezug">AB Aufgabe 1b</span></p>
       <p>Erzeuge ein Auto und teste es gezielt: Beschleunige um 50, <em>ohne</em> den Motor zu starten.
-      Beschleunige danach um 500. Inspiziere das Auto nach jedem Schritt. Probiere auch negative Werte aus,
-      z. B. <code>beschleunigeUm(-30)</code>.</p>
+      Beschleunige danach um 500. Bremse dann um mehr, als das Auto gerade fährt. Inspiziere das Auto nach
+      jedem Schritt. Probiere auch negative Werte aus, z. B. <code>beschleunigeUm(-30)</code>.</p>
       <div class="frage">
         <label for="f1">Frage 1: Was tut dein Auto, was ein echtes Auto so nicht tun würde?</label>
         <textarea id="f1" data-key="f1"></textarea>
@@ -437,8 +431,8 @@ else
       </table></div>
       <p>Ein Attribut vom Typ <code class="j-dekl">boolean</code> ist selbst schon eine Bedingung:
       <code><span class="j-mod">if</span> (<span class="j-lit">this</span>.motorAn)</code> bedeutet „wenn der Motor an ist“.</p>
-      <p><strong>Ein Beispiel aus der Zwischenlösung:</strong> <code>bremseUm</code> verhindert, dass das Tempo
-      negativ wird.</p>
+      <p><strong>Ein Beispiel:</strong> In der Zwischenlösung kann das Tempo beim Bremsen negativ werden. So sieht
+      eine geschützte Version von <code>bremseUm</code> aus, die das verhindert:</p>
       <div class="code"><pre class="java" data-zeilennummern>    public void bremseUm(int pTempo)
     {
         if (this.tempo - pTempo >= 0)
@@ -451,7 +445,8 @@ else
         }
     }</pre></div>
       <p>Spiele die Methode im Kopf durch: Was passiert bei <code>bremseUm(30)</code>, wenn das Auto 50 km/h fährt?
-      Und was, wenn es nur 20 km/h fährt? Prüfe deine Vermutung danach in BlueJ.</p>
+      Und was, wenn es nur 20 km/h fährt? Ersetze danach <code>bremseUm</code> in deiner Klasse durch diese Version
+      und prüfe deine Vermutung in BlueJ.</p>
       <div class="tutorial">📘 Zum Nachschlagen im Java-Tutorial:
       <a href="../java/bedingungen.html" target="_blank">Vergleiche und Bedingungen</a> ·
       <a href="../java/verzweigungen.html" target="_blank">Verzweigungen</a></div>

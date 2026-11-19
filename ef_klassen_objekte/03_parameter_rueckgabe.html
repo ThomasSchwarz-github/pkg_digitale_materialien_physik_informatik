@@ -241,7 +241,7 @@
             <span class="neu">+ gibTempo() : int</span><br><span class="neu">+ gibMaxTempo() : int</span><br>
             <span class="neu">+ istMotorAn() : boolean</span><br>+ setzeFarbe(pFarbe : String)<br>
             <span class="neu">+ setzeMaxTempo(pMaxTempo : int)</span><br>+ starteMotor()<br>
-            <span class="neu">+ stoppeMotor()</span><br>+ beschleunigeUm(pTempo : int)<br>+ bremseUm(pTempo : int)</div>
+            <span class="neu">+ stoppeMotor()</span><br>+ beschleunigeUm(pTempo : int)<br><span class="neu">+ bremseUm(pTempo : int)</span></div>
         </div>
         <ul style="flex:1; min-width: 260px;">
           <li>Steht hinter einer Methode <code>: Datentyp</code>, gibt sie eine Antwort dieses Datentyps zurück
@@ -312,21 +312,6 @@ public class Auto
     public void beschleunigeUm(int pTempo)
     {
         this.tempo = this.tempo + pTempo;
-    }
-
-    /**
-     * Verringert das Tempo um den übergebenen Wert, aber höchstens bis 0.
-     */
-    public void bremseUm(int pTempo)
-    {
-        if (this.tempo - pTempo >= 0)
-        {
-            this.tempo = this.tempo - pTempo;
-        }
-        else
-        {
-            this.tempo = 0;
-        }
     }
 }</pre></div>
       </details>
@@ -456,11 +441,50 @@ public class Auto
   <section class="schritt" id="s5">
     <div class="schritt-kopf">
       <span class="schritt-nr">Schritt 5</span>
-      <span class="schritt-titel">Ein zweiter Konstruktor</span>
+      <span class="schritt-titel">Bremsen: bremseUm selbst schreiben</span>
       <label class="haken"><input type="checkbox" data-key="s5"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
-      <p><span class="ab-bezug">AB Aufgabe 3b und 3c</span></p>
+      <p><span class="ab-bezug">AB Aufgabe 3b</span></p>
+      <p>Dein Auto kann schon beschleunigen, aber noch nicht bremsen. Die Methode <code>bremseUm</code> schreibst
+      du jetzt selbst. Sie bekommt wie <code>beschleunigeUm</code> einen Parameter: um wie viel km/h das Auto
+      langsamer werden soll.</p>
+      <p>Schau dir dafür <code>beschleunigeUm</code> genau an. <code>bremseUm</code> funktioniert nach demselben
+      Muster:</p>
+      <div class="code"><pre class="java" data-zeilennummern>    /**
+     * Erhöht das Tempo um den übergebenen Wert.
+     */
+    public void beschleunigeUm(int pTempo)
+    {
+        this.tempo = this.tempo + pTempo;
+    }</pre></div>
+      <p><strong>Deine Aufgabe:</strong> Ergänze die Methode <code>bremseUm(int pTempo)</code> direkt unter
+      <code>beschleunigeUm</code>. Sie verringert das Tempo um den übergebenen Wert. Schreibe auch einen Kommentar
+      darüber, was sie tut. Übersetze und teste: Starte den Motor, beschleunige um 80, bremse um 30 und
+      inspiziere das Auto. Welches Tempo erwartest du?</p>
+      <details class="ausklapp">
+        <summary>Hilfe 1: Was muss ich ändern?</summary>
+        <p>Kopiere <code>beschleunigeUm</code> und ändere zwei Dinge: den Namen der Methode und das Rechenzeichen.</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Hilfe 2: Wie wird ein Wert verringert?</summary>
+        <p>Genau wie beim Erhöhen, nur mit Minus: Der neue Wert ist der alte Wert minus den Parameter. Rechts vom
+        <code>=</code> wird zuerst gerechnet, dann wird das Ergebnis links im Attribut gespeichert.</p>
+      </details>
+      <div class="warum"><strong>Fällt dir beim Testen etwas Merkwürdiges auf?</strong> Probiere ruhig verschiedene
+      Werte aus und notiere dir, was dir auffällt. Darum kümmern wir uns in Einheit (04).</div>
+    </div>
+  </section>
+
+  <!-- Schritt 6 -->
+  <section class="schritt" id="s6">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 6</span>
+      <span class="schritt-titel">Ein zweiter Konstruktor</span>
+      <label class="haken"><input type="checkbox" data-key="s6"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 3c und 3d</span></p>
       <p>Bisher ist jedes neue Auto rot und fährt höchstens 200 km/h. Schöner wäre es, Farbe und Höchsttempo
       schon beim Herstellen festzulegen. Dafür bekommt die Klasse einen <strong>zweiten Konstruktor mit
       Parametern</strong>:</p>
@@ -489,12 +513,12 @@ public class Auto
     </div>
   </section>
 
-  <!-- Schritt 6 -->
-  <section class="schritt" id="s6">
+  <!-- Schritt 7 -->
+  <section class="schritt" id="s7">
     <div class="schritt-kopf">
-      <span class="schritt-nr">Schritt 6</span>
+      <span class="schritt-nr">Schritt 7</span>
       <span class="schritt-titel">Zusammenfassen</span>
-      <label class="haken"><input type="checkbox" data-key="s6"> erledigt</label>
+      <label class="haken"><input type="checkbox" data-key="s7"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
       <p>Vergleiche deine fertige Klasse mit dem Klassendiagramm aus Schritt 1. Fehlt noch etwas? Überprüfe dich
