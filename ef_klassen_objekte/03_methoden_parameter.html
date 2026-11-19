@@ -234,7 +234,7 @@
           <div class="name">Auto</div>
           <div>- farbe : String<br>- tempo : int<br>- maxTempo : int<br>- motorAn : boolean</div>
           <div>+ Auto()<br>+ setzeFarbe(pFarbe : String)<br><span class="neu">+ setzeMaxTempo(pMaxTempo : int)</span><br>
-            + starteMotor()<br>+ stoppeMotor()<br>+ beschleunigeUm(pTempo : int)<br>
+            + starteMotor()<br><span class="neu">+ stoppeMotor()</span><br>+ beschleunigeUm(pTempo : int)<br>
             <span class="neu">+ bremseUm(pTempo : int)</span></div>
         </div>
         <ul style="flex:1; min-width: 260px;">
@@ -291,14 +291,6 @@ public class Auto
     }
 
     /**
-     * Stoppt den Motor.
-     */
-    public void stoppeMotor()
-    {
-        this.motorAn = false;
-    }
-
-    /**
      * Erhöht das Tempo um den übergebenen Wert.
      */
     public void beschleunigeUm(int pTempo)
@@ -309,7 +301,7 @@ public class Auto
       </details>
       <div class="warum"><strong>Kommentare lesen!</strong> Über jeder Methode steht in einem Kommentar
       <code class="j-doc">/** … */</code>, was sie tut. Lies diese Kommentare, bevor du weiterarbeitest. Vieles
-      kennst du schon: Attribute, Konstruktor, <code>starteMotor()</code> und <code>stoppeMotor()</code>.</div>
+      kennst du schon: Attribute, Konstruktor und <code>starteMotor()</code>.</div>
     </div>
   </section>
 
@@ -338,17 +330,45 @@ public class Auto
     </div>
   </section>
 
-  <h2 class="teil">Setter: ein Attribut auf einen neuen Wert setzen</h2>
-
   <!-- Schritt 3 -->
   <section class="schritt" id="s3">
     <div class="schritt-kopf">
       <span class="schritt-nr">Schritt 3</span>
-      <span class="schritt-titel">Methoden mit Parametern: Setter</span>
+      <span class="schritt-titel">Den Motor stoppen</span>
       <label class="haken"><input type="checkbox" data-key="s3"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
       <p><span class="ab-bezug">AB Aufgabe 2</span></p>
+      <p>Dein Auto kann den Motor starten, aber nicht wieder ausschalten. Schau dir <code>starteMotor()</code> an:</p>
+      <div class="code"><pre class="java" data-zeilennummern>    /**
+     * Startet den Motor.
+     */
+    public void starteMotor()
+    {
+        this.motorAn = true;
+    }</pre></div>
+      <p><strong>Deine Aufgabe:</strong> Ergänze die Methode <code>stoppeMotor()</code> direkt unter
+      <code>starteMotor()</code>. Sie schaltet den Motor aus. Gehe nach dem Muster von <code>starteMotor()</code> vor
+      und schreibe auch einen Kommentar darüber, was die Methode tut. Übersetze, starte und stoppe den Motor, und
+      inspiziere das Auto nach jedem Aufruf.</p>
+      <details class="ausklapp">
+        <summary>Hilfe: Was muss ich ändern?</summary>
+        <p>Kopiere <code>starteMotor()</code> und ändere zwei Dinge: den Namen der Methode und den Wert, den das
+        Attribut <code>motorAn</code> bekommt. Denk auch an den Kommentar.</p>
+      </details>
+    </div>
+  </section>
+
+  <h2 class="teil">Setter: ein Attribut auf einen neuen Wert setzen</h2>
+  <!-- Schritt 4 -->
+  <section class="schritt" id="s4">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 4</span>
+      <span class="schritt-titel">Methoden mit Parametern: Setter</span>
+      <label class="haken"><input type="checkbox" data-key="s4"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 3</span></p>
       <p>Bisher taten unsere Methoden bei jedem Aufruf immer genau dasselbe. Manche Methoden brauchen aber beim
       Aufruf einen Wert, z. B. die neue Farbe des Autos. Schau dir <code>setzeFarbe</code> an:</p>
       <div class="code"><pre class="java" data-zeilennummern>    public void setzeFarbe(String pFarbe)
@@ -388,15 +408,15 @@ public class Auto
 
   <h2 class="teil">Mit Parametern rechnen</h2>
 
-  <!-- Schritt 4 -->
-  <section class="schritt" id="s4">
+  <!-- Schritt 5 -->
+  <section class="schritt" id="s5">
     <div class="schritt-kopf">
-      <span class="schritt-nr">Schritt 4</span>
+      <span class="schritt-nr">Schritt 5</span>
       <span class="schritt-titel">Bremsen: bremseUm selbst schreiben</span>
-      <label class="haken"><input type="checkbox" data-key="s4"> erledigt</label>
+      <label class="haken"><input type="checkbox" data-key="s5"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
-      <p><span class="ab-bezug">AB Aufgabe 3</span></p>
+      <p><span class="ab-bezug">AB Aufgabe 4</span></p>
       <p>Nicht jede Methode mit Parameter ist ein Setter. Schau dir <code>beschleunigeUm</code> an:</p>
       <div class="code"><pre class="java" data-zeilennummern>    /**
      * Erhöht das Tempo um den übergebenen Wert.
@@ -434,12 +454,12 @@ public class Auto
     </div>
   </section>
 
-  <!-- Schritt 5 -->
-  <section class="schritt" id="s5">
+  <!-- Schritt 6 -->
+  <section class="schritt" id="s6">
     <div class="schritt-kopf">
-      <span class="schritt-nr">Schritt 5</span>
+      <span class="schritt-nr">Schritt 6</span>
       <span class="schritt-titel">Zusammenfassen</span>
-      <label class="haken"><input type="checkbox" data-key="s5"> erledigt</label>
+      <label class="haken"><input type="checkbox" data-key="s6"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
       <p>Vergleiche deine fertige Klasse mit dem Klassendiagramm aus Schritt 1. Fehlt noch etwas? Überprüfe dich
