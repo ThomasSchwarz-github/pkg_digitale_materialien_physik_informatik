@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Übungen & Projekte – Informatik EF</title>
+<title>Übungen – Informatik EF</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -69,6 +69,9 @@
     gap: 0.5rem;
   }
 
+  .abschnitt { font-family: 'Source Serif 4', serif; font-size: 1.2rem; font-weight: 600; margin: 2rem 0 .8rem; padding-bottom: .3rem; border-bottom: 1px solid var(--gray-border); }
+  .header + .abschnitt { margin-top: 0; }
+
   @media (max-width: 600px) {
     .page { padding: 2rem 1.25rem 4rem; }
     .header h1 { font-size: 1.7rem; }
@@ -82,9 +85,24 @@
 
   <div class="header">
     <div class="kurs">Informatik · Jahrgangsstufe EF</div>
-    <h1>Übungen &amp; Projekte</h1>
+    <h1>Übungen</h1>
   </div>
 
+  <h2 class="abschnitt">Übungen zur objektorientierten Programmierung in Java</h2>
+  <div class="sim-list">
+
+    <a href="info_ef_uebungen/oop_01_lautsprecher.html" class="sim-card">
+      <div class="sim-icon">🔊</div>
+      <div class="sim-text">
+        <div class="sim-title">Übung 1: Die Bluetooth-Box</div>
+        <div class="sim-desc">Klassen, Objekte, Attribute, Konstruktor und Methoden mit Parametern · passt zu den Einheiten (01) bis (03) · ca. 20–30 Minuten</div>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+
+  </div>
+
+  <h2 class="abschnitt">Weitere Übungen</h2>
   <div class="sim-list">
 
     <a href="info_ef_uebungen/java_musikplayer.html" class="sim-card">
