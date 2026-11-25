@@ -165,7 +165,7 @@
 
   <div class="intro">
     <p>In den letzten beiden Einheiten habt ihr die Klasse <code>Auto</code> um Methoden mit Parametern und um
-    Getter ergänzt. Heute baut ihr darauf auf. Damit alle denselben Stand haben, startet ihr mit der
+    Methoden mit Rückgabewert ergänzt. Heute baut ihr darauf auf. Damit alle denselben Stand haben, startet ihr mit der
     <strong>Zwischenlösung</strong> aus Schritt 1, der Musterlösung von Einheit (04).</p>
     <p>Ihr lernt die <strong>bedingte Anweisung</strong> mit <code class="j-mod">if</code> und
     <code class="j-mod">else</code> kennen: Anweisungen, die nur ausgeführt werden, wenn eine Bedingung erfüllt
@@ -235,7 +235,9 @@
           <div>+ Auto()<br>+ gibFarbe() : String<br>
             + gibTempo() : int<br>+ gibMaxTempo() : int<br>+ istMotorAn() : boolean<br>
             + setzeFarbe(pFarbe : String)<br>+ setzeMaxTempo(pMaxTempo : int)<br>+ starteMotor()<br>
-            + stoppeMotor()<br>+ beschleunigeUm(pTempo : int)<br>+ bremseUm(pTempo : int)</div>
+            + stoppeMotor()<br>+ beschleunigeUm(pTempo : int)<br>+ bremseUm(pTempo : int)<br>
+            + berechneTempoReserve() : int<br>+ berechneReaktionsweg() : int<br>+ berechneBremsweg() : int<br>
+            + berechneAnhalteweg() : int<br>+ berechneTempoNach(pTempo : int) : int<br>+ erstelleBeschreibung() : String</div>
         </div>
         <ul style="flex:1; min-width: 260px;">
           <li>Getter wie <code>gibTempo()</code> geben eine Antwort zurück.</li>
@@ -357,6 +359,55 @@ public class Auto
     public void bremseUm(int pTempo)
     {
         this.tempo = this.tempo - pTempo;
+    }
+
+    /**
+     * Gibt zurück, um wie viel km/h das Auto noch beschleunigen kann.
+     */
+    public int berechneTempoReserve()
+    {
+        return this.maxTempo - this.tempo;
+    }
+
+    /**
+     * Gibt den Reaktionsweg in Metern zurück (Faustformel).
+     */
+    public int berechneReaktionsweg()
+    {
+        return this.tempo * 3 / 10;
+    }
+
+    /**
+     * Gibt den Bremsweg in Metern zurück (Faustformel).
+     */
+    public int berechneBremsweg()
+    {
+        return this.tempo * this.tempo / 100;
+    }
+
+    /**
+     * Gibt den Anhalteweg in Metern zurück: Reaktionsweg und Bremsweg zusammen.
+     */
+    public int berechneAnhalteweg()
+    {
+        return this.berechneReaktionsweg() + this.berechneBremsweg();
+    }
+
+    /**
+     * Gibt zurück, welches Tempo das Auto hätte, wenn es um den übergebenen
+     * Wert schneller wäre. Das Tempo selbst ändert sich dabei nicht.
+     */
+    public int berechneTempoNach(int pTempo)
+    {
+        return this.tempo + pTempo;
+    }
+
+    /**
+     * Gibt einen Text zurück, der das Auto beschreibt.
+     */
+    public String erstelleBeschreibung()
+    {
+        return "Farbe: " + this.farbe + ", Tempo: " + this.tempo + " km/h";
     }
 }</pre></div>
       </details>

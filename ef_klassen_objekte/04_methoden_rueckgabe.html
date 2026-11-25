@@ -150,6 +150,9 @@
     .zuordnung { grid-template-columns: 1fr auto; }
     .zuordnung .rueck { grid-column: 2; }
   }
+  .werte input { width: 100%; min-width: 4.5rem; padding: .35rem .5rem; font: inherit; border: 1px solid var(--gray-border); border-radius: 6px; }
+  .werte input.ok { background: #F0FDF4; border-color: #86efac; }
+  .werte input.falsch { background: #fef2f2; border-color: #fca5a5; }
 </style>
 </head>
 <body>
@@ -160,15 +163,19 @@
   <div class="header">
     <div class="kurs">Informatik · Jahrgangsstufe EF · Einheit 04</div>
     <h1>(04) Methoden mit Rückgabewert</h1>
-    <div class="sub">Gehört zum Arbeitsblatt AB1 „Das Auto gibt Auskunft“. Hier findest du die Zwischenlösung, ausführliche Erklärungen und Hilfen.</div>
+    <div class="sub">Gehört zum Arbeitsblatt AB1 „Das Auto gibt Auskunft“. Hier findest du die Zwischenlösung, ausführliche Erklärungen, gestufte Hilfen und Lösungen zum Vergleichen.</div>
   </div>
 
   <div class="intro">
-    <p>In der letzten Einheit habt ihr der Klasse <code>Auto</code> Methoden mit Parametern gegeben. Heute baut
-    ihr darauf auf. Damit alle denselben Stand haben, startet ihr mit der <strong>Zwischenlösung</strong> aus
-    Schritt 1, der Musterlösung von Einheit (03).</p>
-    <p>Neu sind heute <strong>Methoden mit Rückgabewert</strong>: Methoden, die beim Aufruf eine Antwort
-    zurückgeben. So kann das Auto Auskunft geben, z. B. wie schnell es gerade fährt.</p>
+    <p>Heute lernst du <strong>Methoden mit Rückgabewert</strong> kennen: Methoden, die beim Aufruf einen Wert
+    zurückgeben. Du arbeitest weitgehend selbstständig, in deinem Tempo.</p>
+    <ul>
+      <li><strong>Teil A (Schritte 1 bis 3):</strong> Getter geben den Wert eines Attributs zurück.</li>
+      <li><strong>Teil B (Schritte 4 bis 6):</strong> Andere Methoden berechnen ihren Rückgabewert.</li>
+      <li><strong>Zusatz 1 bis 3 und Übung 2:</strong> für alle, die schneller fertig sind.</li>
+    </ul>
+    <p>Programmiere jede Methode zuerst selbst. Kommst du nicht weiter, öffne die Hilfen der Reihe nach. Die Lösung
+    ist zum Vergleichen da, wenn deine Methode läuft.</p>
   </div>
 
   <!-- ══ Moduswahl ══ -->
@@ -216,6 +223,8 @@
     <div class="balken"><div id="balken"></div></div>
   </div>
 
+  <h2 class="teil">Teil A: Getter</h2>
+
   <!-- Schritt 1 -->
   <section class="schritt" id="s1">
     <div class="schritt-kopf">
@@ -226,7 +235,7 @@
     <div class="schritt-inhalt">
       <p><span class="ab-bezug">AB Aufgabe 1a</span></p>
       <p>Die Zwischenlösung ist die fertige Klasse aus Einheit (03). So sieht das Klassendiagramm am Ende dieser
-      Einheit aus. Grau gedruckt ist, was ihr heute ergänzt:</p>
+      Einheit aus. Grau gedruckt ist, was du heute ergänzt:</p>
       <div class="uml-reihe">
         <div class="uml">
           <div class="name">Auto</div>
@@ -234,22 +243,20 @@
           <div>+ Auto()<br><span class="neu">+ gibFarbe() : String</span><br><span class="neu">+ gibTempo() : int</span><br>
             <span class="neu">+ gibMaxTempo() : int</span><br><span class="neu">+ istMotorAn() : boolean</span><br>
             + setzeFarbe(pFarbe : String)<br>+ setzeMaxTempo(pMaxTempo : int)<br>+ starteMotor()<br>
-            + stoppeMotor()<br>+ beschleunigeUm(pTempo : int)<br>+ bremseUm(pTempo : int)</div>
+            + stoppeMotor()<br>+ beschleunigeUm(pTempo : int)<br>+ bremseUm(pTempo : int)<br>
+            <span class="neu">+ berechneTempoReserve() : int</span><br><span class="neu">+ berechneReaktionsweg() : int</span><br>
+            <span class="neu">+ berechneBremsweg() : int</span><br><span class="neu">+ berechneAnhalteweg() : int</span><br>
+            <span class="neu">+ berechneTempoNach(pTempo : int) : int</span><br><span class="neu">+ erstelleBeschreibung() : String</span></div>
         </div>
-        <ul style="flex:1; min-width: 260px;">
-          <li>Steht hinter einer Methode <code>: Datentyp</code>, gibt sie beim Aufruf eine Antwort dieses Datentyps
-            zurück.</li>
-          <li>Alle anderen Methoden kennst du schon aus Einheit (03).</li>
-        </ul>
+        <ol style="flex:1; min-width: 260px;">
+          <li>Lege in BlueJ ein neues Projekt <code>AutoMitAuskunft</code> mit einer Klasse <code>Auto</code> an.</li>
+          <li>Öffne den Editor, lösche den vorgegebenen Inhalt und füge die Zwischenlösung ein.</li>
+          <li>Übersetze die Klasse.</li>
+        </ol>
       </div>
-      <ol>
-        <li>Lege in BlueJ ein neues Projekt <code>AutoMitAuskunft</code> mit einer Klasse <code>Auto</code> an.</li>
-        <li>Öffne den Editor, lösche den vorgegebenen Inhalt und füge die Zwischenlösung ein.</li>
-        <li>Übersetze die Klasse.</li>
-      </ol>
       <div class="warum"><strong>Warum nicht mit dem eigenen Code weiterarbeiten?</strong> Mit der Zwischenlösung
-      habt ihr alle genau denselben Stand. So passen die Erklärungen und Tests auf dieser Seite für alle. Wer
-      möchte, kann seine eigene Lösung aus Einheit (03) mit der Zwischenlösung vergleichen.</div>
+      haben alle genau denselben Stand. So passen die Erklärungen und Lösungen auf dieser Seite für alle. Wenn du
+      möchtest, vergleiche sie mit deiner eigenen Lösung aus Einheit (03).</div>
       <details class="ausklapp">
         <summary>Zwischenlösung der Klasse Auto (Lösung von Einheit 03)</summary>
         <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>/**
@@ -332,40 +339,18 @@ public class Auto
   <section class="schritt" id="s2">
     <div class="schritt-kopf">
       <span class="schritt-nr">Schritt 2</span>
-      <span class="schritt-titel">Wie schnell fährt das Auto?</span>
+      <span class="schritt-titel">Attributwerte abfragen: der erste Getter</span>
       <label class="haken"><input type="checkbox" data-key="s2"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
-      <p><span class="ab-bezug">AB Aufgabe 1b und 1c</span></p>
-      <p>Erzeuge ein Auto, starte den Motor und beschleunige um 50. Versuche herauszufinden, wie schnell das Auto
-      jetzt fährt. Schau dir dafür auch die Liste der Methoden beim Rechtsklick auf das Auto an.</p>
-      <div class="frage">
-        <label for="f1">Frage 1: Wie kannst du herausfinden, wie schnell das Auto fährt? Gibt es dafür eine Methode?</label>
-        <textarea id="f1" data-key="f1"></textarea>
-      </div>
-      <p>Stell dir vor, ein anderes Programm soll das Tempo des Autos auf einem Tacho anzeigen. Das Programm kann
-      nicht wie du den Inspektor öffnen. Es kann nur Methoden des Autos aufrufen.</p>
-      <div class="frage">
-        <label for="f2">Frage 2: Was müsste das Auto können, damit der Tacho das Tempo anzeigen kann?</label>
-        <textarea id="f2" data-key="f2"></textarea>
-      </div>
-    </div>
-  </section>
-
-  <h2 class="teil">Methoden, die antworten</h2>
-
-  <!-- Schritt 3 -->
-  <section class="schritt" id="s3">
-    <div class="schritt-kopf">
-      <span class="schritt-nr">Schritt 3</span>
-      <span class="schritt-titel">Methoden mit Rückgabewert: Getter</span>
-      <label class="haken"><input type="checkbox" data-key="s3"> erledigt</label>
-    </div>
-    <div class="schritt-inhalt">
-      <p><span class="ab-bezug">AB Aufgabe 2</span></p>
-      <p>Bisher stand vor jeder Methode <code class="j-dekl">void</code> („leer“): Die Methode tut etwas, gibt aber
-      nichts zurück. Eine Methode kann aber auch eine <strong>Antwort zurückgeben</strong>. Schau dir
-      <code>gibTempo()</code> an:</p>
+      <p><span class="ab-bezug">AB Aufgabe 1b</span></p>
+      <p>Den Zustand eines Objekts, also seine Attributwerte, konntest du bisher nur mit dem <strong>Inspektor</strong>
+      ansehen. Der Inspektor ist aber nur ein Hilfsmittel, das in die Entwicklungsumgebung BlueJ für Lernende
+      eingebaut ist. Ein Programm selbst kann ihn nicht benutzen, zum Beispiel um das Tempo auf einem Tacho
+      anzuzeigen. Auch direkt auf die Attribute können andere Programmteile nicht zugreifen, denn sie sind
+      <code class="j-mod">private</code>.</p>
+      <p>In der objektorientierten Programmierung schreibt man deshalb eigene Methoden, die den Wert eines Attributs
+      zurückgeben. Sie heißen <strong>Getter</strong>:</p>
       <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>    /**
      * Gibt das aktuelle Tempo zurück.
      */
@@ -373,60 +358,152 @@ public class Auto
     {
         return this.tempo;
     }</pre></div>
-      <ul>
-        <li>Statt <code class="j-dekl">void</code> steht vor dem Namen der <strong>Datentyp der Antwort</strong>, hier
-          <code class="j-dekl">int</code>, weil das Tempo eine ganze Zahl ist.</li>
-        <li>Mit <code class="j-mod">return</code> gibt die Methode den Wert zurück. Danach ist die Methode beendet.</li>
-        <li>Im Klassendiagramm steht der Datentyp der Antwort hinter der Methode: <code>+ gibTempo() : int</code>.</li>
-        <li>In BlueJ siehst du die Antwort in einem kleinen Fenster, wenn du die Methode aufrufst.</li>
-      </ul>
-      <p>Methoden, die nur den Wert eines Attributs zurückgeben, heißen <strong>Getter</strong> (von engl.
-      <em>to get</em>, bekommen). Ihr Name beginnt mit <code>gib</code>, bei Wahrheitswerten mit <code>ist</code>.</p>
-      <p><strong>Deine Aufgabe, Teil 1:</strong> Ergänze <code>gibTempo()</code> direkt unter dem Konstruktor.
-      Übersetze, erzeuge ein Auto, beschleunige es und rufe <code>gibTempo()</code> auf.</p>
       <div class="tab-wrap"><table class="tab">
-        <tr><th>im Klassendiagramm</th><th>Kopf der Methode in Java</th></tr>
-        <tr><td><code>+ gibTempo() : int</code></td><td><code><span class="j-mod">public</span> <span class="j-dekl">int</span> gibTempo()</code></td></tr>
-        <tr><td><code>+ gibFarbe() : String</code></td><td><code><span class="j-mod">public</span> String gibFarbe()</code></td></tr>
-        <tr><td><code>+ istMotorAn() : boolean</code></td><td><code><span class="j-mod">public</span> <span class="j-dekl">boolean</span> istMotorAn()</code></td></tr>
+        <tr><th>Was?</th><th>Wo?</th><th>Bedeutung</th></tr>
+        <tr><td><strong>Datentyp</strong></td><td>Zeile 4: <code class="j-dekl">int</code></td><td>Datentyp des Rückgabewerts. Er steht an der Stelle, an der bisher
+          <code class="j-dekl">void</code> stand. <code class="j-dekl">void</code> („leer“) bedeutet: Es wird nichts zurückgegeben.</td></tr>
+        <tr><td><strong>Name</strong></td><td>Zeile 4: <code>gibTempo()</code></td><td><code>gib</code> und der Name des Attributs. Die Klammern sind leer, denn der Getter braucht keinen Parameter.</td></tr>
+        <tr><td><strong>return</strong></td><td>Zeile 6: <code class="j-mod">return</code></td><td>gibt den Wert zurück, der dahinter steht, und beendet die Methode.</td></tr>
+        <tr><td><strong>Rückgabewert</strong></td><td>Zeile 6: <code><span class="j-lit">this</span>.tempo</code></td><td>der aktuelle Wert des Attributs <code>tempo</code>. Er muss zum Datentyp in Zeile 4 passen.</td></tr>
+        <tr><td><strong>Klassendiagramm</strong></td><td><code>+ gibTempo() : int</code></td><td>Der Datentyp des Rückgabewerts steht hinter den Klammern.</td></tr>
       </table></div>
-      <p><strong>Deine Aufgabe, Teil 2:</strong> Ergänze nach demselben Muster <code>gibFarbe()</code>,
-      <code>gibMaxTempo()</code> und <code>istMotorAn()</code>. Übersetze und teste alle neuen Methoden.</p>
-      <details class="ausklapp">
-        <summary>Hilfe: Welcher Datentyp gehört vor den Namen?</summary>
-        <p>Der Datentyp der Antwort ist der Datentyp des Attributs, dessen Wert zurückgegeben wird. Schau im
-        Klassendiagramm nach: <code>farbe</code> ist ein <code>String</code>, <code>maxTempo</code> ein
-        <code class="j-dekl">int</code>, <code>motorAn</code> ein <code class="j-dekl">boolean</code>.</p>
-      </details>
-      <div class="tipp">⚠️ <strong>Fehlermeldung „Rückgabeanweisung fehlt“</strong> (englisch
-      „missing return statement“): In einer Methode mit Rückgabewert fehlt das <code class="j-mod">return</code>. Steht
-      dagegen <code class="j-dekl">void</code> vor dem Namen, darf <em>kein</em> Wert zurückgegeben werden.</div>
+      <p><strong>Deine Aufgabe:</strong> Ergänze <code>gibTempo()</code> direkt unter dem Konstruktor und übersetze.
+      Erzeuge ein Auto, beschleunige es um 50 und rufe <code>gibTempo()</code> auf. BlueJ zeigt den Rückgabewert 50 in
+      einem kleinen Fenster an.</p>
+      <div class="merke"><strong>Getter und Setter:</strong> Die Namen kommen aus dem Englischen. Dort beginnen solche
+      Methoden mit <em>get</em> (bekommen) und <em>set</em> (setzen), z. B. <code>getTempo()</code> und
+      <code>setTempo(…)</code>. In unserem Kurs verwenden wir deutsche Namen: <code>gib…</code> und <code>setze…</code>,
+      bei Wahrheitswerten (<code class="j-dekl">boolean</code>) <code>ist…</code> statt <code>gib…</code>. Dahinter folgt
+      immer der Name des Attributs: <code>gibTempo()</code>, <code>setzeFarbe(…)</code>, <code>istMotorAn()</code>.</div>
       <div class="tutorial">📘 Zum Nachschlagen im Java-Tutorial:
       <a href="../java/methoden.html" target="_blank">04 Methoden mit Parametern und Rückgabewerten</a></div>
     </div>
   </section>
 
+  <!-- Schritt 3 -->
+  <section class="schritt" id="s3">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 3</span>
+      <span class="schritt-titel">Weitere Getter</span>
+      <label class="haken"><input type="checkbox" data-key="s3"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 2</span></p>
+      <p>Plane zuerst auf dem Arbeitsblatt, wie die Getter für <code>farbe</code>, <code>maxTempo</code> und
+      <code>motorAn</code> im Klassendiagramm und in Java aussehen. Programmiere sie danach, jeweils mit einem Kommentar,
+      und vergleiche die Rückgabewerte mit dem Inspektor.</p>
+      <details class="ausklapp">
+        <summary>Hilfe 1: Welcher Datentyp, welcher Name?</summary>
+        <p>Der Datentyp des Rückgabewerts ist der Datentyp des Attributs. Der Name besteht aus <code>gib</code> und dem
+        Attributnamen. <code>motorAn</code> ist ein Wahrheitswert, deshalb beginnt der Name hier mit <code>ist</code>.</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Hilfe 2: Der Kopf der drei Methoden</summary>
+        <div class="tab-wrap"><table class="tab">
+          <tr><th>im Klassendiagramm</th><th>Kopf der Methode in Java</th></tr>
+          <tr><td><code>+ gibFarbe() : String</code></td><td><code><span class="j-mod">public</span> String gibFarbe()</code></td></tr>
+          <tr><td><code>+ gibMaxTempo() : int</code></td><td><code><span class="j-mod">public</span> <span class="j-dekl">int</span> gibMaxTempo()</code></td></tr>
+          <tr><td><code>+ istMotorAn() : boolean</code></td><td><code><span class="j-mod">public</span> <span class="j-dekl">boolean</span> istMotorAn()</code></td></tr>
+        </table></div>
+      </details>
+      <details class="ausklapp">
+        <summary>Lösung zum Vergleichen</summary>
+        <div class="code"><pre class="java">    /**
+     * Gibt die Farbe des Autos zurück.
+     */
+    public String gibFarbe()
+    {
+        return this.farbe;
+    }
+
+    /**
+     * Gibt das Höchsttempo zurück.
+     */
+    public int gibMaxTempo()
+    {
+        return this.maxTempo;
+    }
+
+    /**
+     * Gibt zurück, ob der Motor an ist.
+     */
+    public boolean istMotorAn()
+    {
+        return this.motorAn;
+    }</pre></div>
+      </details>
+      <div class="tipp">⚠️ <strong>Typische Fehlermeldungen:</strong><br>
+      „Rückgabeanweisung fehlt“: Im Kopf steht ein Datentyp, aber es fehlt das <code class="j-mod">return</code>.<br>
+      „Unerwarteter Rückgabewert“: Im Kopf steht noch <code class="j-dekl">void</code>.<br>
+      „String kann nicht in int konvertiert werden“: Der Datentyp im Kopf passt nicht zum Attribut.</div>
+    </div>
+  </section>
+
+  <h2 class="teil">Teil B: Weitere Methoden mit Rückgabewert</h2>
+
   <!-- Schritt 4 -->
   <section class="schritt" id="s4">
     <div class="schritt-kopf">
       <span class="schritt-nr">Schritt 4</span>
-      <span class="schritt-titel">Antwort oder Wirkung?</span>
+      <span class="schritt-titel">Rechnen und das Ergebnis zurückgeben</span>
       <label class="haken"><input type="checkbox" data-key="s4"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
       <p><span class="ab-bezug">AB Aufgabe 3</span></p>
-      <p>Rufe abwechselnd <code>starteMotor()</code>, <code>stoppeMotor()</code> und <code>istMotorAn()</code> auf.
-      Beobachte, wann BlueJ eine Antwort anzeigt und wann sich ein Attributwert ändert.</p>
-      <div class="frage">
-        <label for="f3">Frage 3: Was ist der Unterschied zwischen <code>starteMotor()</code> und <code>istMotorAn()</code>?</label>
-        <textarea id="f3" data-key="f3"></textarea>
-      </div>
-      <p>Vergleiche im Klassendiagramm <code>+ setzeMaxTempo(pMaxTempo : int)</code> und
-      <code>+ gibMaxTempo() : int</code>.</p>
-      <div class="frage">
-        <label for="f4">Frage 4: Woran erkennst du im Klassendiagramm, ob eine Methode einen Wert mitgegeben bekommt und ob sie eine Antwort zurückgibt?</label>
-        <textarea id="f4" data-key="f4"></textarea>
-      </div>
+      <p>Hinter <code class="j-mod">return</code> muss nicht ein Attribut allein stehen, es kann auch eine
+      <strong>Rechnung</strong> sein. Ein Beispiel ist eine Faustformel aus der Fahrschule: Der Reaktionsweg (die Strecke,
+      die ein Auto fährt, bis man auf die Bremse tritt) ist in Metern ungefähr das Tempo geteilt durch 10, mal 3.</p>
+      <div class="code"><button class="kopieren">Kopieren</button><pre class="java" data-zeilennummern>    /**
+     * Gibt den Reaktionsweg in Metern zurück (Faustformel).
+     */
+    public int berechneReaktionsweg()
+    {
+        return this.tempo * 3 / 10;
+    }</pre></div>
+      <p>Das passiert beim Aufruf, wenn das Auto 50 km/h fährt:</p>
+      <ol>
+        <li><code><span class="j-lit">this</span>.tempo</code> wird durch den Attributwert ersetzt: <code>50 * 3 / 10</code></li>
+        <li>Die Rechnung wird von links nach rechts ausgewertet: <code>150 / 10</code>, also <code>15</code></li>
+        <li><code class="j-mod">return</code> gibt das Ergebnis <code>15</code> zurück.</li>
+      </ol>
+      <p>Die Attribute ändern sich dabei nicht: Das Auto fährt danach immer noch 50 km/h. Solche Methoden sind keine
+      Getter, weil sie nicht einfach den Wert eines Attributs zurückgeben. Ihr Name beginnt bei uns oft mit
+      <code>berechne</code>.</p>
+      <div class="tab-wrap"><table class="tab">
+        <tr><th>Zeichen</th><th>Bedeutung</th><th>Beispiel mit ganzen Zahlen</th></tr>
+        <tr><td><code>+</code> und <code>-</code></td><td>plus und minus</td><td><code>55 - 10</code> ergibt 45</td></tr>
+        <tr><td><code>*</code></td><td>mal</td><td><code>55 * 3</code> ergibt 165</td></tr>
+        <tr><td><code>/</code></td><td>geteilt; die Nachkommastellen fallen weg</td><td><code>165 / 10</code> ergibt 16 (nicht 16,5)</td></tr>
+      </table></div>
+      <div class="tipp">⚠️ <strong>Reihenfolge beim Teilen:</strong> Bei 55 km/h ergibt <code>55 * 3 / 10</code> den Wert 16.
+      Mit <code>55 / 10 * 3</code> würde zuerst auf 5 abgeschnitten, und es käme nur 15 heraus. Multipliziere deshalb
+      zuerst und teile danach. Punktrechnung geht auch in Java vor Strichrechnung, Klammern kannst du wie in Mathe
+      setzen.</div>
+      <p><strong>Deine Aufgabe:</strong> Programmiere <code>+ berechneTempoReserve() : int</code>. Die Methode gibt zurück,
+      um wie viel km/h das Auto noch bis zum Höchsttempo beschleunigen kann.</p>
+      <p>Teste mindestens diese Fälle: Ein neues Auto hat die Reserve 200. Nach <code>beschleunigeUm(80)</code> ist sie 120.
+      Nach <code>setzeMaxTempo(100)</code> ist sie 20.</p>
+      <details class="ausklapp">
+        <summary>Hilfe 1: Was muss berechnet werden?</summary>
+        <p>Bei Höchsttempo 200 und Tempo 80 ist die Reserve 200 − 80. Welche beiden Attribute stecken hinter den Zahlen?</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Hilfe 2: Der Aufbau</summary>
+        <div class="code"><pre class="java">    public int berechneTempoReserve()
+    {
+        return  // Höchsttempo minus Tempo
+    }</pre></div>
+      </details>
+      <details class="ausklapp">
+        <summary>Lösung zum Vergleichen</summary>
+        <div class="code"><pre class="java">    /**
+     * Gibt zurück, um wie viel km/h das Auto noch beschleunigen kann.
+     */
+    public int berechneTempoReserve()
+    {
+        return this.maxTempo - this.tempo;
+    }</pre></div>
+      </details>
     </div>
   </section>
 
@@ -434,54 +511,350 @@ public class Auto
   <section class="schritt" id="s5">
     <div class="schritt-kopf">
       <span class="schritt-nr">Schritt 5</span>
-      <span class="schritt-titel">Zusammenfassen</span>
+      <span class="schritt-titel">Der Anhalteweg</span>
       <label class="haken"><input type="checkbox" data-key="s5"> erledigt</label>
     </div>
     <div class="schritt-inhalt">
-      <p>Vergleiche deine fertige Klasse mit dem Klassendiagramm aus Schritt 1. Fehlt noch etwas? Überprüfe dich
-      danach mit der Zusammenfassung.</p>
-      <details class="ausklapp">
-        <summary>Zusammenfassung anzeigen</summary>
-        <div class="merke">
-          <p><strong>Rückgabewert:</strong> Eine Methode kann eine Antwort zurückgeben. Statt <code class="j-dekl">void</code>
-          steht der Datentyp der Antwort vor dem Namen, mit <code class="j-mod">return</code> wird der Wert zurückgegeben.</p>
-          <p><strong>Getter:</strong> gibt den Wert eines Attributs zurück, z. B. <code><span class="j-mod">public</span> <span class="j-dekl">int</span> gibTempo()</code>.
-          Der Name beginnt mit <code>gib</code>, bei Wahrheitswerten mit <code>ist</code>.</p>
-          <p><strong>Im Klassendiagramm:</strong> Ein Parameter steht in den Klammern
-          (<code>+ setzeMaxTempo(pMaxTempo : int)</code>), der Datentyp der Antwort hinter den Klammern
-          (<code>+ gibMaxTempo() : int</code>).</p>
-          <p><strong>Antwort oder Wirkung:</strong> <code class="j-dekl">void</code>-Methoden verändern etwas am Objekt.
-          Getter verändern nichts, sie antworten nur.</p>
-        </div>
-      </details>
-    </div>
-  </section>
-
-  <!-- Zusatz -->
-  <section class="schritt zusatz" id="sz">
-    <div class="schritt-kopf">
-      <span class="schritt-nr">Zusatz</span>
-      <span class="schritt-titel">Für Schnelle: eine Beschreibung des Autos</span>
-      <label class="haken"><input type="checkbox" data-key="sz"> erledigt</label>
-    </div>
-    <div class="schritt-inhalt">
-      <p>Schreibe eine Methode <code>gibBeschreibung()</code>, die einen Text über das Auto zurückgibt, zum
-      Beispiel <code>Farbe: rot, Tempo: 50 km/h</code>.</p>
+      <p><span class="ab-bezug">AB Aufgabe 4</span></p>
+      <p>Bis ein Auto steht, vergehen zwei Strecken: der <strong>Reaktionsweg</strong> und danach der
+      <strong>Bremsweg</strong>. Beide zusammen ergeben den <strong>Anhalteweg</strong>. Die Faustformeln (Tempo in km/h,
+      Ergebnis in Metern):</p>
+      <ul>
+        <li>Reaktionsweg = (Tempo : 10) · 3</li>
+        <li>Bremsweg = (Tempo : 10) · (Tempo : 10)</li>
+        <li>Anhalteweg = Reaktionsweg + Bremsweg</li>
+      </ul>
+      <p><strong>Deine Aufgabe:</strong></p>
       <ol>
-        <li>Überlege zuerst: Welchen Datentyp hat die Antwort? Wie sieht die Zeile im Klassendiagramm aus?</li>
-        <li>Texte und Attributwerte verbindest du mit <code>+</code>, genau wie bei <code>System.out.println</code>.
-          Statt den Text auszugeben, gibst du ihn mit <code class="j-mod">return</code> zurück.</li>
-        <li>Teste die Methode und vergleiche die Antwort mit dem Inspektor.</li>
+        <li>Übernimm <code>berechneReaktionsweg()</code> aus Schritt 4. Programmiere danach
+          <code>+ berechneBremsweg() : int</code>.</li>
+        <li>Programmiere <code>+ berechneAnhalteweg() : int</code> und benutze dafür die beiden anderen Methoden.</li>
+        <li>Berechne die Werte in der Tabelle von Hand und prüfe sie hier. Teste danach deine Methoden mit den drei
+          Tempowerten.</li>
       </ol>
+      <div class="merke"><strong>Methoden des eigenen Objekts aufrufen:</strong> Mit <code class="j-lit">this</code> kann ein
+      Objekt seine eigenen Methoden aufrufen. <code><span class="j-lit">this</span>.berechneReaktionsweg()</code> wird beim Ausführen
+      durch den Rückgabewert der Methode ersetzt. Mit diesem Wert kann man weiterrechnen, genau wie mit einem
+      Attributwert.</div>
+      <div class="tab-wrap"><table class="tab werte" id="tab-anhalte">
+        <tr><th>Tempo in km/h</th><th>Reaktionsweg in m</th><th>Bremsweg in m</th><th>Anhalteweg in m</th></tr>
+        <tr><td>30</td><td><input inputmode="numeric" data-key="w1" data-soll="9"></td><td><input inputmode="numeric" data-key="w2" data-soll="9"></td><td><input inputmode="numeric" data-key="w3" data-soll="18"></td></tr>
+        <tr><td>50</td><td><input inputmode="numeric" data-key="w4" data-soll="15"></td><td><input inputmode="numeric" data-key="w5" data-soll="25"></td><td><input inputmode="numeric" data-key="w6" data-soll="40"></td></tr>
+        <tr><td>100</td><td><input inputmode="numeric" data-key="w7" data-soll="30"></td><td><input inputmode="numeric" data-key="w8" data-soll="100"></td><td><input inputmode="numeric" data-key="w9" data-soll="130"></td></tr>
+      </table></div>
+      <p><button class="btn btn-primary" onclick="pruefeWerte()">Werte prüfen</button> <span id="werte-ergebnis"></span></p>
       <details class="ausklapp">
-        <summary>Hilfe: So beginnt die Methode</summary>
-        <div class="code"><pre class="java">    public String gibBeschreibung()
+        <summary>Hilfe 1: Der Bremsweg</summary>
+        <p>(Tempo : 10) · (Tempo : 10) ist dasselbe wie Tempo · Tempo : 100. Die zweite Form ist beim Rechnen mit ganzen
+        Zahlen genauer, weil zuerst multipliziert und dann geteilt wird.</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Hilfe 2: Der Anhalteweg</summary>
+        <p>Hinter <code class="j-mod">return</code> steht eine Summe aus zwei Methodenaufrufen. Der erste Summand ist
+        <code><span class="j-lit">this</span>.berechneReaktionsweg()</code>.</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Lösung zum Vergleichen</summary>
+        <div class="code"><pre class="java">    /**
+     * Gibt den Bremsweg in Metern zurück (Faustformel).
+     */
+    public int berechneBremsweg()
     {
-        return "Farbe: " + this.farbe + ", Tempo: " ...
+        return this.tempo * this.tempo / 100;
+    }
+
+    /**
+     * Gibt den Anhalteweg in Metern zurück: Reaktionsweg und Bremsweg zusammen.
+     */
+    public int berechneAnhalteweg()
+    {
+        return this.berechneReaktionsweg() + this.berechneBremsweg();
     }</pre></div>
       </details>
     </div>
   </section>
+
+  <!-- Schritt 6 -->
+  <section class="schritt" id="s6">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 6</span>
+      <span class="schritt-titel">Parameter und Rückgabewert in einer Methode</span>
+      <label class="haken"><input type="checkbox" data-key="s6"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p><span class="ab-bezug">AB Aufgabe 5</span></p>
+      <p>Eine Methode kann einen Parameter haben <em>und</em> einen Wert zurückgeben. Im Klassendiagramm steht dann beides,
+      zum Beispiel <code>+ berechneTempoNach(pTempo : int) : int</code>:</p>
+      <ul>
+        <li><strong>in den Klammern</strong> der Parameter: ein Wert, den die Methode beim Aufruf mitbekommt,</li>
+        <li><strong>hinter den Klammern</strong> der Datentyp des Rückgabewerts, den die Methode liefert.</li>
+      </ul>
+      <p><strong>Aufgabe a):</strong> Programmiere <code>+ berechneTempoNach(pTempo : int) : int</code>. Die Methode gibt
+      zurück, welches Tempo das Auto hätte, wenn es um <code>pTempo</code> schneller wäre, ohne es wirklich zu
+      beschleunigen. Teste: Beschleunige ein Auto um 80. <code>berechneTempoNach(30)</code> liefert 110, und der Inspektor
+      zeigt danach immer noch Tempo 80.</p>
+      <details class="ausklapp">
+        <summary>Hilfe zu a): Was ist anders als bei beschleunigeUm?</summary>
+        <p><code>beschleunigeUm</code> speichert das Ergebnis im Attribut (<code><span class="j-lit">this</span>.tempo = …</code>). Hier
+        soll das Attribut unverändert bleiben. Die Rechnung steht deshalb direkt hinter <code class="j-mod">return</code>,
+        ohne Zuweisung.</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Lösung zu a) zum Vergleichen</summary>
+        <div class="code"><pre class="java">    /**
+     * Gibt zurück, welches Tempo das Auto hätte, wenn es um den übergebenen
+     * Wert schneller wäre. Das Tempo selbst ändert sich dabei nicht.
+     */
+    public int berechneTempoNach(int pTempo)
+    {
+        return this.tempo + pTempo;
+    }</pre></div>
+      </details>
+      <p><strong>Aufgabe b):</strong> Programmiere <code>+ erstelleBeschreibung() : String</code>. Der Rückgabewert ist ein
+      Text, der zum aktuellen Zustand passt, z. B. <code class="j-str">"Farbe: rot, Tempo: 50 km/h"</code>. Texte und
+      Attributwerte verbindest du mit <code>+</code>, wie bei <code>System.out.println</code>. Achte auf die Leerzeichen.</p>
+      <details class="ausklapp">
+        <summary>Hilfe zu b): Der Anfang</summary>
+        <p><code><span class="j-mod">return</span> <span class="j-str">"Farbe: "</span> + <span class="j-lit">this</span>.farbe + …</code></p>
+      </details>
+      <details class="ausklapp">
+        <summary>Lösung zu b) zum Vergleichen</summary>
+        <div class="code"><pre class="java">    /**
+     * Gibt einen Text zurück, der das Auto beschreibt.
+     */
+    public String erstelleBeschreibung()
+    {
+        return "Farbe: " + this.farbe + ", Tempo: " + this.tempo + " km/h";
+    }</pre></div>
+      </details>
+      <div class="warum"><strong>Ausgeben oder zurückgeben?</strong> <code>System.out.println(…)</code> schreibt einen Text in das
+      Konsolenfenster. Er ist dann nur zu lesen, das Programm kann ihn nicht weiterverwenden.
+      <code class="j-mod">return</code> gibt einen Wert an die Stelle zurück, an der die Methode aufgerufen wurde. Dort kann man
+      mit ihm weiterarbeiten, so wie <code>berechneAnhalteweg()</code> mit den Rückgabewerten der anderen beiden
+      Methoden.</div>
+    </div>
+  </section>
+
+  <!-- Schritt 7 -->
+  <section class="schritt" id="s7">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Schritt 7</span>
+      <span class="schritt-titel">Zusammenfassen und üben</span>
+      <label class="haken"><input type="checkbox" data-key="s7"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Vergleiche deine fertige Klasse mit dem Klassendiagramm aus Schritt 1. Den Merksatz auf dem Arbeitsblatt
+      füllen wir am Ende der Stunde gemeinsam aus.</p>
+      <details class="ausklapp">
+        <summary>Zusammenfassung anzeigen</summary>
+        <div class="merke">
+          <p><strong>Rückgabewert:</strong> der Wert, den eine Methode beim Aufruf liefert. Statt <code class="j-dekl">void</code>
+          steht sein Datentyp vor dem Methodennamen, mit <code class="j-mod">return</code> wird er zurückgegeben. Im
+          Klassendiagramm steht der Datentyp hinter den Klammern: <code>+ gibTempo() : int</code>.</p>
+          <p><strong>Getter:</strong> geben den Wert eines Attributs zurück. Name: <code>gib</code> (bei Wahrheitswerten
+          <code>ist</code>) und der Attributname.</p>
+          <p><strong>Andere Methoden mit Rückgabewert:</strong> berechnen ihren Rückgabewert, z. B.
+          <code><span class="j-mod">return</span> <span class="j-lit">this</span>.maxTempo - <span class="j-lit">this</span>.tempo;</code>. Sie können auch
+          Parameter haben.</p>
+        </div>
+      </details>
+      <div class="tutorial">✏️ <strong>Übung 2:</strong> Zehn Fragen zu Gettern, Settern und allem, was du bisher gelernt hast:
+      <a href="../info_ef_uebungen/oop_02_kinosaal.html" target="_blank">Übung 2: Der Kinosaal</a></div>
+    </div>
+  </section>
+
+  <h2 class="teil">Zusatz</h2>
+
+  <!-- Zusatz 1 -->
+  <section class="schritt zusatz" id="sz1">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Zusatz 1</span>
+      <span class="schritt-titel">Strecke und Fahrzeit</span>
+      <label class="haken"><input type="checkbox" data-key="sz1"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <ol>
+        <li>Programmiere <code>+ berechneStrecke(pMinuten : int) : int</code>. Die Methode gibt zurück, wie viele Kilometer
+          das Auto mit dem aktuellen Tempo in der angegebenen Zeit fährt. Test: Bei Tempo 80 sind es in 45 Minuten 60 km.</li>
+        <li>Programmiere <code>+ berechneFahrzeit(pKilometer : int) : int</code>. Die Methode gibt zurück, wie viele Minuten
+          das Auto mit dem aktuellen Tempo für die Strecke braucht. Test: Bei Tempo 80 dauern 120 km 90 Minuten.</li>
+        <li>Rufe <code>berechneFahrzeit(100)</code> bei einem stehenden Auto auf und erkläre die Fehlermeldung. Wie man so
+          etwas verhindert, lernst du in Einheit (05).</li>
+      </ol>
+      <details class="ausklapp">
+        <summary>Hilfe: Die Formeln</summary>
+        <p>80 km/h bedeutet: 80 km in 60 Minuten. In einer Minute sind es 80 : 60 km. Multipliziere auch hier zuerst und teile
+        danach.</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Lösung zum Vergleichen</summary>
+        <div class="code"><pre class="java">    public int berechneStrecke(int pMinuten)
+    {
+        return this.tempo * pMinuten / 60;
+    }
+
+    public int berechneFahrzeit(int pKilometer)
+    {
+        return pKilometer * 60 / this.tempo;
+    }</pre></div>
+        <p>Bei einem stehenden Auto ist <code>tempo</code> gleich 0. Durch 0 kann man nicht teilen, deshalb bricht die Methode
+        mit <code>ArithmeticException: / by zero</code> ab.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Zusatz 2 -->
+  <section class="schritt zusatz" id="sz2">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Zusatz 2</span>
+      <span class="schritt-titel">Vergleiche zurückgeben</span>
+      <label class="haken"><input type="checkbox" data-key="sz2"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Ein <strong>Vergleich</strong> hat selbst einen Wert: <code class="j-lit">true</code>, wenn er stimmt, sonst
+      <code class="j-lit">false</code>. Deshalb kann er hinter <code class="j-mod">return</code> stehen. Der Datentyp des
+      Rückgabewerts ist dann <code class="j-dekl">boolean</code>.</p>
+      <div class="tab-wrap"><table class="tab">
+        <tr><th>Zeichen</th><th>Bedeutung</th><th>Beispiel</th></tr>
+        <tr><td><code>&lt;</code> und <code>&lt;=</code></td><td>kleiner; kleiner oder gleich</td><td><code>30 &lt; 50</code> ist <code class="j-lit">true</code></td></tr>
+        <tr><td><code>&gt;</code> und <code>&gt;=</code></td><td>größer; größer oder gleich</td><td><code>30 &gt;= 50</code> ist <code class="j-lit">false</code></td></tr>
+        <tr><td><code>==</code></td><td>gleich (zwei Gleichheitszeichen)</td><td><code>50 == 50</code> ist <code class="j-lit">true</code></td></tr>
+      </table></div>
+      <ol>
+        <li>Programmiere <code>+ istSchnellerAls(pTempo : int) : boolean</code>. Test: Bei Tempo 80 liefert
+          <code>istSchnellerAls(50)</code> den Wert <code class="j-lit">true</code>, <code>istSchnellerAls(80)</code> aber
+          <code class="j-lit">false</code>.</li>
+        <li>Programmiere <code>+ istAmLimit() : boolean</code>. Die Methode gibt zurück, ob das Auto genau mit Höchsttempo
+          fährt.</li>
+      </ol>
+      <details class="ausklapp">
+        <summary>Lösung zum Vergleichen</summary>
+        <div class="code"><pre class="java">    public boolean istSchnellerAls(int pTempo)
+    {
+        return this.tempo &gt; pTempo;
+    }
+
+    public boolean istAmLimit()
+    {
+        return this.tempo == this.maxTempo;
+    }</pre></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Zusatz 3 -->
+  <section class="schritt zusatz" id="sz3">
+    <div class="schritt-kopf">
+      <span class="schritt-nr">Zusatz 3</span>
+      <span class="schritt-titel">Eine neue Klasse: Rechteck</span>
+      <label class="haken"><input type="checkbox" data-key="sz3"> erledigt</label>
+    </div>
+    <div class="schritt-inhalt">
+      <p>Programmiere in einem neuen Projekt <code>Geometrie</code> die ganze Klasse <code>Rechteck</code> nach diesem
+      Klassendiagramm, mit Kommentaren. Breite und Höhe sind in cm angegeben.</p>
+      <div class="uml-reihe">
+        <div class="uml">
+          <div class="name">Rechteck</div>
+          <div>- breite : int<br>- hoehe : int</div>
+          <div>+ Rechteck()<br>+ gibBreite() : int<br>+ gibHoehe() : int<br>+ setzeBreite(pBreite : int)<br>
+            + setzeHoehe(pHoehe : int)<br>+ berechneFlaeche() : int<br>+ berechneUmfang() : int<br>+ istQuadrat() : boolean<br>
+            + berechneFlaecheBeiBreiteUm(pZentimeter : int) : int<br>+ erstelleBeschreibung() : String</div>
+        </div>
+        <ul style="flex:1; min-width: 260px;">
+          <li>Ein neues Rechteck ist 4 cm breit und 3 cm hoch.</li>
+          <li><code>istQuadrat()</code> vergleicht Breite und Höhe (siehe Zusatz 2).</li>
+          <li><code>berechneFlaecheBeiBreiteUm</code> gibt den Flächeninhalt zurück, den das Rechteck hätte, wenn es um
+            <code>pZentimeter</code> breiter wäre. Das Rechteck selbst ändert sich nicht.</li>
+          <li><code>erstelleBeschreibung()</code> liefert z. B. <code class="j-str">"4 cm x 3 cm"</code>.</li>
+          <li>Testwerte für ein neues Rechteck: Fläche 12, Umfang 14, kein Quadrat, um 2 cm breiter: Fläche 18.</li>
+        </ul>
+      </div>
+      <details class="ausklapp">
+        <summary>Hilfe: Womit fange ich an?</summary>
+        <p>Gehe in dieser Reihenfolge vor und übersetze nach jedem Schritt: Attribute, Konstruktor, Getter, Setter, dann die
+        Methoden mit Rechnung. Schau dir bei Unsicherheit die Klasse <code>Auto</code> an.</p>
+      </details>
+      <details class="ausklapp">
+        <summary>Lösung zum Vergleichen (ohne Kommentare)</summary>
+        <div class="code"><pre class="java" data-zeilennummern>public class Rechteck
+{
+    private int breite;
+    private int hoehe;
+
+    public Rechteck()
+    {
+        this.breite = 4;
+        this.hoehe = 3;
+    }
+
+    public int gibBreite()
+    {
+        return this.breite;
+    }
+
+    public int gibHoehe()
+    {
+        return this.hoehe;
+    }
+
+    public void setzeBreite(int pBreite)
+    {
+        this.breite = pBreite;
+    }
+
+    public void setzeHoehe(int pHoehe)
+    {
+        this.hoehe = pHoehe;
+    }
+
+    public int berechneFlaeche()
+    {
+        return this.breite * this.hoehe;
+    }
+
+    public int berechneUmfang()
+    {
+        return 2 * this.breite + 2 * this.hoehe;
+    }
+
+    public boolean istQuadrat()
+    {
+        return this.breite == this.hoehe;
+    }
+
+    public int berechneFlaecheBeiBreiteUm(int pZentimeter)
+    {
+        return (this.breite + pZentimeter) * this.hoehe;
+    }
+
+    public String erstelleBeschreibung()
+    {
+        return this.breite + " cm x " + this.hoehe + " cm";
+    }
+}</pre></div>
+      </details>
+      <p><strong>Noch weiter?</strong> Entwirf selbst eine Klasse, z. B. <code>Handy</code>, <code>Getraenkeautomat</code> oder
+      <code>Spielfigur</code>: erst das Klassendiagramm mit mindestens drei Attributen, Gettern, Settern und zwei Methoden, die
+      etwas berechnen, dann die Umsetzung in BlueJ.</p>
+    </div>
+  </section>
+
+  <script>
+  // Werte der Anhalteweg-Tabelle prüfen
+  function pruefeWerte() {
+    let richtig = 0, gesamt = 0;
+    document.querySelectorAll('#tab-anhalte input').forEach(i => {
+      gesamt++;
+      const w = i.value.trim();
+      i.classList.remove('ok', 'falsch');
+      if (w === '') return;
+      const ok = Number(w.replace(',', '.')) === Number(i.dataset.soll);
+      i.classList.add(ok ? 'ok' : 'falsch');
+      if (ok) richtig++;
+    });
+    document.getElementById('werte-ergebnis').textContent = richtig === gesamt ? '✓ Alle Werte stimmen.' : richtig + ' von ' + gesamt + ' Werten stimmen.';
+  }
+  </script>
 
   </div><!-- /inhalt -->
 
@@ -498,7 +871,7 @@ public class Auto
 // ════════════════════════════════════════════
 const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
-const ARBEITSBLATT_ID   = 'ef_uv2_04_methoden_rueckgabe_v1';
+const ARBEITSBLATT_ID   = 'ef_uv2_04_methoden_rueckgabe_v2';
 // ════════════════════════════════════════════
 
 let sb = null;
@@ -579,7 +952,7 @@ function pruefeZuordnung() {
 
 // ── Fortschritt ───────────────────────────────────────────────
 const haken = [...document.querySelectorAll('.haken input')];
-const PFLICHT = haken.filter(h => h.dataset.key !== 'sz');
+const PFLICHT = haken.filter(h => !h.dataset.key.startsWith('sz'));
 function aktualisiereFortschritt() {
   haken.forEach(h => h.closest('.schritt').classList.toggle('erledigt', h.checked));
   const n = PFLICHT.filter(h => h.checked).length;

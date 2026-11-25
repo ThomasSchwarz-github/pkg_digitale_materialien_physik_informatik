@@ -95,7 +95,35 @@
     </ul>
     <div class="merke"><strong>Getter:</strong> Methoden, die nur den Wert eines Attributs zurückgeben, heißen
     Getter. Ihr Name beginnt mit <code>gib</code>, bei Wahrheitswerten mit <code>ist</code>:
-    <code>gibFarbe()</code>, <code>gibTempo()</code>, <code>istMotorAn()</code>.</div>
+    <code>gibFarbe()</code>, <code>gibTempo()</code>, <code>istMotorAn()</code>. Im Englischen heißen sie <em>get</em>-Methoden
+    (<code>getTempo()</code>), daher der Name.</div>
+  </div>
+
+  <div class="karte">
+    <h2>Rechnen und das Ergebnis zurückgeben</h2>
+    <p>Hinter <code class="j-mod">return</code> kann auch eine Rechnung stehen. Sie wird zuerst ausgewertet, dann wird das
+    Ergebnis zurückgegeben. Die Attribute ändern sich dabei nicht:</p>
+    <div class="code"><pre class="java">    public int berechneTempoReserve()
+    {
+        return this.maxTempo - this.tempo;
+    }</pre></div>
+    <div class="tab-wrap"><table class="tab">
+      <tr><th>Zeichen</th><th>Bedeutung</th><th>Beispiel mit ganzen Zahlen</th></tr>
+      <tr><td><code>+</code> <code>-</code></td><td>plus, minus</td><td><code>7 - 2</code> ergibt 5</td></tr>
+      <tr><td><code>*</code></td><td>mal</td><td><code>7 * 2</code> ergibt 14</td></tr>
+      <tr><td><code>/</code></td><td>geteilt; bei <code class="j-dekl">int</code> fallen die Nachkommastellen weg</td><td><code>7 / 2</code> ergibt 3</td></tr>
+    </table></div>
+    <ul>
+      <li>Punktrechnung geht vor Strichrechnung, Klammern werden zuerst ausgewertet. Beim Rechnen mit ganzen Zahlen ist es
+        meist besser, zuerst zu multiplizieren und danach zu teilen.</li>
+      <li>Ein Objekt kann seine eigenen Methoden aufrufen und mit ihrem Rückgabewert weiterrechnen:
+        <code><span class="j-mod">return</span> <span class="j-lit">this</span>.berechneReaktionsweg() + <span class="j-lit">this</span>.berechneBremsweg();</code></li>
+      <li>Auch ein Text (<code>String</code>) oder ein Vergleich (<code class="j-dekl">boolean</code>) kann hinter
+        <code class="j-mod">return</code> stehen: <code><span class="j-mod">return</span> <span class="j-lit">this</span>.tempo &gt; pTempo;</code></li>
+    </ul>
+    <div class="tipp"><strong>Ausgeben oder zurückgeben?</strong> <code>System.out.println(…)</code> schreibt einen Text in das
+    Konsolenfenster. <code class="j-mod">return</code> gibt einen Wert an die Stelle zurück, an der die Methode aufgerufen wurde.
+    Nur mit einem Rückgabewert kann das Programm weiterarbeiten.</div>
   </div>
 
   <div class="karte">
