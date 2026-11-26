@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klausurvorbereitung – Physik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amber-dark: #854F0B; --amber-mid: #BA7517; --amber-light: #FAEEDA;
+    --blue-mid: #185FA5;
+    --gray-border: #D3D1C7; --gray-text: #5F5E5A; --text-main: #1a1917;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); min-height: 100vh; }
+  .page { width: min(1200px, 100%); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .back-link { display: inline-flex; align-items: center; gap: .4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .site-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--text-main); padding-bottom: 1.4rem; margin-bottom: 2.5rem; gap: 1.5rem; }
+  .site-header .eyebrow { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: .5rem; }
+  .site-header h1 { font-family: 'Source Serif 4', serif; font-size: 2.2rem; font-weight: 600; line-height: 1.15; }
+  .site-header .subtitle { margin-top: .6rem; font-size: 14px; color: var(--gray-text); line-height: 1.6; max-width: 580px; }
+  .site-logo { max-height: 160px; width: auto; }
+
+  .kurs-section { margin-bottom: 3rem; }
+  .kurs-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: .7rem; border-bottom: 1.5px solid var(--gray-border); }
+  .kurs-label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; }
+  .kurs-title { font-family: 'Source Serif 4', serif; font-size: 1.35rem; font-weight: 600; }
+  .klausur-block { margin-bottom: 1.5rem; }
+  .klausur-label { display: flex; align-items: center; gap: .55rem; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .75rem; color: var(--amber-dark); }
+  .klausur-label .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber-mid); }
+  .klausur-desc { font-size: 13.5px; line-height: 1.75; color: var(--gray-text); margin: -.4rem 0 1rem; max-width: 780px; }
+  .sim-list { display: flex; flex-direction: column; gap: .6rem; }
+  .sim-card { display: flex; align-items: center; gap: 1rem; background: white; border: 1px solid var(--gray-border); border-left: 3px solid var(--amber-mid); border-radius: 8px; padding: .85rem 1.1rem; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s, transform .1s; }
+  .sim-card:hover { border-color: var(--amber-mid); box-shadow: 0 2px 12px rgba(186,117,23,.12); transform: translateY(-1px); }
+  .sim-icon { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; background: var(--amber-light); }
+  .sim-text { flex: 1; min-width: 0; }
+  .sim-title { font-size: 14.5px; font-weight: 500; margin-bottom: .2rem; }
+  .sim-desc { font-size: 12px; color: var(--gray-text); line-height: 1.5; }
+  .arrow { color: var(--gray-border); font-size: 16px; flex-shrink: 0; transition: color .15s; }
+  .sim-card:hover .arrow { color: var(--amber-mid); }
+  .site-footer { margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  @media (max-width: 600px) {
+    .page { padding: 2rem 1rem 4rem; }
+    .site-header h1 { font-size: 1.7rem; }
+    .site-logo { max-height: 90px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <a href="index_physik.html" class="back-link">‹ Physik</a>
+
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Interaktive Lernmaterialien · Physik</p>
+      <h1>Klausurvorbereitung</h1>
+      <p class="subtitle">Übungsaufgaben zum selbstständigen Wiederholen vor einer Klausur – mit sofortiger Rückmeldung. Mit Anmeldung wird dein Zwischenstand gespeichert.</p>
+    </div>
+    <img src="assets/pkg_hauptlogo_web_kleiner.png" alt="Logo" class="site-logo">
+  </header>
+
+  <section class="kurs-section">
+    <div class="kurs-header">
+      <span class="kurs-label">Leistungskurs</span>
+      <h2 class="kurs-title">Abitur 2028</h2>
+    </div>
+
+    <div class="klausur-block">
+      <div class="klausur-label"><span class="dot"></span>Q1 · 2. Klausur: Magnetische Felder und gekreuzte Felder</div>
+      <p class="klausur-desc">Inhaltsfeld Ladungen, Felder und Induktion, Unterrichtsvorhaben „Magnetische Felder“.</p>
+      <div class="sim-list">
+        <a href="klausurvorbereitung_physik/lk_abi2028_k2_magnetfelder.html" class="sim-card">
+          <div class="sim-icon">🧲</div>
+          <div class="sim-text">
+            <div class="sim-title">Übungsaufgaben: Magnetische Felder und gekreuzte Felder</div>
+            <div class="sim-desc">33 Aufgaben in 9 Kontexten: Feldlinien, Flussdichte, Lorentzkraft, Hall-Effekt, Kreis- und Schraubenbahnen, Wien-Filter, Massenspektrometer · Ankreuzen, Rechnen, Formeln eingeben</div>
+          </div>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <span>Physik · Klausurvorbereitung</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+</body>
+</html>

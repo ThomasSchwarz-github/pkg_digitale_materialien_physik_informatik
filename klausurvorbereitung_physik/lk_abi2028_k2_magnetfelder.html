@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klausurvorbereitung: Magnetische Felder – Physik LK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --blue-dark: #0C447C; --blue-mid: #185FA5; --blue-light: #E6F1FB; --blue-border: #B5D4F4;
+    --amber-dark: #854F0B; --amber-mid: #BA7517; --amber-light: #FAEEDA; --amber-border: #FAC775;
+    --green-mid: #16A34A; --green-dark: #166534; --green-light: #F0FDF4; --green-border: #86EFAC;
+    --red-mid: #b91c1c; --red-light: #fef2f2; --red-border: #fca5a5;
+    --orange-mid: #c2410c; --orange-light: #fff7ed; --orange-border: #fdba74;
+    --gray-bg: #F8F7F4; --gray-border: #D3D1C7; --gray-text: #5F5E5A; --text-main: #1a1917;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #f5f3ef; color: var(--text-main); line-height: 1.6; }
+  .page { width: min(1100px, 100%); margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .back-link { display: inline-flex; gap: .4rem; font-size: 13px; color: var(--gray-text); text-decoration: none; margin-bottom: 1.5rem; }
+  .back-link:hover { color: var(--blue-mid); }
+  .header { border-bottom: 2px solid var(--text-main); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+  .header .kurs { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-text); font-weight: 500; margin-bottom: .4rem; }
+  .header h1 { font-family: 'Source Serif 4', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .header .sub { margin-top: .5rem; font-size: 14px; color: var(--gray-text); }
+
+  .intro { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.1rem 1.3rem; margin-bottom: 1.25rem; font-size: 15px; }
+  .intro ul { padding-left: 1.3rem; margin-top: .4rem; }
+  .intro li + li { margin-top: .2rem; }
+
+  details.eingabehilfe { background: var(--blue-light); border: 1px solid var(--blue-border); border-radius: var(--radius); padding: .8rem 1.2rem; margin-bottom: 1.25rem; font-size: 14px; }
+  details.eingabehilfe summary { cursor: pointer; font-weight: 600; color: var(--blue-dark); }
+  .hilfe-tabelle { border-collapse: collapse; margin-top: .6rem; width: 100%; }
+  .hilfe-tabelle td { padding: .3rem .5rem; border-bottom: 1px solid var(--blue-border); vertical-align: top; }
+  .hilfe-tabelle td:first-child { width: 34%; color: var(--blue-dark); }
+  code, .mono { font-family: 'IBM Plex Mono', monospace; font-size: .92em; background: rgba(255,255,255,.7); padding: 0 .25em; border-radius: 3px; }
+
+  /* Moduswahl / Anmeldung */
+  .mode-card { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1rem 1.3rem; margin-bottom: .75rem; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+  .mode-card:hover { border-color: var(--blue-mid); box-shadow: 0 2px 12px rgba(24,95,165,.12); }
+  .mode-card h3 { font-size: 15px; font-weight: 600; color: var(--blue-dark); margin-bottom: .25rem; }
+  .mode-card p { font-size: 13.5px; color: var(--gray-text); }
+  .auth-card { display: none; background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1.2rem 1.3rem; margin-bottom: 1.25rem; }
+  .auth-card h2 { font-size: 15px; margin-bottom: .5rem; }
+  .auth-card p { font-size: 13.5px; color: var(--gray-text); margin-bottom: .8rem; }
+  .input-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: .5rem; }
+  .input-row input { flex: 1; min-width: 200px; border: 1px solid var(--gray-border); border-radius: 8px; padding: 9px 12px; font: inherit; font-size: 14px; }
+  input:focus, select:focus { outline: none; border-color: var(--blue-mid); }
+  #auth-status { font-size: 13px; color: var(--gray-text); min-height: 1.3em; margin-bottom: .5rem; }
+  .btn { padding: 8px 15px; border-radius: 8px; border: none; font: inherit; font-size: 14px; cursor: pointer; }
+  .btn-primary { background: var(--blue-mid); color: white; }
+  .btn-primary:hover { background: var(--blue-dark); }
+  .btn-secondary { background: white; border: 1px solid var(--gray-border); color: var(--text-main); }
+  .btn-secondary:hover { background: #f9f8f5; }
+  .user-bar { display: none; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; margin-bottom: 1rem; }
+  .email-tag { background: var(--blue-light); color: var(--blue-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .anon-hint { display: none; background: #fef9c3; border: 1px solid #fde047; border-radius: var(--radius); padding: .7rem 1rem; font-size: 13.5px; color: #713f12; margin-bottom: 1rem; }
+
+  #inhalt { display: none; }
+  .fortschritt { position: sticky; top: 0; z-index: 5; background: #f5f3ef; padding: .6rem 0 .7rem; margin-bottom: .5rem; }
+  .fortschritt-zeile { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; font-size: 13.5px; margin-bottom: .35rem; }
+  .balken { height: 8px; background: #e7e5df; border-radius: 4px; overflow: hidden; }
+  #balken { height: 100%; width: 0; background: var(--green-mid); transition: width .3s; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; margin-right: 6px; }
+  .dot.saved { background: var(--green-mid); }
+  .inhaltsverzeichnis { display: flex; flex-wrap: wrap; gap: .4rem; margin: .4rem 0 1.4rem; }
+  .inhaltsverzeichnis a { font-size: 12.5px; text-decoration: none; color: var(--blue-dark); background: white; border: 1px solid var(--blue-border); border-radius: 20px; padding: 2px 11px; }
+  .inhaltsverzeichnis a:hover { background: var(--blue-light); }
+  .inhaltsverzeichnis a .zaehler { color: var(--gray-text); margin-left: .3em; }
+
+  .kontext { margin: 2.2rem 0 1rem; }
+  .kontext h2 { font-family: 'Source Serif 4', serif; font-size: 1.4rem; font-weight: 600; border-bottom: 1px solid var(--gray-border); padding-bottom: .3rem; margin-bottom: .7rem; scroll-margin-top: 70px; }
+  .kontext h2 .knr { color: var(--amber-mid); margin-right: .4em; }
+  .kontext-text { background: var(--amber-light); border-left: 3px solid var(--amber-mid); border-radius: 0 8px 8px 0; padding: .8rem 1.1rem; font-size: 15px; margin-bottom: 1rem; }
+  .kontext-text p + p { margin-top: .4rem; }
+  .kontext-text svg { display: block; max-width: 100%; height: auto; margin: .6rem auto .2rem; background: white; border-radius: 8px; }
+
+  .aufgabe { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1rem 1.2rem 1.1rem; margin-bottom: .9rem; scroll-margin-top: 70px; }
+  .aufgabe.alles-richtig { border-color: var(--green-border); box-shadow: inset 4px 0 0 var(--green-mid); }
+  .aufgabe-kopf { display: flex; align-items: baseline; gap: .6rem; margin-bottom: .45rem; }
+  .aufgabe-nr { font-weight: 600; color: var(--blue-dark); white-space: nowrap; }
+  .aufgabe-typ { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-text); border: 1px solid var(--gray-border); border-radius: 4px; padding: 0 .4em; white-space: nowrap; }
+  .aufgabe-status { margin-left: auto; color: var(--green-mid); font-weight: 600; }
+  .aufgabe-text { font-size: 15px; }
+  .aufgabe-text p + p { margin-top: .4rem; }
+  .aufgabe-text svg { display: block; max-width: 100%; height: auto; margin: .6rem auto .2rem; }
+  svg text { font-family: 'IBM Plex Sans', sans-serif; }
+  .hinweis-mc { font-size: 12.5px; color: var(--gray-text); margin: .3rem 0 .5rem; }
+
+  .mc-opt { display: flex; flex-direction: column; border: 1px solid var(--gray-border); border-radius: 8px; padding: .45rem .7rem; margin-top: .4rem; font-size: 14.5px; }
+  .mc-opt label { display: flex; gap: .6rem; align-items: flex-start; cursor: pointer; }
+  .mc-opt input { margin-top: .35rem; flex-shrink: 0; width: 16px; height: 16px; }
+  .mc-erkl { display: none; font-size: 13px; color: var(--gray-text); margin: .3rem 0 0 1.75rem; }
+  .geprueft .mc-erkl { display: block; }
+  .mc-opt.ok { border-color: var(--green-border); background: var(--green-light); }
+  .mc-opt.falsch { border-color: var(--red-border); background: var(--red-light); }
+  .mc-opt.fehlt { border-color: var(--orange-border); background: var(--orange-light); }
+
+  .feld-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .6rem; }
+  .feld-zeile .groesse { font-size: 15px; }
+  .feld-zeile input[type=text] { border: 1px solid var(--gray-border); border-radius: 8px; padding: 8px 11px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; min-width: 0; }
+  input.formel { flex: 1 1 280px; }
+  input.zahl { width: 210px; }
+  select { border: 1px solid var(--gray-border); border-radius: 8px; padding: 7px 9px; font: inherit; font-size: 14.5px; background: white; }
+  .vorschau { margin-top: .5rem; min-height: 2.6em; padding: .4rem .8rem; border: 1px dashed var(--gray-border); border-radius: 8px; background: var(--gray-bg); font-size: 15px; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+  .vorschau .lbl { font-size: 12px; color: var(--gray-text); }
+  .vorschau.fehler { border-color: var(--orange-border); background: var(--orange-light); color: var(--orange-mid); font-size: 13.5px; }
+  .variablen { font-size: 12.5px; color: var(--gray-text); margin-top: .35rem; }
+  .variablen .chip { display: inline-block; border: 1px solid var(--gray-border); background: white; border-radius: 4px; padding: 0 .35em; margin: 0 .1em; font-family: 'IBM Plex Mono', monospace; color: var(--text-main); }
+
+  .zu-zeile { display: grid; grid-template-columns: 1fr minmax(180px, 260px) 1.5rem; gap: .6rem; align-items: center; border-top: 1px solid #eeece6; padding: .45rem 0; font-size: 14.5px; }
+  .zu-zeile:first-of-type { border-top: none; }
+  .zu-zeile select { width: 100%; }
+  .zu-zeile .rueck { font-weight: 700; }
+  .zu-zeile .rueck.ok { color: var(--green-mid); }
+  .zu-zeile .rueck.falsch { color: var(--red-mid); }
+
+  .aktionen { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; align-items: center; }
+  .rueckmeldung { margin-top: .6rem; font-size: 14px; border-radius: 8px; padding: .45rem .75rem; display: none; }
+  .rueckmeldung.ok { display: block; background: var(--green-light); border: 1px solid var(--green-border); color: var(--green-dark); }
+  .rueckmeldung.falsch { display: block; background: var(--red-light); border: 1px solid var(--red-border); color: var(--red-mid); }
+  .rueckmeldung.info { display: block; background: var(--orange-light); border: 1px solid var(--orange-border); color: var(--orange-mid); }
+  .loesungsweg { display: none; margin-top: .6rem; background: var(--blue-light); border: 1px solid var(--blue-border); border-radius: 8px; padding: .6rem .9rem; font-size: 14.5px; }
+  .loesungsweg.offen { display: block; }
+  .loesungsweg .titel { font-weight: 600; color: var(--blue-dark); font-size: 13px; margin-bottom: .2rem; }
+  .btn-loesung { display: none; }
+  .geprueft .btn-loesung { display: inline-block; }
+
+  .abschluss { background: white; border: 1px solid var(--gray-border); border-radius: var(--radius); padding: 1rem 1.3rem; margin-top: 2rem; font-size: 14.5px; }
+  .site-footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-border); font-size: 12px; color: var(--gray-text); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  @media (max-width: 600px) {
+    .page { padding: 1.5rem 1rem 3rem; }
+    .header h1 { font-size: 1.6rem; }
+    .zu-zeile { grid-template-columns: 1fr 1.5rem; }
+    .zu-zeile select { grid-column: 1; }
+    input.zahl { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <a href="../klausurvorbereitung_physik.html" class="back-link">‹ Klausurvorbereitung Physik</a>
+
+  <div class="header">
+    <div class="kurs">Physik · Leistungskurs Abitur 2028 · Q1 · 2. Klausur</div>
+    <h1>Magnetische Felder und gekreuzte Felder</h1>
+    <div class="sub">Übungsaufgaben zum Unterrichtsvorhaben „Magnetische Felder“ (Inhaltsfeld Ladungen, Felder und Induktion): Feldlinien, Flussdichte, Lorentzkraft, Hall-Effekt, Kreis- und Schraubenbahnen, Wien-Filter, Massenspektrometer.</div>
+  </div>
+
+  <div class="intro">
+    <p>Die Aufgaben sind nach kleinen Kontexten geordnet. Innerhalb eines Kontexts bauen sie aufeinander auf. Du kannst aber auch springen.</p>
+    <ul>
+      <li><b>Ankreuzaufgaben:</b> Es können eine, mehrere oder alle Antworten richtig sein. Lies nach dem Prüfen die Erklärungen.</li>
+      <li><b>Rechenaufgaben:</b> Rechne auf Papier, gib dann Zahl und Einheit ein. Zehnerpotenzen wie <code>6,2e-3</code> oder <code>6,2*10^-3</code> sind erlaubt. Du darfst auch einen Vorsatz wählen (z.&nbsp;B. mV statt V).</li>
+      <li><b>Formelaufgaben:</b> Leite die Formel auf Papier her und tippe dein Ergebnis ein. Jede gleichwertige Schreibweise zählt als richtig.</li>
+      <li>Halte deine Formelsammlung bereit. Nutze die Werte: $e = 1{,}602 \cdot 10^{-19}\,\mathrm{C}$, $m_\mathrm{e} = 9{,}109 \cdot 10^{-31}\,\mathrm{kg}$, $1\,\mathrm{u} = 1{,}661 \cdot 10^{-27}\,\mathrm{kg}$.</li>
+    </ul>
+  </div>
+
+  <details class="eingabehilfe">
+    <summary>So gibst du Formeln ein</summary>
+    <table class="hilfe-tabelle">
+      <tr><td>Multiplikation</td><td><code>*</code>, <code>·</code>, ein Leerzeichen oder direkt nebeneinander: <code>2*e*U</code>, <code>2 e U</code> und <code>2eU</code> sind dasselbe.</td></tr>
+      <tr><td>Division</td><td><code>/</code>. Ein Nenner aus mehreren Faktoren gehört in Klammern: <code>2U/(B^2 r^2)</code>. Ohne Klammern (<code>2U/B^2r^2</code>) wäre die Eingabe mehrdeutig und wird nicht angenommen.</td></tr>
+      <tr><td>Potenz</td><td><code>^</code> oder <code>²</code>: <code>B^2</code>, <code>B²</code>, <code>(B r)^2</code></td></tr>
+      <tr><td>Wurzel</td><td><code>sqrt(...)</code> oder <code>√(...)</code>, das Argument immer in Klammern. Auch <code>(...)^(1/2)</code> geht.</td></tr>
+      <tr><td>π, Winkel</td><td><code>pi</code> oder <code>π</code>; <code>sin(alpha)</code>, <code>cos(α)</code></td></tr>
+      <tr><td>Groß und klein</td><td>werden unterschieden: <code>B</code> (Flussdichte) ist nicht <code>b</code> (Breite).</td></tr>
+      <tr><td>Kontrolle</td><td>Unter dem Eingabefeld siehst du sofort, wie deine Eingabe verstanden wird.</td></tr>
+    </table>
+  </details>
+
+  <!-- ══ Moduswahl ══ -->
+  <div id="mode-select">
+    <div class="mode-card" onclick="selectMode('saved')">
+      <h3>🔐 Mit Anmeldung – Zwischenstand speichern</h3>
+      <p>Melde dich mit deiner Schul-E-Mail-Adresse an. Deine Eingaben werden automatisch gespeichert, und du kannst später weiterarbeiten.</p>
+    </div>
+    <div class="mode-card" onclick="selectMode('anon')">
+      <h3>👤 Ohne Anmeldung – nicht gespeichert</h3>
+      <p>Bearbeite die Aufgaben direkt. Deine Eingaben gehen beim Schließen der Seite verloren.</p>
+    </div>
+  </div>
+
+  <div class="auth-card" id="auth-card">
+    <h2>Anmelden</h2>
+    <p>Gib deine Schul-E-Mail-Adresse und dein Passwort ein.</p>
+    <div class="input-row">
+      <input type="email" id="email-input" placeholder="vorname.nachname@pkg-online.de" autocomplete="username">
+      <input type="password" id="password-input" placeholder="Passwort" autocomplete="current-password" onkeydown="if(event.key==='Enter') login()">
+      <button class="btn btn-primary" onclick="login()">Anmelden</button>
+    </div>
+    <div id="auth-status"></div>
+    <button class="btn btn-secondary" onclick="location.reload()">‹ Zurück zur Auswahl</button>
+  </div>
+
+  <div class="user-bar" id="user-bar">
+    <span>Angemeldet als</span>
+    <span class="email-tag" id="user-email"></span>
+    <button class="btn btn-secondary" onclick="logout()">Abmelden</button>
+  </div>
+
+  <div class="anon-hint" id="anon-hint">
+    ℹ️ Du arbeitest ohne Anmeldung. Deine Eingaben werden <strong>nicht gespeichert</strong>.
+  </div>
+
+  <!-- ══ Inhalt ══ -->
+  <div id="inhalt">
+    <div class="fortschritt">
+      <div class="fortschritt-zeile">
+        <span id="fortschritt-text">0 Aufgaben richtig</span>
+        <span><span class="dot" id="dot"></span><span id="save-text">Noch nicht gespeichert.</span></span>
+      </div>
+      <div class="balken"><div id="balken"></div></div>
+    </div>
+    <nav class="inhaltsverzeichnis" id="inhaltsverzeichnis"></nav>
+    <div id="aufgaben"></div>
+    <div class="abschluss">
+      <b>Zum Schluss:</b> Prüfe mit dem Infozettel zur 2.&nbsp;Klausur, ob du alle Themen abgedeckt hast.
+      Die Herleitungen (Lorentzkraft, Hall-Spannung, $e/m$, Wien-Filter, Massenspektrometer) solltest du
+      in der Klausur ausführlich mit Begründung aufschreiben können, nicht nur das Ergebnis.
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <span>Physik · Klausurvorbereitung · Interaktive Lernmaterialien</span>
+    <span>Gehostet auf GitHub Pages</span>
+  </footer>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+//  1  FORMEL-PARSER
+//  Liest Eingaben wie "2U/(B^2 r^2)", "sqrt(2mU/e)/B", "q v B sin(alpha)".
+//  Bewertung: numerischer Vergleich an mehreren zufälligen Wertesätzen,
+//  daher zählt jede mathematisch gleichwertige Schreibweise.
+// ════════════════════════════════════════════════════════════════════
+const FUNKTIONEN = { sqrt: Math.sqrt, wurzel: Math.sqrt, sin: Math.sin, cos: Math.cos, tan: Math.tan, ln: Math.log };
+const FUNK_TEX = { sqrt: null, wurzel: null, sin: '\\sin', cos: '\\cos', tan: '\\tan', ln: '\\ln' };
+
+class EingabeFehler extends Error {}
+
+function normalisiere(s) {
+  return s
+    .replace(/[·×⋅∙]/g, '*').replace(/[−–—]/g, '-').replace(/:/g, '/')
+    .replace(/²/g, '^2').replace(/³/g, '^3').replace(/√/g, 'sqrt').replace(/π/g, 'pi').replace(/α/g, 'alpha')
+    .replace(/\*\*/g, '^').replace(/[\[{]/g, '(').replace(/[\]}]/g, ')')
+    .replace(/(\d),(\d)/g, '$1.$2');
+}
+
+// vars: [{n:'U', tex:'U', alias:['U_B']}]; numerisch: Zahlenmodus mit e-Schreibweise
+function zerlege(eingabe, vars, numerisch) {
+  let s = normalisiere(eingabe);
+  if (numerisch) s = s.replace(/(\d)\s*[xX]\s*(?=\d)/g, '$1*');
+  const namen = [];
+  (vars || []).forEach(v => { namen.push({ text: v.n, art: 'var', v }); (v.alias || []).forEach(a => namen.push({ text: a, art: 'var', v })); });
+  Object.keys(FUNKTIONEN).forEach(f => namen.push({ text: f, art: 'fn' }));
+  namen.push({ text: 'pi', art: 'pi' });
+  namen.sort((a, b) => b.text.length - a.text.length);
+  const toks = [];
+  let i = 0;
+  while (i < s.length) {
+    const c = s[i];
+    if (/\s/.test(c)) { toks.push({ t: 'leer' }); i++; continue; }
+    if (/[0-9.]/.test(c)) {
+      const re = numerisch ? /^(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/ : /^(\d+\.?\d*|\.\d+)/;
+      const m = s.slice(i).match(re);
+      if (!m || m[0] === '.') throw new EingabeFehler('Unerwarteter Punkt bzw. unerwartetes Komma.');
+      toks.push({ t: 'zahl', v: parseFloat(m[0]) }); i += m[0].length; continue;
+    }
+    if ('+-*/^()'.includes(c)) { toks.push({ t: c }); i++; continue; }
+    if (/[A-Za-z_]/.test(c)) {
+      const m = s.slice(i).match(/^[A-Za-z_]+/)[0];
+      let j = 0;
+      while (j < m.length) {
+        const rest = m.slice(j);
+        const treffer = namen.find(nm => rest.startsWith(nm.text));
+        if (!treffer) {
+          if (rest[0] === '_') { j++; continue; }
+          const erlaubt = (vars || []).map(v => v.n).join(', ');
+          throw new EingabeFehler(`„${rest[0]}“ kenne ich hier nicht.` + (erlaubt ? ` Erlaubte Größen: ${erlaubt}` : ' Hier ist nur eine Zahl gefragt.'));
+        }
+        if (treffer.art === 'var') toks.push({ t: 'var', v: treffer.v });
+        else if (treffer.art === 'fn') toks.push({ t: 'fn', f: treffer.text });
+        else toks.push({ t: 'pi' });
+        j += treffer.text.length;
+      }
+      i += m.length; continue;
+    }
+    throw new EingabeFehler(`Das Zeichen „${c}“ kann ich nicht lesen.`);
+  }
+  return toks;
+}
+
+function parse(eingabe, vars, numerisch) {
+  const roh = zerlege(eingabe, vars, numerisch);
+  // Leerzeichen nur als Trenner zwischen zwei Faktoren behalten
+  const toks = [];
+  roh.forEach((t, k) => { if (t.t !== 'leer') toks.push(t); });
+  let p = 0;
+  const peek = () => toks[p];
+  const next = () => toks[p++];
+  const startetFaktor = t => t && (t.t === 'zahl' || t.t === 'var' || t.t === 'pi' || t.t === 'fn' || t.t === '(');
+
+  function ausdruck() {
+    let a = term();
+    while (peek() && (peek().t === '+' || peek().t === '-')) {
+      const o = next().t; a = { t: 'op', o, a, b: term() };
+    }
+    return a;
+  }
+  function term() {
+    let a = vorzeichen();
+    let letzterOp = null;
+    while (true) {
+      const t = peek();
+      if (t && (t.t === '*' || t.t === '/')) { next(); a = { t: 'op', o: t.t, a, b: vorzeichen() }; letzterOp = t.t; }
+      else if (startetFaktor(t)) {
+        if (letzterOp === '/') throw new EingabeFehler('Mehrdeutig: Steht nach dem Bruchstrich noch ein Faktor? Setze den ganzen Nenner in Klammern, z. B. 2U/(B^2 r^2).');
+        a = { t: 'op', o: '*', a, b: vorzeichen(), implizit: true }; letzterOp = 'impl';
+      }
+      else break;
+    }
+    return a;
+  }
+  function vorzeichen() {
+    const t = peek();
+    if (t && (t.t === '-' || t.t === '+')) { next(); const a = vorzeichen(); return t.t === '-' ? { t: 'neg', a } : a; }
+    return potenz();
+  }
+  function potenz() {
+    const basis = primaer();
+    if (peek() && peek().t === '^') { next(); return { t: 'op', o: '^', a: basis, b: vorzeichen() }; }
+    return basis;
+  }
+  function primaer() {
+    const t = next();
+    if (!t) throw new EingabeFehler('Die Eingabe hört zu früh auf.');
+    if (t.t === 'zahl') return { t: 'zahl', v: t.v };
+    if (t.t === 'var') return { t: 'var', v: t.v };
+    if (t.t === 'pi') return { t: 'pi' };
+    if (t.t === 'fn') {
+      if (!peek() || peek().t !== '(') throw new EingabeFehler(`Setze das Argument von ${t.f} in Klammern, z. B. ${t.f}(2mU/e).`);
+      next(); const a = ausdruck();
+      if (!peek() || peek().t !== ')') throw new EingabeFehler('Eine schließende Klammer fehlt.');
+      next(); return { t: 'fn', f: t.f, a };
+    }
+    if (t.t === '(') {
+      const a = ausdruck();
+      if (!peek() || peek().t !== ')') throw new EingabeFehler('Eine schließende Klammer fehlt.');
+      next(); return { t: 'klammer', a };
+    }
+    if (t.t === ')') throw new EingabeFehler('Hier steht eine Klammer zu viel (oder vor ihr fehlt etwas).');
+    throw new EingabeFehler(`Vor „${t.t}“ fehlt etwas.`);
+  }
+  if (!toks.length) throw new EingabeFehler('');
+  const baum = ausdruck();
+  if (p < toks.length) throw new EingabeFehler(toks[p].t === ')' ? 'Hier steht eine Klammer zu viel.' : 'Die Eingabe ist unvollständig oder hat ein überzähliges Zeichen.');
+  return baum;
+}
+
+function rechne(k, env) {
+  switch (k.t) {
+    case 'zahl': return k.v;
+    case 'pi': return Math.PI;
+    case 'var': return env[k.v.n];
+    case 'klammer': return rechne(k.a, env);
+    case 'neg': return -rechne(k.a, env);
+    case 'fn': return FUNKTIONEN[k.f](rechne(k.a, env));
+    case 'op': {
+      const a = rechne(k.a, env), b = rechne(k.b, env);
+      if (k.o === '+') return a + b; if (k.o === '-') return a - b;
+      if (k.o === '*') return a * b; if (k.o === '/') return a / b;
+      return Math.pow(a, b);
+    }
+  }
+}
+
+// LaTeX-Darstellung der Eingabe (zeigt, wie sie verstanden wurde)
+function zahlTex(v) {
+  if (v !== 0 && (Math.abs(v) >= 1e5 || Math.abs(v) < 1e-3)) {
+    const ex = Math.floor(Math.log10(Math.abs(v))); const m = v / Math.pow(10, ex);
+    return `${+m.toPrecision(6)}`.replace('.', '{,}') + ` \\cdot 10^{${ex}}`;
+  }
+  return `${+v.toPrecision(10)}`.replace('.', '{,}');
+}
+function ohneKlammer(k) { return k.t === 'klammer' ? ohneKlammer(k.a) : k; }
+function tex(k) {
+  switch (k.t) {
+    case 'zahl': return zahlTex(k.v);
+    case 'pi': return '\\pi';
+    case 'var': return k.v.tex || k.v.n;
+    case 'klammer': {
+      const inner = ohneKlammer(k.a);
+      return `\\left(${tex(inner)}\\right)`;
+    }
+    case 'neg': return '-' + tex(k.a);
+    case 'fn': return FUNK_TEX[k.f] === null ? `\\sqrt{${tex(ohneKlammer(k.a))}}` : `${FUNK_TEX[k.f]}\\left(${tex(ohneKlammer(k.a))}\\right)`;
+    case 'op': {
+      if (k.o === '/') return `\\dfrac{${tex(ohneKlammer(k.a))}}{${tex(ohneKlammer(k.b))}}`;
+      if (k.o === '^') {
+        const b = k.a.t === 'op' || k.a.t === 'neg' ? `\\left(${tex(k.a)}\\right)` : tex(k.a);
+        return `{${b}}^{${tex(ohneKlammer(k.b))}}`;
+      }
+      if (k.o === '*') return `${tex(k.a)} \\cdot ${tex(k.b)}`;
+      return `${tex(k.a)} ${k.o} ${tex(k.b)}`;
+    }
+  }
+}
+
+function zufallsWerte(vars) {
+  const env = {};
+  vars.forEach(v => {
+    const [lo, hi] = v.bereich || [0.5, 3];
+    env[v.n] = Math.exp(Math.log(lo) + Math.random() * (Math.log(hi) - Math.log(lo)));
+  });
+  return env;
+}
+function gleichwertig(baumA, baumB, vars) {
+  let gueltig = 0;
+  for (let i = 0; i < 12; i++) {
+    const env = zufallsWerte(vars);
+    const a = rechne(baumA, env), b = rechne(baumB, env);
+    if (!isFinite(b)) continue;
+    if (!isFinite(a)) return false;
+    if (Math.abs(a - b) > 1e-8 * Math.max(1, Math.abs(b))) return false;
+    gueltig++;
+  }
+  return gueltig >= 6;
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  2  AUFGABEN
+//  typ: 'mc' | 'zahl' | 'formel' | 'zuordnung'
+// ════════════════════════════════════════════════════════════════════
+const R = String.raw;
+
+// Einheiten für Zahlaufgaben: dim = physikalische Dimension (nur gleiche Dimension ist richtig)
+const E = {
+  N:   { t: 'N', f: 1, dim: 'kraft' }, mN: { t: 'mN', f: 1e-3, dim: 'kraft' }, kN: { t: 'kN', f: 1e3, dim: 'kraft' },
+  T:   { t: 'T', f: 1, dim: 'B' }, mT: { t: 'mT', f: 1e-3, dim: 'B' }, uT: { t: 'µT', f: 1e-6, dim: 'B' },
+  V:   { t: 'V', f: 1, dim: 'U' }, mV: { t: 'mV', f: 1e-3, dim: 'U' }, uV: { t: 'µV', f: 1e-6, dim: 'U' }, kV: { t: 'kV', f: 1e3, dim: 'U' },
+  m:   { t: 'm', f: 1, dim: 'l' }, cm: { t: 'cm', f: 1e-2, dim: 'l' }, mm: { t: 'mm', f: 1e-3, dim: 'l' }, km: { t: 'km', f: 1e3, dim: 'l' }, um: { t: 'µm', f: 1e-6, dim: 'l' },
+  ms:  { t: 'm/s', f: 1, dim: 'v' }, kms: { t: 'km/s', f: 1e3, dim: 'v' }, kmh: { t: 'km/h', f: 1 / 3.6, dim: 'v' },
+  impuls: { t: 'kg·m/s', f: 1, dim: 'p' }, Ns: { t: 'N·s', f: 1, dim: 'p' },
+  J:   { t: 'J', f: 1, dim: 'energie' }, A: { t: 'A', f: 1, dim: 'I' }, s: { t: 's', f: 1, dim: 't' },
+  Nm:  { t: 'N/m', f: 1, dim: 'x1' }, Am: { t: 'A·m', f: 1, dim: 'x2' }, Vm: { t: 'V/m', f: 1, dim: 'E' }, NC: { t: 'N/C', f: 1, dim: 'E' },
+  ms2: { t: 'm/s²', f: 1, dim: 'a' }, kgms2: { t: 'kg·m/s²', f: 1, dim: 'kraft' }, kgm2s: { t: 'kg·m²/s', f: 1, dim: 'x3' },
+  Hz:  { t: 'Hz', f: 1, dim: 'f' }, cm2: { t: 'cm²', f: 1e-4, dim: 'A' }, Tm: { t: 'T·m', f: 1, dim: 'x4' }
+};
+
+const KONTEXTE = [
+ {
+  id: 'k1', titel: 'Feldlinienbilder und das Feld gerader Leiter',
+  text: R`<p>Magnetfelder macht man mit Eisenfeilspänen oder Kompassnadeln sichtbar. 1820 entdeckte Ørsted, dass auch ein stromdurchflossener Draht eine Kompassnadel auslenkt. Für die Richtung benutzen wir wie im Unterricht die <b>Linke-Faust-Regel</b> (bezogen auf die Elektronenflussrichtung).</p>`,
+  aufgaben: [
+   { typ: 'mc', text: R`Welche Aussagen über Magnetfelder und ihre Feldlinien sind richtig?`, optionen: [
+     { t: R`Außerhalb eines Magneten verlaufen die Feldlinien vom Nordpol zum Südpol.`, r: true, e: R`So ist die Feldrichtung festgelegt: Der Nordpol einer Kompassnadel zeigt in Feldrichtung.` },
+     { t: R`Magnetfeldlinien beginnen am Nordpol und enden am Südpol.`, r: false, e: R`Magnetfeldlinien sind geschlossen. Im Innern des Magneten laufen sie vom Süd- zum Nordpol weiter. Anders als elektrische Feldlinien haben sie keinen Anfang und kein Ende.` },
+     { t: R`Je dichter die Feldlinien, desto stärker ist das Magnetfeld an dieser Stelle.`, r: true, e: R`Die Feldliniendichte ist ein Maß für die Flussdichte $B$.` },
+     { t: R`Liegen zwei Magnete nebeneinander, können sich ihre Feldlinien schneiden.`, r: false, e: R`An jedem Ort hat das Feld genau eine Richtung. Die Felder überlagern sich zu einem gemeinsamen Feld, dessen Linien sich nie schneiden.` },
+     { t: R`In einem homogenen Feld verlaufen die Feldlinien parallel und in gleichen Abständen.`, r: true, e: R`Homogen heißt: überall gleiche Stärke und gleiche Richtung, z. B. zwischen den Polschuhen eines Hufeisenmagneten oder zwischen Helmholtz-Spulen.` },
+     { t: R`Eine Kompassnadel zeigt mit ihrem Südpol in Feldrichtung.`, r: false, e: R`Der <b>Nord</b>pol der Nadel zeigt in Feldrichtung.` },
+     { t: R`Zerbricht man einen Stabmagneten in der Mitte, erhält man einen einzelnen Nordpol und einen einzelnen Südpol.`, r: false, e: R`Jedes Bruchstück ist wieder ein vollständiger Magnet mit Nord- und Südpol. Einzelne Magnetpole gibt es nicht.` },
+     { t: R`In der Nähe des geographischen Nordpols liegt ein magnetischer Südpol der Erde.`, r: true, e: R`Der Nordpol der Kompassnadel wird dorthin gezogen, also muss dort ein magnetischer Südpol liegen.` },
+     { t: R`Magnetfeldlinien zeigen die Richtung der Kraft auf eine bewegte Ladung an.`, r: false, e: R`Die Lorentzkraft steht senkrecht auf den Feldlinien (und auf $\vec v$).` }
+   ]},
+   { typ: 'mc', text: R`Ein langer, senkrecht stehender Draht wird von Elektronen von unten nach oben durchflossen. Du schaust von oben auf den Draht, die Elektronen kommen also auf dich zu. Welche Aussagen stimmen?`, optionen: [
+     { t: R`Die Feldlinien sind konzentrische Kreise um den Draht.`, r: true, e: R`Ørsted-Versuch: Die Kompassnadeln stellen sich tangential zu Kreisen um den Draht ein.` },
+     { t: R`Von oben gesehen laufen die Feldlinien im Uhrzeigersinn um den Draht.`, r: true, e: R`Linke-Faust-Regel: Der Daumen zeigt in Elektronenflussrichtung, also auf dich zu. Die gekrümmten Finger der linken Hand laufen dann im Uhrzeigersinn. (Mit der technischen Stromrichtung nach unten und der rechten Hand ergibt sich dasselbe.)` },
+     { t: R`Von oben gesehen laufen die Feldlinien gegen den Uhrzeigersinn um den Draht.`, r: false, e: R`Das wäre richtig, wenn du die rechte Hand mit der Elektronenflussrichtung benutzt. Bei Elektronen gilt die <b>Linke</b>-Faust-Regel.` },
+     { t: R`Die Feldlinien verlaufen sternförmig vom Draht weg.`, r: false, e: R`Sternförmig (radial) ist das elektrische Feld einer geladenen Kugel oder eines geladenen Drahtes, nicht das Magnetfeld eines Stromes.` },
+     { t: R`Weiter weg vom Draht werden die Abstände zwischen den Feldlinien größer.`, r: true, e: R`Das Feld wird nach außen schwächer (es gilt $B \sim 1/r$).` },
+     { t: R`Kehrt man die Richtung des Elektronenflusses um, ändert sich am Magnetfeld nichts.`, r: false, e: R`Die Feldrichtung kehrt sich um, die Form bleibt.` },
+     { t: R`Außerhalb des Drahtes ist das Feld homogen.`, r: false, e: R`Richtung und Stärke ändern sich von Ort zu Ort, das Feld ist inhomogen.` }
+   ]},
+   { typ: 'mc', text: R`Zwei lange, parallele Drähte stehen senkrecht zur Zeichenebene. In beiden fließen Elektronen in die Zeichenebene hinein (⊗), gleich stark. Welche Aussagen stimmen?
+  <svg viewBox="0 0 360 110" width="360" aria-label="Zwei parallele Drähte, Elektronen in die Zeichenebene hinein">
+    <g fill="white" stroke="#444" stroke-width="2"><circle cx="100" cy="50" r="17"/><circle cx="260" cy="50" r="17"/></g>
+    <g stroke="#444" stroke-width="2"><line x1="89" y1="39" x2="111" y2="61"/><line x1="111" y1="39" x2="89" y2="61"/><line x1="249" y1="39" x2="271" y2="61"/><line x1="271" y1="39" x2="249" y2="61"/></g>
+    <circle cx="180" cy="50" r="3" fill="#BA7517"/><text x="174" y="38" font-size="13" fill="#BA7517">M</text>
+    <text x="72" y="95" font-size="13" fill="#555">Draht 1</text><text x="232" y="95" font-size="13" fill="#555">Draht 2</text>
+  </svg>`, optionen: [
+     { t: R`Genau in der Mitte zwischen den Drähten heben sich die beiden Felder auf.`, r: true, e: R`Superposition: Beide Kreisfelder haben dort gleichen Betrag, aber entgegengesetzte Richtung.` },
+     { t: R`In der Mitte zwischen den Drähten addieren sich die Felder zum doppelten Wert.`, r: false, e: R`Das gilt, wenn die Elektronen in den beiden Drähten in <b>entgegengesetzte</b> Richtungen fließen (z. B. Hin- und Rückleiter).` },
+     { t: R`Die beiden Drähte ziehen sich an.`, r: true, e: R`Jeder Draht liegt im Feld des anderen. Mit der Linke-Hand-Regel ergibt sich eine Kraft zum anderen Draht hin. Gleichsinnige Ströme ziehen sich an.` },
+     { t: R`Die beiden Drähte stoßen sich ab.`, r: false, e: R`Abstoßung gibt es bei entgegengesetzten Strömen.` },
+     { t: R`Weit entfernt sieht das Feldlinienbild fast so aus wie das eines einzigen Drahtes mit doppelter Stromstärke.`, r: true, e: R`Aus großer Entfernung ist der Abstand der Drähte vernachlässigbar, die Felder addieren sich.` },
+     { t: R`Zwischen den Drähten ist das Feld homogen.`, r: false, e: R`Zwischen den Drähten ändert das Feld Betrag und Richtung (in der Mitte ist es null).` }
+   ]}
+  ]
+ },
+ {
+  id: 'k2', titel: 'Der Lautsprecher: Kraft auf einen Leiter',
+  text: R`<p>In einem Lautsprecher sitzt eine <b>Schwingspule</b> im ringförmigen Spalt eines Dauermagneten. Das Magnetfeld zeigt im Spalt überall radial nach außen und steht damit überall senkrecht auf dem Draht. Die Spule ist mit der Membran verbunden.</p>
+  <p>Daten: $N = 80$ Windungen, Radius der Spule $r = 1{,}5\,\mathrm{cm}$, Flussdichte im Spalt $B = 1{,}2\,\mathrm{T}$.</p>
+  <svg viewBox="0 0 520 230" width="520" aria-label="Lautsprecher von oben: Polkern, Spalt mit Schwingspule, Außenring">
+    <defs><marker id="pfeilB2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#185FA5"/></marker></defs>
+    <rect x="1" y="1" width="518" height="228" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <circle cx="160" cy="115" r="98" fill="#c8c6bf"/><circle cx="160" cy="115" r="74" fill="#fbfbfa"/>
+    <circle cx="160" cy="115" r="48" fill="#c8c6bf"/>
+    <text x="153" y="102" font-size="16" font-weight="600" fill="#444">N</text>
+    <text x="153" y="34" font-size="16" font-weight="600" fill="#444">S</text>
+    <g stroke="#185FA5" stroke-width="2" marker-end="url(#pfeilB2)">
+      <line x1="210" y1="115" x2="232" y2="115"/><line x1="110" y1="115" x2="88" y2="115"/>
+      <line x1="160" y1="165" x2="160" y2="187"/><line x1="160" y1="65" x2="160" y2="43"/>
+      <line x1="195.4" y1="150.4" x2="211" y2="166"/><line x1="124.6" y1="150.4" x2="109" y2="166"/>
+      <line x1="195.4" y1="79.6" x2="211" y2="64"/><line x1="124.6" y1="79.6" x2="109" y2="64"/>
+    </g>
+    <circle cx="160" cy="115" r="61" fill="none" stroke="#BA7517" stroke-width="4"/>
+    <line x1="160" y1="115" x2="117" y2="158" stroke="#444" stroke-width="1.3"/><circle cx="160" cy="115" r="2.5" fill="#444"/>
+    <text x="126" y="140" font-size="14" font-style="italic" fill="#444">r</text>
+    <g font-size="13" fill="#555">
+      <line x1="221" y1="115" x2="300" y2="70" stroke="#999"/><text x="306" y="66"><tspan fill="#185FA5">Magnetfeld im Spalt</tspan> (radial)</text>
+      <line x1="213" y1="140" x2="300" y2="118" stroke="#999"/><text x="306" y="122"><tspan fill="#BA7517">Schwingspule</tspan> mit N Windungen</text>
+      <line x1="245" y1="165" x2="300" y2="170" stroke="#999"/><text x="306" y="174">Dauermagnet (Außenring)</text>
+      <text x="306" y="210" fill="#888">Blick von oben auf den Magneten</text>
+    </g>
+  </svg>`,
+  aufgaben: [
+   { typ: 'formel', text: R`Gib den Betrag der Kraft $F$ auf die Spule in Abhängigkeit von $N$, $r$, $I$ und $B$ an.`, ziel: 'F',
+     vars: [{ n: 'N' }, { n: 'r' }, { n: 'I' }, { n: 'B' }],
+     loesung: '2*pi*N*r*I*B',
+     fehler: [
+       { f: 'N*r*I*B', h: R`Welche Drahtlänge $l$ steckt in einer Windung? Der Umfang eines Kreises ist $2\pi r$.` },
+       { f: 'pi*N*r*I*B', h: R`Der Umfang eines Kreises ist $2\pi r$, nicht $\pi r$.` },
+       { f: 'pi*N*r^2*I*B', h: R`Du hast die Kreisfläche verwendet. In $F = I \cdot l \cdot B$ steht die <b>Länge</b> des Drahtes.` },
+       { f: '2*pi*r*I*B', h: R`Das ist die Kraft auf <b>eine</b> Windung. Es sind $N$ Windungen.` }
+     ],
+     weg: R`$F = I \cdot l \cdot B$ mit der gesamten Drahtlänge $l = N \cdot 2\pi r$: $\;F = 2\pi \cdot N \cdot r \cdot I \cdot B$` },
+   { typ: 'zahl', text: R`Berechne die Kraft für $I = 0{,}40\,\mathrm{A}$.`, wert: 3.619, tol: 0.03,
+     einheiten: ['N', 'mN', 'T', 'Nm', 'J', 'Am', 'kgm2s'],
+     weg: R`$l = 80 \cdot 2\pi \cdot 0{,}015\,\mathrm{m} \approx 7{,}54\,\mathrm{m}$<br>$F = I \cdot l \cdot B = 0{,}40\,\mathrm{A} \cdot 7{,}54\,\mathrm{m} \cdot 1{,}2\,\mathrm{T} \approx 3{,}6\,\mathrm{N}$` },
+   { typ: 'mc', text: R`Welche Einheiten sind gleich $1\,\mathrm{T}$?`, optionen: [
+     { t: R`$1\,\mathrm{N/(A \cdot m)}$`, r: true, e: R`Aus der Definition $B = F/(I \cdot l)$.` },
+     { t: R`$1\,\mathrm{kg/(A \cdot s^2)}$`, r: true, e: R`$1\,\mathrm{N} = 1\,\mathrm{kg \cdot m/s^2}$ einsetzen: $\mathrm{kg \cdot m/(s^2 \cdot A \cdot m)} = \mathrm{kg/(A \cdot s^2)}$.` },
+     { t: R`$1\,\mathrm{V \cdot s/m^2}$`, r: true, e: R`$1\,\mathrm{V} = 1\,\mathrm{J/C} = 1\,\mathrm{N \cdot m/(A \cdot s)}$. Damit $\mathrm{V \cdot s/m^2} = \mathrm{N/(A \cdot m)}$.` },
+     { t: R`$1\,\mathrm{N \cdot A/m}$`, r: false, e: R`$I$ steht in $B = F/(I \cdot l)$ im Nenner.` },
+     { t: R`$1\,\mathrm{V/m}$`, r: false, e: R`Das ist die Einheit der elektrischen Feldstärke $E$.` },
+     { t: R`$1\,\mathrm{N/C}$`, r: false, e: R`Ebenfalls die Einheit der elektrischen Feldstärke.` },
+     { t: R`$1\,\mathrm{kg \cdot m/(A \cdot s)}$`, r: false, e: R`Hier stimmen die Potenzen von m und s nicht.` }
+   ]},
+   { typ: 'mc', text: R`Was gilt für die Kraft auf die Schwingspule?`, optionen: [
+     { t: R`Bei doppelter Stromstärke ist die Kraft doppelt so groß.`, r: true, e: R`$F \sim I$` },
+     { t: R`Wird die Stromrichtung umgekehrt, kehrt sich die Kraft um.`, r: true, e: R`Linke-Hand-Regel: Daumen umgedreht, also auch Mittelfinger umgedreht.` },
+     { t: R`Werden Magnetfeld und Stromrichtung gleichzeitig umgepolt, kehrt sich die Kraft um.`, r: false, e: R`Zweimal umkehren ergibt wieder die ursprüngliche Richtung.` },
+     { t: R`Eine Spule mit doppeltem Radius, aber gleich langem Draht erfährt die doppelte Kraft.`, r: false, e: R`Es kommt nur auf die Drahtlänge im Feld an. Bei gleichem $l$ (dann nur halb so viele Windungen) bleibt $F$ gleich.` },
+     { t: R`Bei Wechselstrom schwingt die Membran mit der Frequenz des Stromes.`, r: true, e: R`Die Kraft wechselt im Takt des Stromes die Richtung. So wird das elektrische Signal zu Schall.` },
+     { t: R`Bei Wechselstrom bewegt sich die Membran nicht, weil sich die Kräfte im Mittel aufheben.`, r: false, e: R`Im Mittel ist die Kraft zwar null, aber die Membran folgt der schnell wechselnden Kraft und schwingt.` }
+   ]}
+  ]
+ },
+ {
+  id: 'k3', titel: 'Die Lorentzkraft',
+  text: R`<p>Die Kraft auf einen stromdurchflossenen Leiter ist die Summe der Kräfte auf die einzelnen bewegten Elektronen. Für Richtungen gilt bei Elektronen die <b>Linke-Hand-Regel</b> (Daumen: Bewegungsrichtung, Zeigefinger: Magnetfeld, Mittelfinger: Kraft), bei positiven Ladungen entsprechend die rechte Hand.</p>
+  <p>Richtungsangaben beziehen sich auf die Zeichenebene: oben, unten, links, rechts, in die Zeichenebene hinein (⊗) und aus der Zeichenebene heraus (⊙).</p>`,
+  aufgaben: [
+   { typ: 'formel', text: R`In einem Leiterstück der Länge $l$ befinden sich $N$ frei bewegliche Elektronen, die alle mit der Geschwindigkeit $v$ driften. Gib die Stromstärke $I$ in Abhängigkeit von $N$, $e$, $v$ und $l$ an.`, ziel: 'I',
+     vars: [{ n: 'N' }, { n: 'e' }, { n: 'v' }, { n: 'l' }],
+     loesung: 'N*e*v/l',
+     fehler: [
+       { f: 'N*e*l/v', h: R`Wie lange dauert es, bis alle Elektronen das Leiterstück verlassen haben? $t = l/v$, und $I = Q/t$.` },
+       { f: 'N*e*v', h: R`Die Einheit stimmt nicht: $\mathrm{C \cdot m/s}$ ist keine Stromstärke. Es fehlt die Länge.` },
+       { f: 'e*v/l', h: R`Es sind $N$ Elektronen, die Ladung im Leiterstück ist $Q = N \cdot e$.` }
+     ],
+     weg: R`Ladung im Leiterstück: $Q = N \cdot e$. Sie hat das Stück nach $t = l/v$ verlassen.<br>$I = Q/t = N \cdot e \cdot v/l$. Eingesetzt in $F = I \cdot l \cdot B$: $F = N \cdot e \cdot v \cdot B$, also pro Elektron $F_\mathrm{L} = e \cdot v \cdot B$.` },
+   { typ: 'zuordnung', text: R`Bestimme die Richtung der Lorentzkraft.`, optionen: ['nach oben', 'nach unten', 'nach links', 'nach rechts', 'in die Zeichenebene hinein (⊗)', 'aus der Zeichenebene heraus (⊙)', 'keine Kraft'],
+     zeilen: [
+       { t: R`Ein Elektron fliegt nach rechts, $\vec B$ zeigt in die Zeichenebene hinein.`, l: 'nach unten' },
+       { t: R`Ein Proton fliegt nach rechts, $\vec B$ zeigt in die Zeichenebene hinein.`, l: 'nach oben' },
+       { t: R`Ein Elektron fliegt nach oben, $\vec B$ zeigt nach rechts.`, l: 'aus der Zeichenebene heraus (⊙)' },
+       { t: R`Ein Elektron fliegt nach rechts, $\vec B$ zeigt nach links.`, l: 'keine Kraft' },
+       { t: R`Ein Heliumkern (zweifach positiv) fliegt in die Zeichenebene hinein, $\vec B$ zeigt nach oben.`, l: 'nach rechts' },
+       { t: R`Ein Elektron fliegt aus der Zeichenebene heraus, $\vec B$ zeigt nach unten.`, l: 'nach links' }
+     ],
+     weg: R`Bei Elektronen Linke-Hand-Regel, bei positiven Ladungen rechte Hand. Sind $\vec v$ und $\vec B$ parallel oder antiparallel, gibt es keine Kraft. Ein Proton erfährt bei gleicher Bewegung die entgegengesetzte Kraft wie ein Elektron.` },
+   { typ: 'formel', text: R`Ein Teilchen mit der Ladung $q$ fliegt mit der Geschwindigkeit $v$ unter dem Winkel $\alpha$ zu den Feldlinien eines homogenen Magnetfelds $B$. Gib den Betrag der Lorentzkraft an.`, ziel: R`F_\mathrm{L}`,
+     vars: [{ n: 'q' }, { n: 'v' }, { n: 'B' }, { n: 'alpha', tex: R`\alpha`, bereich: [0.15, 1.4] }],
+     loesung: 'q*v*B*sin(alpha)',
+     fehler: [
+       { f: 'q*v*B*cos(alpha)', h: R`$\alpha$ ist der Winkel zwischen $\vec v$ und $\vec B$. Für $\alpha = 0$ (parallel) gibt es keine Kraft. Welche Winkelfunktion ist bei $0°$ null?` },
+       { f: 'q*v*B', h: R`Das gilt nur für $\vec v \perp \vec B$. Nur die Komponente von $\vec v$ senkrecht zu $\vec B$ zählt.` }
+     ],
+     weg: R`Nur die Geschwindigkeitskomponente senkrecht zum Feld trägt bei: $v_\perp = v \cdot \sin\alpha$, also $F_\mathrm{L} = q \cdot v \cdot B \cdot \sin\alpha$.` },
+   { typ: 'mc', text: R`Welche Aussagen über die Lorentzkraft sind richtig?`, optionen: [
+     { t: R`Sie steht immer senkrecht auf $\vec v$ und auf $\vec B$.`, r: true, e: R`Das zeigt die Drei-Finger-Regel.` },
+     { t: R`Sie ändert den Betrag der Geschwindigkeit nicht.`, r: true, e: R`Weil sie senkrecht auf $\vec v$ steht, ändert sie nur die Richtung.` },
+     { t: R`Sie ändert die kinetische Energie eines Teilchens nicht.`, r: true, e: R`Kraft senkrecht zum Weg: Es wird keine Energie übertragen. Deshalb kann man mit einem Magnetfeld allein Teilchen nicht schneller machen.` },
+     { t: R`Sie kann ein ruhendes Elektron in Bewegung setzen.`, r: false, e: R`Für $v = 0$ ist $F_\mathrm{L} = 0$. Ein ruhendes Elektron bewegt nur ein elektrisches Feld.` },
+     { t: R`Sie ist am größten, wenn sich das Teilchen parallel zu den Feldlinien bewegt.`, r: false, e: R`Dann ist sie null. Am größten ist sie für $\vec v \perp \vec B$.` },
+     { t: R`Sie ist proportional zur Ladung des Teilchens.`, r: true, e: R`$F_\mathrm{L} = q \cdot v \cdot B$: Ein zweifach geladenes Ion erfährt bei gleichem $v$ die doppelte Kraft.` },
+     { t: R`Sie zeigt in Richtung der Feldlinien.`, r: false, e: R`Das gilt für die elektrische Kraft auf positive Ladungen, nicht für die Lorentzkraft.` }
+   ]}
+  ]
+ },
+ {
+  id: 'k4', titel: 'Die Strommesszange: ein Hall-Sensor',
+  text: R`<p>Mit einer Strommesszange misst man Ströme, ohne das Kabel aufzutrennen. Ein Eisenring umschließt das Kabel. In einem schmalen Spalt des Rings sitzt ein Hall-Plättchen. Die Flussdichte $B$ im Spalt ist proportional zum Strom im Kabel.</p>
+  <p>Das Plättchen ist aus einem Halbleiter, die Ladungsträger sind Elektronen mit der Elektronendichte $n = 1{,}0 \cdot 10^{21}\,\mathrm{m^{-3}}$. Dicke (in Feldrichtung) $d = 0{,}20\,\mathrm{mm}$, Breite $b = 2{,}0\,\mathrm{mm}$, Steuerstrom $I = 5{,}0\,\mathrm{mA}$.</p>
+  <svg viewBox="0 0 540 220" width="540" aria-label="Hall-Plättchen mit Breite b, Dicke d, Steuerstrom und Magnetfeld">
+    <defs>
+      <marker id="pfeilB4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#185FA5"/></marker>
+      <marker id="pfeilI4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#BA7517"/></marker>
+    </defs>
+    <rect x="1" y="1" width="538" height="218" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <g stroke="#185FA5" stroke-width="2"><line x1="235" y1="200" x2="235" y2="158"/><line x1="345" y1="200" x2="345" y2="158"/></g>
+    <polygon points="120,136 380,136 440,96 180,96" fill="#e9e7e0" stroke="#666" stroke-width="1.5"/>
+    <polygon points="120,136 380,136 380,150 120,150" fill="#d3d1c7" stroke="#666" stroke-width="1.5"/>
+    <polygon points="380,136 440,96 440,110 380,150" fill="#c0beb5" stroke="#666" stroke-width="1.5"/>
+    <g stroke="#185FA5" stroke-width="2" marker-end="url(#pfeilB4)"><line x1="235" y1="116" x2="235" y2="40"/><line x1="345" y1="116" x2="345" y2="40"/></g>
+    <text x="252" y="50" font-size="15" font-style="italic" fill="#185FA5">B</text>
+    <line x1="150" y1="116" x2="400" y2="116" stroke="#BA7517" stroke-width="2.5" marker-end="url(#pfeilI4)"/>
+    <text x="190" y="110" font-size="13" fill="#BA7517">Steuerstrom <tspan font-style="italic">I</tspan></text>
+    <text x="104" y="148" font-size="14" font-style="italic" fill="#444">d</text>
+    <text x="134" y="110" font-size="14" font-style="italic" fill="#444">b</text>
+    <circle cx="290" cy="150" r="3.5" fill="#444"/><circle cx="310" cy="96" r="3.5" fill="#444"/>
+    <polyline points="290,150 290,190 470,190 470,172" fill="none" stroke="#444" stroke-width="1.3"/>
+    <polyline points="310,96 310,24 470,24 470,142" fill="none" stroke="#444" stroke-width="1.3"/>
+    <circle cx="470" cy="157" r="15" fill="white" stroke="#444" stroke-width="1.5"/>
+    <text x="464" y="162" font-size="14" fill="#444">V</text>
+    <text x="490" y="162" font-size="14" fill="#444"><tspan font-style="italic">U</tspan><tspan font-size="10" dy="3">H</tspan></text>
+  </svg>`,
+  aufgaben: [
+   { typ: 'mc', text: R`Was passiert im Plättchen, wenn ein Magnetfeld senkrecht zur Plättchenfläche anliegt?`, optionen: [
+     { t: R`Die Lorentzkraft drängt die Elektronen zu einer Seitenkante des Plättchens.`, r: true, e: R`Die Elektronen bewegen sich längs durch das Plättchen, die Kraft wirkt quer dazu.` },
+     { t: R`Durch die Ladungstrennung entsteht quer zum Steuerstrom ein elektrisches Feld.`, r: true, e: R`Eine Kante wird negativ, die gegenüberliegende positiv. Dazwischen liegt die Hall-Spannung.` },
+     { t: R`Im Gleichgewicht gilt $e \cdot E_\mathrm{H} = e \cdot v \cdot B$.`, r: true, e: R`Dann fliegen die nachfolgenden Elektronen geradeaus durch, die Ladungstrennung wächst nicht weiter.` },
+     { t: R`Die Hall-Spannung wächst weiter, solange der Steuerstrom fließt.`, r: false, e: R`Das Querfeld wächst nur, bis die elektrische Kraft die Lorentzkraft ausgleicht. Das geht sehr schnell.` },
+     { t: R`Die Hall-Spannung liegt in Richtung des Steuerstroms an.`, r: false, e: R`Sie liegt quer dazu, zwischen den Seitenkanten.` },
+     { t: R`Wird das Magnetfeld umgepolt, ändert sich die Hall-Spannung nicht.`, r: false, e: R`Die Elektronen werden zur anderen Kante gedrängt: Das Vorzeichen der Hall-Spannung kehrt sich um. Daran erkennt man die Feldrichtung.` },
+     { t: R`Die Hall-Spannung ist proportional zur Flussdichte $B$.`, r: true, e: R`Deshalb eignet sich das Plättchen als Messgerät für $B$ (Hallsonde).` }
+   ]},
+   { typ: 'formel', text: R`Leite die Hall-Spannung $U_\mathrm{H}$ in Abhängigkeit von $I$, $B$, $n$, $e$ und $d$ her. Nutze $I = n \cdot e \cdot A \cdot v$ mit $A = b \cdot d$.`, ziel: R`U_\mathrm{H}`,
+     vars: [{ n: 'I' }, { n: 'B' }, { n: 'n' }, { n: 'e' }, { n: 'd' }, { n: 'b' }],
+     loesung: 'I*B/(n*e*d)',
+     fehler: [
+       { f: 'I*B/(n*e*b)', h: R`Breite und Dicke vertauscht? Aus $U_\mathrm{H} = v \cdot B \cdot b$ und $v = I/(n \cdot e \cdot b \cdot d)$ kürzt sich die <b>Breite</b> $b$ heraus.` },
+       { f: 'I*B*b/(n*e*d)', h: R`Prüfe die Geschwindigkeit: $v = I/(n \cdot e \cdot b \cdot d)$. Das $b$ kürzt sich dann gegen das $b$ aus $U_\mathrm{H} = E_\mathrm{H} \cdot b$.` },
+       { f: 'n*e*d/(I*B)', h: R`Das ist der Kehrwert. Bei stärkerem Feld muss $U_\mathrm{H}$ größer werden.` },
+       { f: 'I*B/(n*e*b*d)', h: R`Das ist $v \cdot B$, also die Feldstärke $E_\mathrm{H}$. Die Spannung ist $U_\mathrm{H} = E_\mathrm{H} \cdot b$.` }
+     ],
+     weg: R`Gleichgewicht: $e \cdot U_\mathrm{H}/b = e \cdot v \cdot B \;\Rightarrow\; U_\mathrm{H} = v \cdot B \cdot b$<br>Mit $v = I/(n \cdot e \cdot b \cdot d)$: $\;U_\mathrm{H} = I \cdot B/(n \cdot e \cdot d)$` },
+   { typ: 'zahl', text: R`Im Spalt herrscht $B = 40\,\mathrm{mT}$. Berechne die Hall-Spannung.`, wert: 6.242e-3, tol: 0.03,
+     einheiten: ['mV', 'V', 'uV', 'mT', 'Vm', 'J'],
+     weg: R`$U_\mathrm{H} = \dfrac{I \cdot B}{n \cdot e \cdot d} = \dfrac{5{,}0 \cdot 10^{-3}\,\mathrm{A} \cdot 0{,}040\,\mathrm{T}}{1{,}0 \cdot 10^{21}\,\mathrm{m^{-3}} \cdot 1{,}602 \cdot 10^{-19}\,\mathrm{C} \cdot 2{,}0 \cdot 10^{-4}\,\mathrm{m}} \approx 6{,}2\,\mathrm{mV}$` },
+   { typ: 'mc', text: R`Warum verwendet man für Hallsonden dünne Halbleiterplättchen statt Kupfer?`, optionen: [
+     { t: R`Im Halbleiter ist die Elektronendichte $n$ viel kleiner, dadurch ist $U_\mathrm{H}$ viel größer.`, r: true, e: R`$U_\mathrm{H} \sim 1/n$. Kupfer hat $n \approx 8{,}5 \cdot 10^{28}\,\mathrm{m^{-3}}$, die Hall-Spannung wäre fast $10^8$-mal kleiner.` },
+     { t: R`Bei gleichem Strom driften die Elektronen im Halbleiter viel schneller.`, r: true, e: R`$v = I/(n \cdot e \cdot A)$: wenige Ladungsträger müssen schnell sein. Größeres $v$ bedeutet größere Lorentzkraft.` },
+     { t: R`Ein dünnes Plättchen (kleines $d$) vergrößert die Hall-Spannung.`, r: true, e: R`$U_\mathrm{H} \sim 1/d$` },
+     { t: R`Halbleiter leiten den Strom besser als Kupfer.`, r: false, e: R`Umgekehrt: Kupfer leitet viel besser, gerade weil es so viele freie Elektronen hat.` },
+     { t: R`In Kupfer wirkt auf die Elektronen keine Lorentzkraft.`, r: false, e: R`Die Lorentzkraft wirkt auf jede bewegte Ladung. In Kupfer ist $v$ nur sehr klein.` },
+     { t: R`Kupfer würde das Magnetfeld abschirmen.`, r: false, e: R`Kupfer ist nicht ferromagnetisch und beeinflusst ein statisches Magnetfeld praktisch nicht.` }
+   ]}
+  ]
+ },
+ {
+  id: 'k5', titel: 'Spuren in der Blasenkammer',
+  text: R`<p>In einer Blasenkammer hinterlassen geladene Teilchen Spuren aus kleinen Bläschen. Die Kammer liegt in einem homogenen Magnetfeld $B = 1{,}5\,\mathrm{T}$, das <b>aus der Zeichenebene heraus</b> zeigt. Ein Photon (ohne Spur) erzeugt in der Kammer ein Elektron und ein Positron (gleiche Masse, Ladung $+e$). Beide fliegen zunächst nach rechts.</p>
+  <svg viewBox="0 0 520 210" width="520" aria-label="Zwei Spuren in der Blasenkammer">
+    <rect x="1" y="1" width="518" height="208" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <g fill="#999"><circle cx="40" cy="30" r="3"/><circle cx="480" cy="30" r="3"/><circle cx="40" cy="180" r="3"/><circle cx="480" cy="180" r="3"/></g>
+    <g fill="none" stroke="#999"><circle cx="40" cy="30" r="8"/><circle cx="480" cy="30" r="8"/><circle cx="40" cy="180" r="8"/><circle cx="480" cy="180" r="8"/></g>
+    <text x="58" y="35" font-size="14" fill="#666" font-style="italic">B</text>
+    <line x1="20" y1="105" x2="140" y2="105" stroke="#bbb" stroke-dasharray="5 4"/>
+    <text x="30" y="98" font-size="13" fill="#888">Photon</text>
+    <path d="M140 105 C 230 104, 300 80, 340 50 C 370 28, 405 30, 410 52 C 414 72, 392 80, 378 70 C 368 62, 375 50, 388 52" fill="none" stroke="#185FA5" stroke-width="2.5"/>
+    <path d="M140 105 C 230 106, 300 130, 340 160 C 370 182, 405 180, 410 158 C 414 138, 392 130, 378 140 C 368 148, 375 160, 388 158" fill="none" stroke="#BA7517" stroke-width="2.5"/>
+    <text x="300" y="64" font-size="15" fill="#185FA5" font-weight="600">1</text>
+    <text x="300" y="160" font-size="15" fill="#BA7517" font-weight="600">2</text>
+  </svg>`,
+  aufgaben: [
+   { typ: 'mc', text: R`Welche Aussagen zu den Spuren 1 und 2 sind richtig?`, optionen: [
+     { t: R`Spur 1 gehört zum Elektron.`, r: true, e: R`Elektron nach rechts, $\vec B$ aus der Ebene: Linke-Hand-Regel ergibt eine Kraft nach oben.` },
+     { t: R`Spur 1 gehört zum Positron.`, r: false, e: R`Für eine positive Ladung zeigt die Kraft nach unten (rechte Hand).` },
+     { t: R`Würde man das Magnetfeld umpolen, wären die beiden Krümmungen vertauscht.`, r: true, e: R`Mit $\vec B$ kehrt sich auch die Lorentzkraft um.` },
+     { t: R`Die Spuren werden zu Spiralen, weil die Teilchen durch Stöße Energie verlieren und dadurch $r = m \cdot v/(e \cdot B)$ kleiner wird.`, r: true, e: R`Langsamere Teilchen laufen auf engeren Kreisen.` },
+     { t: R`Die Spuren werden zu Spiralen, weil die Lorentzkraft die Teilchen abbremst.`, r: false, e: R`Die Lorentzkraft steht senkrecht auf $\vec v$ und ändert den Betrag der Geschwindigkeit nicht.` },
+     { t: R`Je schneller ein Teilchen ist, desto stärker ist seine Spur gekrümmt.`, r: false, e: R`Umgekehrt: Schnellere Teilchen haben größere Bahnradien, ihre Spuren sind schwächer gekrümmt.` },
+     { t: R`Da beide Spuren am Anfang gleich stark gekrümmt sind, hatten beide Teilchen anfangs etwa gleich große Impulse.`, r: true, e: R`Gleiche Ladung (Betrag) und gleiches $B$: gleiches $r$ bedeutet gleiches $p = m \cdot v$.` }
+   ]},
+   { typ: 'formel', text: R`Ein Teilchen mit der Ladung $q$ läuft senkrecht zum Feld auf einem Kreis mit dem Radius $r$. Gib seinen Impuls $p$ in Abhängigkeit von $q$, $r$ und $B$ an.`, ziel: 'p',
+     vars: [{ n: 'q' }, { n: 'r' }, { n: 'B' }],
+     loesung: 'q*r*B',
+     fehler: [
+       { f: 'q*B/r', h: R`Aus $q \cdot v \cdot B = m \cdot v^2/r$ folgt $r = m \cdot v/(q \cdot B)$. Löse nach $m \cdot v$ auf.` },
+       { f: 'r/(q*B)', h: R`Prüfe die Umformung: $r = p/(q \cdot B)$, also $p = \ldots$` }
+     ],
+     weg: R`$q \cdot v \cdot B = m \cdot v^2/r \;\Rightarrow\; m \cdot v = q \cdot r \cdot B$, also $p = q \cdot r \cdot B$. Aus dem Krümmungsradius einer Spur liest man so den Impuls ab.` },
+   { typ: 'zahl', text: R`Die Spur eines Protons hat den Radius $r = 0{,}80\,\mathrm{m}$. Berechne seinen Impuls.`, wert: 1.9224e-19, tol: 0.03,
+     einheiten: ['impuls', 'Ns', 'kgms2', 'J', 'N', 'kgm2s'],
+     weg: R`$p = e \cdot r \cdot B = 1{,}602 \cdot 10^{-19}\,\mathrm{C} \cdot 0{,}80\,\mathrm{m} \cdot 1{,}5\,\mathrm{T} \approx 1{,}9 \cdot 10^{-19}\,\mathrm{kg \cdot m/s}$<br>Hinweis: $\mathrm{N \cdot s}$ ist dieselbe Einheit wie $\mathrm{kg \cdot m/s}$.` }
+  ]
+ },
+ {
+  id: 'k6', titel: 'Kreisbahnen: das Fadenstrahlrohr',
+  text: R`<p>Im Fadenstrahlrohr werden Elektronen mit der Spannung $U$ beschleunigt und fliegen dann senkrecht in das homogene Feld $B$ der Helmholtz-Spulen. Sie laufen auf einem Kreis mit dem Radius $r$.</p>
+  <svg viewBox="0 0 520 230" width="520" aria-label="Fadenstrahlrohr mit kreisförmigem Elektronenstrahl, Magnetfeld aus der Zeichenebene heraus">
+    <rect x="1" y="1" width="518" height="228" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <circle cx="260" cy="118" r="105" fill="#f1f4f8" stroke="#999" stroke-width="1.5"/>
+    <g fill="#999"><circle cx="45" cy="35" r="3"/><circle cx="475" cy="35" r="3"/><circle cx="45" cy="195" r="3"/><circle cx="475" cy="195" r="3"/></g>
+    <g fill="none" stroke="#999"><circle cx="45" cy="35" r="8"/><circle cx="475" cy="35" r="8"/><circle cx="45" cy="195" r="8"/><circle cx="475" cy="195" r="8"/></g>
+    <text x="62" y="40" font-size="14" fill="#666" font-style="italic">B</text>
+    <rect x="180" y="184" width="40" height="16" rx="3" fill="#777"/>
+    <circle cx="260" cy="128" r="60" fill="none" stroke="#3d8bd9" stroke-width="3" opacity=".85"/>
+    <line x1="220" y1="188" x2="260" y2="188" stroke="#3d8bd9" stroke-width="3" opacity=".85"/>
+    <polygon points="320,122 314,134 326,134" fill="#3d8bd9"/>
+    <line x1="260" y1="128" x2="218" y2="85.6" stroke="#444" stroke-width="1.3"/><circle cx="260" cy="128" r="2.5" fill="#444"/>
+    <text x="228" y="102" font-size="14" font-style="italic" fill="#444">r</text>
+    <text x="70" y="214" font-size="13" fill="#555">Elektronenkanone (<tspan font-style="italic">U</tspan>)</text>
+    <line x1="160" y1="208" x2="185" y2="198" stroke="#999"/>
+    <text x="380" y="214" font-size="13" fill="#555">Glaskolben</text>
+  </svg>`,
+  aufgaben: [
+   { typ: 'zuordnung', text: R`Bringe die Herleitung der spezifischen Ladung $e/m$ in die richtige Reihenfolge. Wähle für jeden Schritt die passende Gleichung.`,
+     optionen: [R`$e \cdot U = m \cdot v^2/2$`, R`$e \cdot v \cdot B = m \cdot v^2/r$`, R`$v = e \cdot B \cdot r/m$`, R`$e \cdot U = m \cdot (e \cdot B \cdot r/m)^2/2$`, R`$e/m = 2\,U/(B^2 \cdot r^2)$`],
+     zeilen: [
+       { t: R`Schritt 1: Energieerhaltung in der Elektronenkanone`, l: 0 },
+       { t: R`Schritt 2: Die Lorentzkraft wirkt als Zentripetalkraft`, l: 1 },
+       { t: R`Schritt 3: nach $v$ auflösen`, l: 2 },
+       { t: R`Schritt 4: in Schritt 1 einsetzen`, l: 3 },
+       { t: R`Schritt 5: umformen`, l: 4 }
+     ],
+     weg: R`In der Klausur gehört zu Schritt 2 auch die Begründung: $\vec F_\mathrm{L} \perp \vec v$, der Betrag von $v$ bleibt konstant, also eine Kreisbahn mit $F_\mathrm{L}$ als Zentripetalkraft.` },
+   { typ: 'formel', text: R`Gib den Bahnradius $r$ in Abhängigkeit von $U$, $B$, $e$ und $m$ an.`, ziel: 'r',
+     vars: [{ n: 'U' }, { n: 'B' }, { n: 'e' }, { n: 'm' }],
+     loesung: 'sqrt(2*m*U/e)/B',
+     fehler: [
+       { f: 'sqrt(2*e*U/m)/B', h: R`$e$ und $m$ vertauscht? Aus $r = m \cdot v/(e \cdot B)$: Schwere Teilchen laufen auf größeren Kreisen.` },
+       { f: 'sqrt(m*U/e)/B', h: R`Prüfe den Faktor 2: $e \cdot U = m \cdot v^2/2$.` },
+       { f: 'sqrt(2*m*U/e)/B^2', h: R`Ziehe die Wurzel nur aus dem Term in der Klammer: $r = \frac{1}{B}\sqrt{2mU/e}$.` },
+       { f: '2*m*U/(e*B)', h: R`Die Geschwindigkeit ist $v = \sqrt{2\,e\,U/m}$, da fehlt eine Wurzel.` }
+     ],
+     weg: R`$v = \sqrt{2 \cdot e \cdot U/m}$ in $r = m \cdot v/(e \cdot B)$ einsetzen: $\;r = \dfrac{1}{B}\sqrt{\dfrac{2 \cdot m \cdot U}{e}}$` },
+   { typ: 'mc', text: R`Welche Aussagen über den Bahnradius im Fadenstrahlrohr sind richtig?`, optionen: [
+     { t: R`Verdoppelt man $B$, halbiert sich $r$.`, r: true, e: R`$r \sim 1/B$` },
+     { t: R`Vervierfacht man $U$, verdoppelt sich $r$.`, r: true, e: R`$r \sim \sqrt{U}$` },
+     { t: R`Verdoppelt man $U$, verdoppelt sich $r$.`, r: false, e: R`$r \sim \sqrt{U}$: Der Radius wächst nur um den Faktor $\sqrt 2 \approx 1{,}41$.` },
+     { t: R`Verdoppelt man den Spulenstrom, halbiert sich $r$.`, r: true, e: R`Bei Helmholtz-Spulen gilt $B \sim I$, also $r \sim 1/I$.` },
+     { t: R`Protonen hätten bei gleichem $U$ und $B$ einen etwa 43-mal so großen Radius.`, r: true, e: R`$r \sim \sqrt{m}$ bei gleicher Ladung: $\sqrt{1836} \approx 43$.` },
+     { t: R`Protonen hätten bei gleichem $U$ und $B$ einen 1836-mal so großen Radius.`, r: false, e: R`Das gälte bei gleicher Geschwindigkeit. Bei gleicher Beschleunigungsspannung sind Protonen langsamer: $r \sim \sqrt{m}$.` },
+     { t: R`Die Zeit für einen Umlauf hängt nicht von $U$ ab.`, r: true, e: R`$T = 2\pi \cdot m/(e \cdot B)$: Schnellere Elektronen laufen auf größeren Kreisen, brauchen aber gleich lang.` }
+   ]},
+   { typ: 'zahl', text: R`Bei $U = 150\,\mathrm{V}$ soll der Kreis den Radius $r = 4{,}0\,\mathrm{cm}$ haben. Berechne die nötige Flussdichte.`, wert: 1.0326e-3, tol: 0.03,
+     einheiten: ['mT', 'T', 'uT', 'mV', 'Tm', 'N'],
+     weg: R`$B = \dfrac{1}{r}\sqrt{\dfrac{2 \cdot m_\mathrm{e} \cdot U}{e}} = \dfrac{1}{0{,}040\,\mathrm{m}}\sqrt{\dfrac{2 \cdot 9{,}109 \cdot 10^{-31}\,\mathrm{kg} \cdot 150\,\mathrm{V}}{1{,}602 \cdot 10^{-19}\,\mathrm{C}}} \approx 1{,}0\,\mathrm{mT}$` }
+  ]
+ },
+ {
+  id: 'k7', titel: 'Gefangen im Erdmagnetfeld: Schraubenbahnen',
+  text: R`<p>In den Strahlungsgürteln der Erde sind Elektronen im Erdmagnetfeld gefangen. Ein Elektron fliegt dort mit $v = 1{,}0 \cdot 10^{7}\,\mathrm{m/s}$ unter dem Winkel $\alpha = 30°$ zu den Feldlinien. Das Feld hat dort $B = 5{,}0\,\mathrm{\mu T}$ und ist im betrachteten Bereich näherungsweise homogen.</p>
+  <svg viewBox="0 0 520 200" width="520" aria-label="Schraubenbahn eines Elektrons um eine Feldlinie, Ganghöhe h">
+    <defs><marker id="pfeilB7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#185FA5"/></marker></defs>
+    <rect x="1" y="1" width="518" height="198" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <line x1="30" y1="100" x2="495" y2="100" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#pfeilB7)"/>
+    <line x1="30" y1="172" x2="495" y2="172" stroke="#185FA5" stroke-width="1.5" marker-end="url(#pfeilB7)"/>
+    <line x1="30" y1="28" x2="495" y2="28" stroke="#185FA5" stroke-width="1.5" marker-end="url(#pfeilB7)"/>
+    <text x="470" y="164" font-size="15" font-style="italic" fill="#185FA5">B</text>
+    <path d="M70.0 100.0 L72.1 95.6 L73.7 91.3 L74.7 87.2 L75.2 83.3 L75.2 79.7 L74.8 76.5 L74.0 73.7 L72.9 71.5 L71.5 69.8 L69.9 68.6 L68.2 68.1 L66.5 68.1 L64.9 68.7 L63.3 70.0 L62.0 71.8 L60.9 74.1 L60.1 76.9 L59.8 80.2 L59.8 83.8 L60.4 87.8 L61.5 91.9 L63.1 96.2 L65.3 100.6 L68.1 105.0 L71.4 109.3 L75.3 113.4 L79.7 117.3 L84.6 120.8 L89.9 123.9 L95.5 126.6 L101.5 128.8 L107.7 130.4 L114.1 131.5 L120.6 132.0 L127.2 131.8 L133.6 131.1 L140.0 129.8 L146.1 127.9 L152.0 125.5 L157.5 122.6 L162.6 119.3 L167.2 115.6 L171.4 111.7 L175.0 107.5 L178.1 103.1 L180.7 98.7 L182.6 94.4 L184.0 90.1 L184.9 86.0 L185.3 82.2 L185.1 78.7 L184.6 75.7 L183.7 73.0 L182.5 70.9 L181.1 69.4 L179.4 68.4 L177.7 68.0 L176.0 68.2 L174.4 69.0 L172.9 70.4 L171.6 72.4 L170.6 74.9 L170.0 77.8 L169.7 81.2 L169.9 84.9 L170.7 88.9 L171.9 93.1 L173.7 97.5 L176.1 101.9 L179.0 106.2 L182.5 110.5 L186.5 114.5 L191.0 118.3 L196.0 121.7 L201.4 124.7 L207.2 127.3 L213.3 129.3 L219.5 130.8 L226.0 131.7 L232.5 132.0 L239.0 131.7 L245.5 130.8 L251.7 129.3 L257.8 127.3 L263.6 124.7 L269.0 121.7 L274.0 118.3 L278.5 114.5 L282.5 110.5 L286.0 106.2 L288.9 101.9 L291.3 97.5 L293.1 93.1 L294.3 88.9 L295.1 84.9 L295.3 81.2 L295.0 77.8 L294.4 74.9 L293.4 72.4 L292.1 70.4 L290.6 69.0 L289.0 68.2 L287.3 68.0 L285.6 68.4 L283.9 69.4 L282.5 70.9 L281.3 73.0 L280.4 75.7 L279.9 78.7 L279.7 82.2 L280.1 86.0 L281.0 90.1 L282.4 94.4 L284.3 98.7 L286.9 103.1 L290.0 107.5 L293.6 111.7 L297.8 115.6 L302.4 119.3 L307.5 122.6 L313.0 125.5 L318.9 127.9 L325.0 129.8 L331.4 131.1 L337.8 131.8 L344.4 132.0 L350.9 131.5 L357.3 130.4 L363.5 128.8 L369.5 126.6 L375.1 123.9 L380.4 120.8 L385.3 117.3 L389.7 113.4 L393.6 109.3 L396.9 105.0 L399.7 100.6 L401.9 96.2 L403.5 91.9 L404.6 87.8 L405.2 83.8 L405.2 80.2 L404.9 76.9 L404.1 74.1 L403.0 71.8 L401.7 70.0 L400.1 68.7 L398.5 68.1 L396.8 68.1 L395.1 68.6 L393.5 69.8 L392.1 71.5 L391.0 73.7 L390.2 76.5 L389.8 79.7 L389.8 83.3 L390.3 87.2 L391.3 91.3 L392.9 95.6 L395.0 100.0" fill="none" stroke="#BA7517" stroke-width="2.5"/>
+    <circle cx="70" cy="100" r="4" fill="#BA7517"/><text x="44" y="96" font-size="13" fill="#BA7517">e⁻</text>
+    <g stroke="#444" stroke-width="1.2"><line x1="67.5" y1="62" x2="67.5" y2="44"/><line x1="177.5" y1="62" x2="177.5" y2="44"/><line x1="67.5" y1="50" x2="177.5" y2="50"/></g>
+    <polygon points="67.5,50 75.5,46 75.5,54" fill="#444"/><polygon points="177.5,50 169.5,46 169.5,54" fill="#444"/>
+    <text x="118" y="45" font-size="15" font-style="italic" fill="#444">h</text>
+    <text x="40" y="194" font-size="12" fill="#888">nicht maßstäblich</text>
+  </svg>`,
+  aufgaben: [
+   { typ: 'mc', text: R`Welche Aussagen über die Bahn des Elektrons sind richtig?`, optionen: [
+     { t: R`Das Elektron bewegt sich auf einer Schraubenbahn um die Feldlinien.`, r: true, e: R`Kreisbewegung senkrecht zum Feld und gleichförmige Bewegung längs des Feldes ergeben zusammen eine Schraube.` },
+     { t: R`Die Geschwindigkeitskomponente parallel zu den Feldlinien bleibt unverändert.`, r: true, e: R`Für diese Komponente ist $\vec v \parallel \vec B$, es wirkt keine Kraft in Feldrichtung.` },
+     { t: R`Senkrecht zu den Feldlinien läuft das Elektron auf einem Kreis.`, r: true, e: R`Für die Komponente $v_\perp = v \cdot \sin\alpha$ wirkt die Lorentzkraft als Zentripetalkraft.` },
+     { t: R`Das Elektron bewegt sich auf einer Parabel, wie im elektrischen Querfeld.`, r: false, e: R`Eine Parabel entsteht bei einer konstanten Kraft in fester Richtung. Die Lorentzkraft dreht sich mit $\vec v$ mit.` },
+     { t: R`Die Lorentzkraft verringert die Komponente parallel zu den Feldlinien, bis das Elektron auf einem Kreis läuft.`, r: false, e: R`Die Lorentzkraft steht senkrecht auf $\vec B$, sie hat keine Komponente in Feldrichtung.` },
+     { t: R`Je größer $\alpha$, desto enger liegen die Windungen der Schraube (bei gleichem $v$).`, r: true, e: R`Die Ganghöhe ist $h = v \cdot \cos\alpha \cdot T$. Größeres $\alpha$ bedeutet kleineres $v_\parallel$.` }
+   ]},
+   { typ: 'formel', text: R`Gib die Ganghöhe $h$ der Schraube (Strecke in Feldrichtung während eines Umlaufs) in Abhängigkeit von $m$, $v$, $\alpha$, $e$ und $B$ an.`, ziel: 'h',
+     vars: [{ n: 'm' }, { n: 'v' }, { n: 'alpha', tex: R`\alpha`, bereich: [0.15, 1.4] }, { n: 'e' }, { n: 'B' }],
+     loesung: '2*pi*m*v*cos(alpha)/(e*B)',
+     fehler: [
+       { f: '2*pi*m*v*sin(alpha)/(e*B)', h: R`In Feldrichtung zählt die Komponente <b>parallel</b> zu $\vec B$: $v_\parallel = v \cdot \cos\alpha$.` },
+       { f: 'm*v*cos(alpha)/(e*B)', h: R`Prüfe die Umlaufdauer: $T = 2\pi \cdot m/(e \cdot B)$.` },
+       { f: 'm*v*sin(alpha)/(e*B)', h: R`Das ist der Radius der Schraube, nicht die Ganghöhe.` },
+       { f: '2*pi*m/(e*B)', h: R`Das ist die Umlaufdauer $T$. Die Ganghöhe ist die Strecke $v_\parallel \cdot T$.` }
+     ],
+     weg: R`$T = 2\pi r/v_\perp = 2\pi \cdot m/(e \cdot B)$, $\;v_\parallel = v \cdot \cos\alpha$<br>$h = v_\parallel \cdot T = 2\pi \cdot m \cdot v \cdot \cos\alpha/(e \cdot B)$` },
+   { typ: 'zahl', text: R`Berechne die Ganghöhe für die angegebenen Werte.`, wert: 61.88, tol: 0.03,
+     einheiten: ['m', 'km', 'cm', 's', 'ms'],
+     weg: R`$T = \dfrac{2\pi \cdot 9{,}109 \cdot 10^{-31}\,\mathrm{kg}}{1{,}602 \cdot 10^{-19}\,\mathrm{C} \cdot 5{,}0 \cdot 10^{-6}\,\mathrm{T}} \approx 7{,}15 \cdot 10^{-6}\,\mathrm{s}$<br>$h = v \cdot \cos 30° \cdot T = 1{,}0 \cdot 10^{7}\,\mathrm{m/s} \cdot 0{,}866 \cdot 7{,}15 \cdot 10^{-6}\,\mathrm{s} \approx 62\,\mathrm{m}$ (Radius nur etwa $5{,}7\,\mathrm{m}$)` }
+  ]
+ },
+ {
+  id: 'k8', titel: 'Ionen für die Chipfabrik: der Wien-Filter',
+  text: R`<p>Bei der Herstellung von Computerchips schießt man Bor-Ionen ($\mathrm{B^+}$, einfach positiv) in Siliziumscheiben. Damit alle Ionen gleich tief eindringen, sollen sie dieselbe Geschwindigkeit haben. Ein Wien-Filter wählt sie aus: Die Ionen fliegen nach rechts in den Filter, das Magnetfeld zeigt in die Zeichenebene hinein.</p>
+  <p>Daten: Plattenabstand $d = 1{,}0\,\mathrm{cm}$, Spannung $U = 2{,}0\,\mathrm{kV}$, $B = 0{,}050\,\mathrm{T}$.</p>
+  <svg viewBox="0 0 520 170" width="520" aria-label="Wien-Filter">
+    <rect x="1" y="1" width="518" height="168" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <rect x="150" y="28" width="230" height="10" fill="#777"/><rect x="150" y="132" width="230" height="10" fill="#777"/>
+    <text x="388" y="38" font-size="13" fill="#555">Platte 1</text><text x="388" y="142" font-size="13" fill="#555">Platte 2</text>
+    <g stroke="#888" stroke-width="1.6">
+      <line x1="185" y1="60" x2="197" y2="72"/><line x1="197" y1="60" x2="185" y2="72"/>
+      <line x1="255" y1="60" x2="267" y2="72"/><line x1="267" y1="60" x2="255" y2="72"/>
+      <line x1="325" y1="60" x2="337" y2="72"/><line x1="337" y1="60" x2="325" y2="72"/>
+      <line x1="185" y1="98" x2="197" y2="110"/><line x1="197" y1="98" x2="185" y2="110"/>
+      <line x1="255" y1="98" x2="267" y2="110"/><line x1="267" y1="98" x2="255" y2="110"/>
+      <line x1="325" y1="98" x2="337" y2="110"/><line x1="337" y1="98" x2="325" y2="110"/>
+    </g>
+    <text x="345" y="72" font-size="14" fill="#666" font-style="italic">B</text>
+    <line x1="30" y1="85" x2="470" y2="85" stroke="#BA7517" stroke-width="2.5"/>
+    <polygon points="470,85 458,79 458,91" fill="#BA7517"/>
+    <rect x="128" y="62" width="8" height="18" fill="#444"/><rect x="128" y="90" width="8" height="18" fill="#444"/>
+    <rect x="396" y="62" width="8" height="18" fill="#444"/><rect x="396" y="90" width="8" height="18" fill="#444"/>
+    <text x="34" y="76" font-size="13" fill="#BA7517">B⁺-Ionen</text>
+    <text x="410" y="108" font-size="13" fill="#555">Blende</text>
+  </svg>`,
+  aufgaben: [
+   { typ: 'mc', text: R`Welche Aussagen stimmen für Ionen, die den Filter geradlinig durchfliegen sollen?`, optionen: [
+     { t: R`Die Lorentzkraft auf die Ionen zeigt nach oben.`, r: true, e: R`Positive Ladung, $\vec v$ nach rechts, $\vec B$ in die Ebene: Rechte-Hand-Regel ergibt eine Kraft nach oben.` },
+     { t: R`Platte 1 (oben) muss positiv geladen sein.`, r: true, e: R`Die elektrische Kraft muss nach unten zeigen, das Feld also von oben nach unten: oben $+$, unten $-$.` },
+     { t: R`Platte 2 (unten) muss positiv geladen sein.`, r: false, e: R`Dann zeigten elektrische Kraft und Lorentzkraft beide nach oben.` },
+     { t: R`Zu schnelle Ionen werden nach oben abgelenkt.`, r: true, e: R`$F_\mathrm{L} = q \cdot v \cdot B$ wächst mit $v$, $F_\mathrm{el} = q \cdot E$ nicht. Die Lorentzkraft überwiegt.` },
+     { t: R`Zu langsame Ionen werden nach oben abgelenkt.`, r: false, e: R`Bei ihnen überwiegt die elektrische Kraft, sie werden nach unten abgelenkt.` },
+     { t: R`Elektronen mit derselben Geschwindigkeit kämen ebenfalls geradlinig durch.`, r: true, e: R`Beide Kräfte kehren sich um und gleichen sich weiter aus. Die Bedingung $v = E/B$ enthält weder $q$ noch $m$.` },
+     { t: R`Zweifach geladene Ionen mit derselben Geschwindigkeit werden abgelenkt.`, r: false, e: R`Beide Kräfte verdoppeln sich, das Gleichgewicht bleibt.` }
+   ]},
+   { typ: 'formel', text: R`Leite die Geschwindigkeit $v$ der Ionen, die geradlinig durchfliegen, in Abhängigkeit von $U$, $B$ und $d$ her.`, ziel: 'v',
+     vars: [{ n: 'U' }, { n: 'B' }, { n: 'd' }],
+     loesung: 'U/(B*d)',
+     fehler: [
+       { f: 'U*d/B', h: R`Prüfe die Feldstärke im Kondensator: $E = U/d$.` },
+       { f: 'B*d/U', h: R`Das ist der Kehrwert. Gleichgewicht: $q \cdot E = q \cdot v \cdot B$.` },
+       { f: 'U/B', h: R`$E = U/d$, nicht $U$.` }
+     ],
+     weg: R`$F_\mathrm{el} = F_\mathrm{L}$: $\;q \cdot U/d = q \cdot v \cdot B \;\Rightarrow\; v = U/(B \cdot d)$` },
+   { typ: 'zahl', text: R`Berechne diese Geschwindigkeit.`, wert: 4.0e6, tol: 0.02,
+     einheiten: ['ms', 'kms', 'kmh', 'ms2', 'Vm'],
+     weg: R`$v = \dfrac{U}{B \cdot d} = \dfrac{2{,}0 \cdot 10^{3}\,\mathrm{V}}{0{,}050\,\mathrm{T} \cdot 0{,}010\,\mathrm{m}} = 4{,}0 \cdot 10^{6}\,\mathrm{m/s}$` },
+   { typ: 'mc', text: R`Für flachere Schichten sollen Ionen mit der <b>halben</b> Geschwindigkeit durchgelassen werden. Welche Änderungen erreichen das (jeweils allein)?`, optionen: [
+     { t: R`$U$ halbieren`, r: true, e: R`$v = U/(B \cdot d) \sim U$` },
+     { t: R`$B$ verdoppeln`, r: true, e: R`$v \sim 1/B$` },
+     { t: R`$d$ verdoppeln, $U$ gleich lassen`, r: true, e: R`$E = U/d$ halbiert sich.` },
+     { t: R`$U$ verdoppeln`, r: false, e: R`Dann würde $v$ verdoppelt.` },
+     { t: R`$B$ halbieren`, r: false, e: R`Dann würde $v$ verdoppelt.` },
+     { t: R`Leichtere Ionen verwenden`, r: false, e: R`Die durchgelassene Geschwindigkeit hängt nicht von der Masse ab.` }
+   ]}
+  ]
+ },
+ {
+  id: 'k9', titel: 'Uran trennen: das Calutron',
+  text: R`<p>Im Calutron, einem frühen Massenspektrometer, wurden in den 1940er-Jahren Uran-Isotope getrennt. Einfach positiv geladene Ionen von U-235 ($235\,\mathrm{u}$) und U-238 ($238\,\mathrm{u}$) werden mit $U = 35\,\mathrm{kV}$ beschleunigt und fliegen dann senkrecht in ein homogenes Magnetfeld $B = 0{,}34\,\mathrm{T}$. Nach einem Halbkreis treffen sie auf Auffänger. <b>Einen Wien-Filter gibt es nicht.</b></p>
+  <svg viewBox="0 0 520 250" width="520" aria-label="Calutron: Ionenquelle, Beschleunigung, zwei Halbkreisbahnen im Magnetfeld, Auffänger">
+    <rect x="1" y="1" width="518" height="248" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <rect x="40" y="14" width="440" height="172" rx="4" fill="#eef2f7" stroke="#b8c6d8"/>
+    <g fill="#8aa0bb"><circle cx="70" cy="40" r="2.5"/><circle cx="250" cy="40" r="2.5"/><circle cx="450" cy="40" r="2.5"/><circle cx="160" cy="110" r="2.5"/><circle cx="340" cy="110" r="2.5"/><circle cx="70" cy="160" r="2.5"/><circle cx="450" cy="160" r="2.5"/></g>
+    <g fill="none" stroke="#8aa0bb"><circle cx="70" cy="40" r="7"/><circle cx="250" cy="40" r="7"/><circle cx="450" cy="40" r="7"/><circle cx="160" cy="110" r="7"/><circle cx="340" cy="110" r="7"/><circle cx="70" cy="160" r="7"/><circle cx="450" cy="160" r="7"/></g>
+    <text x="84" y="45" font-size="14" font-style="italic" fill="#6c86a6">B</text>
+    <path d="M100 186 A150 150 0 0 1 400 186" fill="none" stroke="#185FA5" stroke-width="2.3"/>
+    <path d="M100 186 A160 160 0 0 1 420 186" fill="none" stroke="#BA7517" stroke-width="2.3"/>
+    <line x1="100" y1="232" x2="100" y2="186" stroke="#666" stroke-width="2.3"/>
+    <rect x="80" y="232" width="40" height="12" rx="2" fill="#777"/>
+    <rect x="70" y="210" width="24" height="4" fill="#444"/><rect x="106" y="210" width="24" height="4" fill="#444"/>
+    <rect x="70" y="194" width="24" height="4" fill="#444"/><rect x="106" y="194" width="24" height="4" fill="#444"/>
+    <text x="136" y="208" font-size="13" fill="#555"><tspan font-style="italic">U</tspan> = 35 kV</text>
+    <text x="126" y="243" font-size="13" fill="#555">Ionenquelle</text>
+    <rect x="393" y="186" width="14" height="12" fill="#185FA5"/><rect x="413" y="186" width="14" height="12" fill="#BA7517"/>
+    <text x="440" y="208" font-size="13" fill="#555">Auffänger</text>
+    <text x="300" y="232" font-size="12" fill="#888">Abstand der Bahnen stark übertrieben</text>
+  </svg>`,
+  aufgaben: [
+   { typ: 'mc', text: R`Welche Aussagen sind richtig?`, optionen: [
+     { t: R`Alle Ionen haben nach der Beschleunigung dieselbe kinetische Energie.`, r: true, e: R`Jedes einfach geladene Ion gewinnt $e \cdot U$, unabhängig von seiner Masse.` },
+     { t: R`Alle Ionen haben nach der Beschleunigung dieselbe Geschwindigkeit.`, r: false, e: R`Bei gleicher Energie sind schwere Ionen langsamer: $v = \sqrt{2\,e\,U/m}$.` },
+     { t: R`Der Radius hängt hier nur noch von der Masse ab, deshalb trennt das Gerät die Isotope auch ohne Wien-Filter.`, r: true, e: R`$r = \frac{1}{B}\sqrt{2\,m\,U/e}$: Bei gleichem $q$, $U$ und $B$ ist $r \sim \sqrt m$.` },
+     { t: R`U-238 läuft auf dem größeren Halbkreis.`, r: true, e: R`Größere Masse, größerer Radius.` },
+     { t: R`Es gilt $r \sim m$.`, r: false, e: R`Das gilt bei gleicher Geschwindigkeit (mit Wien-Filter). Bei gleicher Energie ist $r \sim \sqrt m$.` },
+     { t: R`Für die spezifische Ladung gilt $q/m = 2\,U/(B^2 \cdot r^2)$, genau wie beim Fadenstrahlrohr.`, r: true, e: R`Die Herleitung ist dieselbe: Energieerhaltung plus Lorentzkraft als Zentripetalkraft.` }
+   ]},
+   { typ: 'zahl', text: R`Berechne den Abstand der Auftreffpunkte der beiden Isotope ($2 r_{238} - 2 r_{235}$).`, wert: 0.01546, tol: 0.05,
+     einheiten: ['cm', 'mm', 'm', 'um', 'cm2'],
+     weg: R`$r = \dfrac{1}{B}\sqrt{\dfrac{2 \cdot m \cdot U}{e}}$: $\;r_{238} \approx 1{,}222\,\mathrm{m}$, $\;r_{235} \approx 1{,}215\,\mathrm{m}$<br>Abstand $= 2 \cdot (r_{238} - r_{235}) \approx 1{,}5\,\mathrm{cm}$. Rechne mit mindestens vier gültigen Ziffern, sonst geht die kleine Differenz im Runden verloren.` },
+   { typ: 'mc', text: R`Welche Einheiten passen zur spezifischen Ladung $q/m$?`, optionen: [
+     { t: R`$\mathrm{C/kg}$`, r: true, e: R`Ladung durch Masse.` },
+     { t: R`$\mathrm{A \cdot s/kg}$`, r: true, e: R`$1\,\mathrm{C} = 1\,\mathrm{A \cdot s}$` },
+     { t: R`$\mathrm{m^2/(V \cdot s^2)}$`, r: true, e: R`Aus $2U/(B^2 r^2)$: $\mathrm{V/(T^2 \cdot m^2)}$ mit $1\,\mathrm{T} = 1\,\mathrm{V \cdot s/m^2}$ ergibt $\mathrm{m^2/(V \cdot s^2)}$. Eine gute Kontrolle für deine Herleitung!` },
+     { t: R`$\mathrm{kg/C}$`, r: false, e: R`Das ist der Kehrwert.` },
+     { t: R`$\mathrm{C \cdot kg}$`, r: false, e: R`Ladung und Masse werden geteilt, nicht multipliziert.` },
+     { t: R`$\mathrm{V/T}$`, r: false, e: R`Mit $1\,\mathrm{T} = 1\,\mathrm{V \cdot s/m^2}$ ist $\mathrm{V/T} = \mathrm{m^2/s}$. Das passt nicht.` }
+   ]},
+   { typ: 'formel', text: R`Gib $q/m$ in Abhängigkeit von $U$, $B$ und $r$ an.`, ziel: 'q/m',
+     vars: [{ n: 'U' }, { n: 'B' }, { n: 'r' }],
+     loesung: '2*U/(B^2*r^2)',
+     fehler: [
+       { f: 'U/(B^2*r^2)', h: R`Prüfe den Faktor 2 aus $q \cdot U = m \cdot v^2/2$.` },
+       { f: '2*U/(B*r^2)', h: R`$B$ steht quadratisch im Nenner.` },
+       { f: '2*U/(B^2*r)', h: R`$r$ steht quadratisch im Nenner.` },
+       { f: 'B^2*r^2/(2*U)', h: R`Das ist $m/q$, der Kehrwert.` }
+     ],
+     weg: R`$q \cdot U = m \cdot v^2/2$ und $q \cdot v \cdot B = m \cdot v^2/r$, also $v = q \cdot B \cdot r/m$.<br>Einsetzen: $q \cdot U = q^2 B^2 r^2/(2\,m) \;\Rightarrow\; q/m = 2\,U/(B^2 \cdot r^2)$` }
+  ]
+ }
+];
+
+// ════════════════════════════════════════════════════════════════════
+//  3  AUFBAU DER SEITE
+// ════════════════════════════════════════════════════════════════════
+const ARBEITSBLATT_ID = 'ph_lk_abi2028_k2_magnetfelder_v1';
+const ALLE = [];          // {id, aufg, box}
+const RICHTIG = new Set();
+const GEPRUEFT = new Set();
+const KATEX_OPT = { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false };
+const typName = { mc: 'Ankreuzen', zahl: 'Rechnen', formel: 'Formel', zuordnung: 'Zuordnen' };
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function mischen(a, seed) {   // feste Reihenfolge pro Aufgabe (beim Neuladen gleich)
+  const r = a.slice(); let s = seed;
+  for (let i = r.length - 1; i > 0; i--) { s = (s * 9301 + 49297) % 233280; const j = Math.floor(s / 233280 * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; }
+  return r;
+}
+
+function baue() {
+  const ziel = document.getElementById('aufgaben');
+  const nav = document.getElementById('inhaltsverzeichnis');
+  let nr = 0;
+  KONTEXTE.forEach((k, ki) => {
+    const sec = document.createElement('section');
+    sec.className = 'kontext';
+    sec.innerHTML = `<h2 id="${k.id}"><span class="knr">${ki + 1}</span>${k.titel}</h2><div class="kontext-text">${k.text}</div>`;
+    ziel.appendChild(sec);
+    const link = document.createElement('a');
+    link.href = '#' + k.id; link.innerHTML = `${ki + 1} ${k.titel.split(':')[0]}<span class="zaehler" data-zaehler="${k.id}"></span>`;
+    nav.appendChild(link);
+    k.aufgaben.forEach((a, ai) => {
+      nr++;
+      const id = `${k.id}a${ai + 1}`;
+      const box = document.createElement('div');
+      box.className = 'aufgabe'; box.id = id; box.dataset.kontext = k.id;
+      let html = `<div class="aufgabe-kopf"><span class="aufgabe-nr">${ki + 1}.${ai + 1}</span><span class="aufgabe-typ">${typName[a.typ]}</span><span class="aufgabe-status"></span></div>
+        <div class="aufgabe-text">${a.text}</div>`;
+      if (a.typ === 'mc') {
+        html += `<div class="hinweis-mc">Eine, mehrere oder alle Antworten können richtig sein.</div>`;
+        const reihenfolge = mischen(a.optionen.map((o, i) => i), nr * 7 + 3);
+        reihenfolge.forEach(i => {
+          const o = a.optionen[i];
+          html += `<div class="mc-opt" data-richtig="${o.r}"><label><input type="checkbox" data-key="${id}_o${i}"><span>${o.t}</span></label><div class="mc-erkl">${o.r ? '✓ richtig. ' : '✗ falsch. '}${o.e}</div></div>`;
+        });
+      } else if (a.typ === 'zahl') {
+        const reihe = mischen(a.einheiten, nr * 11 + 5);
+        html += `<div class="feld-zeile"><span class="groesse">Ergebnis:</span>
+          <input type="text" class="zahl" data-key="${id}_wert" placeholder="z. B. 3,6 oder 6,2e-3" autocomplete="off" spellcheck="false">
+          <select data-key="${id}_einheit"><option value="">Einheit …</option>${reihe.map(u => `<option value="${u}">${E[u].t}</option>`).join('')}</select></div>
+          <div class="vorschau"><span class="lbl">Eingabe:</span><span class="vs"></span></div>`;
+      } else if (a.typ === 'formel') {
+        html += `<div class="feld-zeile"><span class="groesse ziel"></span>
+          <input type="text" class="formel" data-key="${id}_formel" placeholder="Formel eintippen …" autocomplete="off" spellcheck="false"></div>
+          <div class="variablen">Erlaubte Größen: ${a.vars.map(v => `<span class="chip">${v.n}</span>`).join(' ')} · dazu Zahlen, <span class="chip">pi</span>, <span class="chip">sqrt( )</span>${a.vars.some(v => v.n === 'alpha') ? ', <span class="chip">sin( )</span>, <span class="chip">cos( )</span>' : ''}</div>
+          <div class="vorschau"><span class="lbl">So verstehe ich deine Eingabe:</span><span class="vs"></span></div>`;
+      } else if (a.typ === 'zuordnung') {
+        html += `<div style="margin-top:.5rem">` + a.zeilen.map((z, zi) => `<div class="zu-zeile"><span>${z.t}</span><select data-key="${id}_z${zi}"><option value="">– wählen –</option>${
+          (typeof z.l === 'number' ? mischen(a.optionen.map((o, oi) => oi), nr * 13 + 1) : a.optionen.map((o, oi) => oi)).map(oi => `<option value="${oi}">${a.optionen[oi]}</option>`).join('')}</select><span class="rueck"></span></div>`).join('') + `</div>`;
+      }
+      html += `<div class="aktionen"><button class="btn btn-primary btn-pruefen">Prüfen</button>`;
+      if (a.weg) html += `<button class="btn btn-secondary btn-loesung">Lösungsweg anzeigen</button>`;
+      html += `</div><div class="rueckmeldung"></div>`;
+      if (a.weg) html += `<div class="loesungsweg"><div class="titel">Lösungsweg</div>${a.weg}</div>`;
+      box.innerHTML = html;
+      sec.appendChild(box);
+      ALLE.push({ id, aufg: a, box });
+
+      // Zuordnungen mit Formeln als Optionen: <option> kann kein KaTeX, daher Klartext
+      if (a.typ === 'zuordnung') box.querySelectorAll('option').forEach(op => { op.textContent = op.textContent.replace(/\$/g, '').replace(/\\cdot/g, '·').replace(/\^2/g, '²').replace(/\\,/g, ' '); });
+      if (a.typ === 'formel') {
+        const zielEl = box.querySelector('.ziel');
+        katex.render(a.ziel + ' =', zielEl, { throwOnError: false });
+        a._baum = parse(a.loesung, a.vars);
+        a._fehler = (a.fehler || []).map(f => ({ baum: parse(f.f, a.vars), h: f.h }));
+        const inp = box.querySelector('input.formel');
+        inp.addEventListener('input', () => vorschauFormel(box, a));
+        inp.addEventListener('keydown', ev => { if (ev.key === 'Enter') pruefe(ALLE.find(x => x.id === id)); });
+      }
+      if (a.typ === 'zahl') {
+        const inp = box.querySelector('input.zahl');
+        inp.addEventListener('input', () => vorschauZahl(box));
+        inp.addEventListener('keydown', ev => { if (ev.key === 'Enter') pruefe(ALLE.find(x => x.id === id)); });
+      }
+      box.querySelector('.btn-pruefen').addEventListener('click', () => pruefe(ALLE.find(x => x.id === id)));
+      const bl = box.querySelector('.btn-loesung');
+      if (bl) bl.addEventListener('click', () => {
+        const w = box.querySelector('.loesungsweg'); w.classList.toggle('offen');
+        bl.textContent = w.classList.contains('offen') ? 'Lösungsweg ausblenden' : 'Lösungsweg anzeigen';
+      });
+      box.querySelectorAll('[data-key]').forEach(el => {
+        el.addEventListener(el.tagName === 'INPUT' && el.type === 'text' ? 'input' : 'change', () => { zuruecksetzen(box); planeSpeichern(); });
+      });
+    });
+  });
+  renderMathInElement(ziel, KATEX_OPT);
+  renderMathInElement(document.querySelector('.intro'), KATEX_OPT);
+  renderMathInElement(document.querySelector('.abschluss'), KATEX_OPT);
+}
+
+// ── Vorschau ─────────────────────────────────────────────────────
+function vorschauFormel(box, a) {
+  const inp = box.querySelector('input.formel');
+  const vs = box.querySelector('.vorschau'), el = vs.querySelector('.vs');
+  vs.classList.remove('fehler');
+  if (!inp.value.trim()) { el.textContent = ''; return null; }
+  try {
+    const baum = parse(inp.value, a.vars);
+    katex.render(a.ziel + ' = ' + tex(baum), el, { throwOnError: false, displayMode: false });
+    return baum;
+  } catch (e) {
+    vs.classList.add('fehler');
+    el.textContent = e instanceof EingabeFehler ? (e.message || 'Die Eingabe ist noch unvollständig.') : 'Die Eingabe kann ich nicht lesen.';
+    return null;
+  }
+}
+function leseZahl(text) {
+  const baum = parse(text, [], true);
+  const v = rechne(baum, {});
+  return { v, baum };
+}
+function vorschauZahl(box) {
+  const inp = box.querySelector('input.zahl');
+  const vs = box.querySelector('.vorschau'), el = vs.querySelector('.vs');
+  vs.classList.remove('fehler');
+  if (!inp.value.trim()) { el.textContent = ''; return null; }
+  try {
+    const { v } = leseZahl(inp.value);
+    if (!isFinite(v)) throw new EingabeFehler('Das ergibt keine Zahl.');
+    katex.render(zahlTex(v), el, { throwOnError: false });
+    return v;
+  } catch (e) {
+    vs.classList.add('fehler');
+    el.textContent = e instanceof EingabeFehler ? (e.message || 'Die Eingabe ist noch unvollständig.') : 'Die Eingabe kann ich nicht lesen.';
+    return null;
+  }
+}
+
+// ── Prüfen ───────────────────────────────────────────────────────
+function melde(box, art, html) {
+  const r = box.querySelector('.rueckmeldung');
+  r.className = 'rueckmeldung ' + art; r.innerHTML = html;
+  renderMathInElement(r, KATEX_OPT);
+}
+
+function pruefe(eintrag, still) {
+  const { aufg: a, box } = eintrag;
+  let ok = false;
+  if (a.typ === 'mc') {
+    ok = true;
+    box.querySelectorAll('.mc-opt').forEach(opt => {
+      const soll = opt.dataset.richtig === 'true', ist = opt.querySelector('input').checked;
+      opt.classList.remove('ok', 'falsch', 'fehlt');
+      if (soll && ist) opt.classList.add('ok');
+      else if (!soll && ist) { opt.classList.add('falsch'); ok = false; }
+      else if (soll && !ist) { opt.classList.add('fehlt'); ok = false; }
+    });
+    melde(box, ok ? 'ok' : 'falsch', ok ? '✓ Alles richtig!' : 'Noch nicht ganz. Grün: richtig angekreuzt · Rot: falsch angekreuzt · Orange: hätte angekreuzt werden müssen. Lies die Erklärungen.');
+  } else if (a.typ === 'zahl') {
+    const v = vorschauZahl(box);
+    const u = box.querySelector('select').value;
+    if (v === null) { melde(box, 'info', 'Gib zuerst ein Ergebnis ein, das ich lesen kann.'); return; }
+    if (!u) { melde(box, 'info', 'Wähle noch eine Einheit aus.'); return; }
+    const einheit = E[u], soll = a.wert, zielDim = E[a.einheiten[0]].dim;
+    if (einheit.dim !== zielDim) {
+      melde(box, 'falsch', `Die Einheit ${einheit.t} passt nicht zu der gesuchten Größe.`);
+    } else {
+      const ist = v * einheit.f;
+      const rel = Math.abs(ist - soll) / Math.abs(soll);
+      if (rel <= a.tol) { ok = true; melde(box, 'ok', '✓ Richtig!'); }
+      else {
+        const q = ist / soll, ex = Math.round(Math.log10(Math.abs(q)));
+        if (q > 0 && ex !== 0 && Math.abs(Math.log10(Math.abs(q)) - ex) < 0.02) melde(box, 'falsch', 'Fast: Die Ziffern stimmen, aber eine Zehnerpotenz (oder der Vorsatz der Einheit) ist falsch.');
+        else if (q < 0) melde(box, 'falsch', 'Prüfe das Vorzeichen. Gefragt ist ein Betrag.');
+        else if (rel < 0.15) melde(box, 'falsch', 'Knapp daneben. Hast du zu früh gerundet oder einen Wert ungenau eingesetzt?');
+        else melde(box, 'falsch', 'Das stimmt noch nicht. Prüfe deinen Ansatz und deine Rechnung.');
+      }
+    }
+  } else if (a.typ === 'formel') {
+    const baum = vorschauFormel(box, a);
+    if (!baum) { melde(box, 'info', 'Gib zuerst eine Formel ein, die ich lesen kann (siehe Hinweis unter dem Eingabefeld).'); return; }
+    if (gleichwertig(baum, a._baum, a.vars)) { ok = true; melde(box, 'ok', '✓ Richtig! Deine Formel ist gleichwertig zur Musterlösung.'); }
+    else {
+      const f = a._fehler.find(x => gleichwertig(baum, x.baum, a.vars));
+      melde(box, 'falsch', f ? 'Noch nicht richtig. ' + f.h : 'Noch nicht richtig. Prüfe deine Herleitung Schritt für Schritt. Tipp: Kontrolliere mit den Einheiten.');
+    }
+  } else if (a.typ === 'zuordnung') {
+    let r = 0, leer = 0;
+    box.querySelectorAll('.zu-zeile').forEach((zeile, zi) => {
+      const sel = zeile.querySelector('select'), rk = zeile.querySelector('.rueck');
+      const soll = typeof a.zeilen[zi].l === 'number' ? a.zeilen[zi].l : a.optionen.indexOf(a.zeilen[zi].l);
+      if (sel.value === '') { leer++; rk.textContent = ''; rk.className = 'rueck'; return; }
+      const passt = +sel.value === soll;
+      if (passt) r++;
+      rk.textContent = passt ? '✓' : '✗'; rk.className = 'rueck ' + (passt ? 'ok' : 'falsch');
+    });
+    ok = r === a.zeilen.length;
+    melde(box, ok ? 'ok' : 'falsch', ok ? '✓ Alles richtig!' : `${r} von ${a.zeilen.length} richtig${leer ? ` (${leer} noch offen)` : ''}.`);
+  }
+  box.classList.add('geprueft');
+  GEPRUEFT.add(box.id);
+  box.classList.toggle('alles-richtig', ok);
+  box.querySelector('.aufgabe-status').textContent = ok ? '✓' : '';
+  if (ok) RICHTIG.add(box.id); else RICHTIG.delete(box.id);
+  aktualisiereFortschritt();
+  if (!still) planeSpeichern();
+}
+
+function zuruecksetzen(box) {
+  if (!box.classList.contains('geprueft')) return;
+  box.classList.remove('geprueft', 'alles-richtig');
+  box.querySelectorAll('.mc-opt').forEach(o => o.classList.remove('ok', 'falsch', 'fehlt'));
+  box.querySelectorAll('.zu-zeile .rueck').forEach(r => { r.textContent = ''; r.className = 'rueck'; });
+  const r = box.querySelector('.rueckmeldung'); r.className = 'rueckmeldung'; r.innerHTML = '';
+  box.querySelector('.aufgabe-status').textContent = '';
+  RICHTIG.delete(box.id); GEPRUEFT.delete(box.id);
+  aktualisiereFortschritt();
+}
+
+function aktualisiereFortschritt() {
+  const n = RICHTIG.size, gesamt = ALLE.length;
+  document.getElementById('fortschritt-text').textContent = `${n} von ${gesamt} Aufgaben richtig`;
+  document.getElementById('balken').style.width = (100 * n / gesamt) + '%';
+  KONTEXTE.forEach(k => {
+    const ids = ALLE.filter(x => x.box.dataset.kontext === k.id).map(x => x.id);
+    const r = ids.filter(i => RICHTIG.has(i)).length;
+    const z = document.querySelector(`[data-zaehler="${k.id}"]`);
+    if (z) z.textContent = ` ${r}/${ids.length}`;
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  4  ANMELDUNG UND SPEICHERN (Supabase, wie die übrigen Arbeitsblätter)
+// ════════════════════════════════════════════════════════════════════
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+<script>
+const SUPABASE_URL      = 'https://ljcvameuyosoppzfmryo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_6hqFqB_zL2yFyP4tIthaRQ_GN44vrAG';
+
+let sb = null;
+try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { console.warn('Supabase nicht verfügbar', e); }
+let modus = null, speicherTimer = null;
+
+try { baue(); } catch (e) { console.error(e); document.getElementById('aufgaben').textContent = 'Die Aufgaben konnten nicht geladen werden. Bitte lade die Seite neu.'; }
+
+function selectMode(m) {
+  modus = m;
+  document.getElementById('mode-select').style.display = 'none';
+  if (m === 'saved') {
+    if (!sb) { setStatus('Speichern ist gerade nicht möglich (keine Verbindung).', false); zeigeInhalt(); return; }
+    pruefeSitzung();
+  } else {
+    document.getElementById('anon-hint').style.display = 'block';
+    setStatus('Ohne Anmeldung: nichts wird gespeichert.', false);
+    zeigeInhalt();
+  }
+}
+function zeigeInhalt() { document.getElementById('inhalt').style.display = 'block'; aktualisiereFortschritt(); }
+
+async function pruefeSitzung() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) angemeldet(session);
+  else document.getElementById('auth-card').style.display = 'block';
+}
+async function login() {
+  const email = document.getElementById('email-input').value.trim();
+  const pw = document.getElementById('password-input').value;
+  const st = document.getElementById('auth-status');
+  if (!email || !pw) { st.textContent = 'Bitte E-Mail und Passwort eingeben.'; return; }
+  st.textContent = 'Anmeldung …';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  if (error) { st.textContent = 'Anmeldung fehlgeschlagen: ' + error.message; return; }
+  angemeldet(data.session);
+}
+async function logout() { await sb.auth.signOut(); location.reload(); }
+function angemeldet(session) {
+  document.getElementById('auth-card').style.display = 'none';
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-email').textContent = session.user.email;
+  zeigeInhalt();
+  lade();
+}
+
+function sammle() {
+  const d = {};
+  document.querySelectorAll('#aufgaben [data-key]').forEach(el => d[el.dataset.key] = el.type === 'checkbox' ? el.checked : el.value);
+  d._geprueft = [...GEPRUEFT];
+  d._richtig = RICHTIG.size;
+  return d;
+}
+function planeSpeichern() {
+  if (modus !== 'saved' || !sb) return;
+  setStatus('Ungespeicherte Änderungen …', false);
+  clearTimeout(speicherTimer);
+  speicherTimer = setTimeout(speichere, 1500);
+}
+async function speichere() {
+  speicherTimer = null;
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { setStatus('Nicht angemeldet – Speichern nicht möglich.', false); return; }
+  const { error } = await sb.from('arbeitsblatt_antworten').upsert({
+    user_id: user.id, arbeitsblatt: ARBEITSBLATT_ID, antworten: sammle(), gespeichert_am: new Date().toISOString()
+  }, { onConflict: 'user_id,arbeitsblatt' });
+  if (error) setStatus('Speichern fehlgeschlagen: ' + error.message, false);
+  else setStatus('Gespeichert um ' + new Date().toLocaleTimeString('de-DE'), true);
+}
+async function lade() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+  const { data, error } = await sb.from('arbeitsblatt_antworten')
+    .select('antworten, gespeichert_am').eq('user_id', user.id).eq('arbeitsblatt', ARBEITSBLATT_ID).maybeSingle();
+  if (error) { setStatus('Laden fehlgeschlagen: ' + error.message, false); return; }
+  if (!data) { setStatus('Noch nichts gespeichert. Deine Eingaben werden automatisch gespeichert.', false); return; }
+  const a = data.antworten || {};
+  document.querySelectorAll('#aufgaben [data-key]').forEach(el => {
+    const w = a[el.dataset.key];
+    if (w === undefined) return;
+    if (el.type === 'checkbox') el.checked = !!w; else el.value = w;
+  });
+  ALLE.forEach(x => {
+    if (x.aufg.typ === 'formel') vorschauFormel(x.box, x.aufg);
+    if (x.aufg.typ === 'zahl') vorschauZahl(x.box);
+  });
+  (a._geprueft || []).forEach(id => { const x = ALLE.find(y => y.id === id); if (x) pruefe(x, true); });
+  aktualisiereFortschritt();
+  setStatus('Zwischenstand geladen (gespeichert am ' + new Date(data.gespeichert_am).toLocaleString('de-DE') + ')', true);
+}
+function setStatus(text, ok) {
+  document.getElementById('save-text').textContent = text;
+  document.getElementById('dot').className = 'dot' + (ok ? ' saved' : '');
+}
+window.addEventListener('beforeunload', () => {
+  if (speicherTimer && modus === 'saved') { clearTimeout(speicherTimer); speichere(); }
+});
+</script>
+</body>
+</html>
