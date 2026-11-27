@@ -600,7 +600,31 @@ const KONTEXTE = [
  },
  {
   id: 'k4', titel: 'Die Strommesszange: ein Hall-Sensor',
-  text: R`<p>Mit einer Strommesszange misst man Ströme, ohne das Kabel aufzutrennen. Ein Eisenring umschließt das Kabel. In einem schmalen Spalt des Rings sitzt ein Hall-Plättchen. Die Flussdichte $B$ im Spalt ist proportional zum Strom im Kabel.</p>
+  text: R`<p>Mit einer Strommesszange misst man Ströme, ohne das Kabel aufzutrennen. Ein Eisenring umschließt das Kabel. In einem schmalen Spalt des Rings sitzt ein Hall-Plättchen. Der Eisenring bündelt das Magnetfeld des Kabels, sodass die Feldlinien im Spalt senkrecht durch das Plättchen laufen. Die Flussdichte $B$ im Spalt ist proportional zum Strom im Kabel.</p>
+  <svg viewBox="0 0 540 250" width="540" aria-label="Strommesszange im Querschnitt: Kabel in der Mitte, Eisenring mit Spalt, Hall-Plättchen im Spalt">
+    <defs><marker id="pfeilZ4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#185FA5"/></marker></defs>
+    <rect x="1" y="1" width="538" height="248" rx="8" fill="#fbfbfa" stroke="#ccc"/>
+    <circle cx="150" cy="125" r="82.5" fill="none" stroke="#b9b7ae" stroke-width="26" stroke-dasharray="504.4 14" stroke-dashoffset="-7"/>
+    <circle cx="150" cy="125" r="82.5" fill="none" stroke="#185FA5" stroke-width="1.3" stroke-dasharray="5 4"/>
+    <g stroke="#185FA5" stroke-width="2" marker-end="url(#pfeilZ4)" fill="none">
+      <path d="M 91.7 66.7 A 82.5 82.5 0 0 0 67.5 125"/>
+      <path d="M 208.3 183.3 A 82.5 82.5 0 0 0 232.5 125"/>
+      <path d="M 67.5 125 A 82.5 82.5 0 0 0 91.7 183.3"/>
+    </g>
+    <rect x="222" y="122" width="21" height="6" fill="#BA7517" stroke="#7a4d0f"/>
+    <line x1="256" y1="140" x2="256" y2="108" stroke="#185FA5" stroke-width="2" marker-end="url(#pfeilZ4)"/>
+    <text x="262" y="118" font-size="14" font-style="italic" fill="#185FA5">B</text>
+    <circle cx="150" cy="125" r="24" fill="#d9a066" stroke="#8a5a2b" stroke-width="2"/>
+    <circle cx="150" cy="125" r="13" fill="white" stroke="#444" stroke-width="1.8"/>
+    <g stroke="#444" stroke-width="1.8"><line x1="141" y1="116" x2="159" y2="134"/><line x1="159" y1="116" x2="141" y2="134"/></g>
+    <g font-size="13" fill="#555">
+      <line x1="168" y1="141" x2="300" y2="200" stroke="#999"/><text x="306" y="198">Kabel (Elektronen fließen in die</text><text x="306" y="214">Zeichenebene hinein)</text>
+      <line x1="214" y1="70" x2="300" y2="45" stroke="#999"/><text x="306" y="44">Eisenring der Zange</text>
+      <line x1="243" y1="125" x2="300" y2="140" stroke="#999"/><text x="306" y="138"><tspan fill="#BA7517">Hall-Plättchen</tspan> im Spalt</text>
+      <text x="306" y="78" fill="#185FA5">Feldlinie im Eisen</text>
+      <text x="306" y="238" fill="#888">Blick entlang des Kabels, Spalt vergrößert</text>
+    </g>
+  </svg>
   <p>Das Plättchen ist aus einem Halbleiter, die Ladungsträger sind Elektronen mit der Elektronendichte $n = 1{,}0 \cdot 10^{21}\,\mathrm{m^{-3}}$. Dicke (in Feldrichtung) $d = 0{,}20\,\mathrm{mm}$, Breite $b = 2{,}0\,\mathrm{mm}$, Steuerstrom $I = 5{,}0\,\mathrm{mA}$.</p>
   <svg viewBox="0 0 540 220" width="540" aria-label="Hall-Plättchen mit Breite b, Dicke d, Steuerstrom und Magnetfeld">
     <defs>
